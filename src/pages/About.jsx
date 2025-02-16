@@ -1,66 +1,59 @@
 import { Link } from "react-router-dom";
 import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa";
 
-const services = [
-    { name: "pro calm skin treatment", image: "/images/skincare1.png" },
-    { name: "luxliftfacial", image: "/images/skincare2.png" },
-    { name: "pro bright skin treatment", image: "/images/skincare3.png" },
-    { name: "pro nanoinfusion", image: "/images/skincare1.png" },
-    { name: "pro clear skin treatment", image: "/images/skincare2.png" },
-    { name: "pro firm neck + skin treatment", image: "/images/skincare3.png" },
-];
 
-export default function Services() {
+export default function About() {
     return (
         <div className="bg-[#c2661f27] min-h-screen">
             {/* Header */}
             <header className="bg-[#fef8f8] shadow-md py-6 px-8 flex justify-between items-center">
                 <h1 className="text-[#e3a2a2] text-2xl font-bold">SWD</h1>
                 <nav className="flex space-x-20">
-                    <Link to="/" className="text-gray-700 font-semibold hover:text-[#e3a2a2]">Home</Link>
-                    <Link to="/ve-chung-toi" className="text-gray-700 font-semibold hover:text-[#e3a2a2]">About</Link>
-                    <Link to="/dich-vu" className="text-gray-700 font-semibold hover:text-[#e3a2a2]">Service</Link>
-                    <Link to="/blog" className="text-gray-700 font-semibold hover:text-[#e3a2a2]">Blog</Link>
+                    <a href="/" className="text-gray-700 font-semibold hover:text-[#e3a2a2]">Home</a>
+                    <a href="/dich-vu" className="text-gray-700 font-semibold hover:text-[#e3a2a2]">Service</a>
+                    <a href="#" className="text-gray-700 font-semibold hover:text-[#e3a2a2]">Skincare Consultation</a>
+                    <a href="/blog" className="text-gray-700 font-semibold hover:text-[#e3a2a2]">Blog</a>
                 </nav>
                 <Link to="/dang-nhap">
                     <button className="bg-[#edadad] text-white px-4 py-2 rounded-full hover:bg-[#e3a2a2]">Login</button>
                 </Link>
             </header>
 
-            {/* Services Hero Section */}
-            <div className="h-[500px] w-full flex items-center justify-center text-white text-center"
+            {/* Hero Section */}
+            <div
+                className="h-[700px] w-full flex items-center justify-center text-white text-center"
                 style={{
-                    backgroundImage: "url('/images/service.png')",
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                    backgroundRepeat: "no-repeat",
-                    backgroundAttachment: "fixed"
-                }}>
-                <h1 className="text-5xl font-semibold bg-opacity-50 px-6 py-4 rounded-lg">Skincare Services</h1>
+                    backgroundImage: "url('/images/home.png')",
+                    backgroundSize: "cover",  // Giúp ảnh bao phủ toàn bộ phần hero
+                    backgroundPosition: "center",  // Căn giữa ảnh
+                    backgroundRepeat: "no-repeat", // Không lặp lại ảnh
+                    backgroundAttachment: "fixed"  // Cố định ảnh khi cuộn trang
+                }}
+            >
+                <h1 className="text-6xl font-semibold bg-opacity-50 px-6 py-4 rounded-lg">Our Story</h1>
             </div>
 
-            {/* Services Content */}
+            {/* Body Section */}
+
             <div className="max-w-5xl mx-auto px-6 py-16 text-gray-800">
-                <h2 className="text-3xl font-bold text-center mb-6">Dịch Vụ Chăm Sóc Da Chuyên Nghiệp</h2>
-                <p className="text-lg text-center leading-relaxed pb-8">
-                    Chúng tôi cung cấp các liệu trình chăm sóc da chuyên sâu giúp bạn có làn da khỏe mạnh, tươi sáng.
+                <h2 className="text-3xl font-bold text-center mb-6">
+                    <span className="text-[#e3a2a2]">LÀN DA KHỎE ĐẸP</span> TỪ THIÊN NHIÊN - AN TOÀN VÀ HIỆU QUẢ!
+                </h2>
+                <p className="text-lg text-center leading-relaxed">
+                    Từ năm 1973, Revivalabs đã theo đuổi một sứ mệnh duy nhất: tạo ra những sản phẩm chăm sóc da an toàn, hiệu quả và mang lại kết quả rõ rệt với mức giá hợp lý.
+                    Chúng tôi tự hào khi biết rằng sản phẩm của mình được tin dùng qua nhiều thế hệ – từ bà, mẹ đến con gái.
                 </p>
 
-                {/* Services List */}
-                <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
-                    {services.map((service, index) => (
-                        <div key={index} className="flex flex-col items-center">
-                            <div className="w-48 h-48 rounded-full overflow-hidden border-4 border-[#00000000]">
-                                <img src={service.image} alt={service.name} className="w-full h-full object-cover" />
-                            </div>
-                            <div className="mt-4 text-center">
-                                <h3 className="text-xl font-semibold">{service.name}</h3>
-                                <button className="mt-3 px-7 py-1 bg-[#edadad] text-white rounded-full hover:bg-[#e3a2a2]">
-                                    Chọn
-                                </button>
-                            </div>
-                        </div>
-                    ))}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-10">
+                    <img src="/images/history.jpg" alt="Lịch sử thương hiệu" className="rounded-lg shadow-lg" />
+                    <div>
+                        <p className="text-lg leading-relaxed">
+                            Hành trình của Revivalabs là một câu chuyện về sự đổi mới, niềm tin và sự bền vững. Từ những ngày đầu tiên, chúng tôi đã theo đuổi 100% nguyên liệu thiên nhiên, trước khi xu hướng này trở thành phổ biến trên toàn cầu.
+                        </p>
+                        <p className="mt-4 text-lg leading-relaxed">
+                            Ngày nay, chúng tôi tiếp tục phát triển những sản phẩm chăm sóc da tự nhiên giúp bạn có làn da rạng rỡ và khỏe mạnh hơn mỗi ngày. Hãy cùng chúng tôi viết tiếp câu chuyện này!
+                        </p>
+                    </div>
                 </div>
             </div>
 
@@ -106,3 +99,5 @@ export default function Services() {
         </div>
     );
 }
+
+

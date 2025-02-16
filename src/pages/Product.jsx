@@ -10,7 +10,7 @@ const services = [
     { name: "pro firm neck + skin treatment", image: "/images/skincare3.png" },
 ];
 
-export default function Services() {
+export default function Product() {
     return (
         <div className="bg-[#c2661f27] min-h-screen">
             {/* Header */}
@@ -36,14 +36,14 @@ export default function Services() {
                     backgroundRepeat: "no-repeat",
                     backgroundAttachment: "fixed"
                 }}>
-                <h1 className="text-5xl font-semibold bg-opacity-50 px-6 py-4 rounded-lg">Skincare Services</h1>
+                <h1 className="text-5xl font-semibold bg-opacity-50 px-6 py-4 rounded-lg">Skincare Product</h1>
             </div>
 
             {/* Services Content */}
             <div className="max-w-5xl mx-auto px-6 py-16 text-gray-800">
-                <h2 className="text-3xl font-bold text-center mb-6">Dịch Vụ Chăm Sóc Da Chuyên Nghiệp</h2>
+                <h2 className="text-3xl font-bold text-center mb-6">Sản Phẩm Chăm Sóc Da Chuyên Biệt</h2>
                 <p className="text-lg text-center leading-relaxed pb-8">
-                    Chúng tôi cung cấp các liệu trình chăm sóc da chuyên sâu giúp bạn có làn da khỏe mạnh, tươi sáng.
+                    Chúng tôi cung cấp các sản phẩm chăm sóc da chuyên sâu giúp bạn có làn da khỏe mạnh, tươi sáng.
                 </p>
 
                 {/* Services List */}
