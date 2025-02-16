@@ -8,9 +8,10 @@ export default function Blog() {
             <header className="bg-[#fef8f8] shadow-md py-6 px-8 flex justify-between items-center">
                 <h1 className="text-[#e3a2a2] text-2xl font-bold">SWD</h1>
                 <nav className="flex space-x-20">
-                    <Link to="/" className="text-gray-700 font-semibold hover:text-[#e3a2a2]">Home</Link>
-                    <Link to="/about" className="text-gray-700 font-semibold hover:text-[#e3a2a2]">About</Link>
+                    <Link to="/ve-chung-toi" className="text-gray-700 font-semibold hover:text-[#e3a2a2]">About</Link>
                     <Link to="/dich-vu" className="text-gray-700 font-semibold hover:text-[#e3a2a2]">Service</Link>
+                    <Link to="#" className="text-gray-700 font-semibold hover:text-[#e3a2a2]">Skincare Consultation</Link>
+                    <Link to="/san-pham" className="text-gray-700 font-semibold hover:text-[#e3a2a2]">Product</Link>
                     <Link to="/blog" className="text-gray-700 font-semibold hover:text-[#e3a2a2]">Blog</Link>
                 </nav>
                 <Link to="/dang-nhap">
@@ -63,7 +64,7 @@ export default function Blog() {
                             <Link to="/blog/chong-nang" className="text-[#e3a2a2] font-semibold mt-4 inline-block">Đọc thêm →</Link>
                         </div>
                     </div>
-                    
+
                 </div>
             </div>
 

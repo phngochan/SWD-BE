@@ -17,11 +17,11 @@ export default function Home() {
             <header className="bg-[#fef8f8] shadow-md py-6 px-8 flex justify-between items-center ">
                 <h1 className="text-[#e3a2a2] text-2xl font-bold">SWD</h1>
                 <nav className="flex space-x-20">
-                    <a href="/ve-chung-toi" className="text-gray-700 font-semibold hover:text-[#e3a2a2]">About</a>
-                    <a href="/dich-vu" className="text-gray-700 font-semibold hover:text-[#e3a2a2]">Service</a>
-                    <a href="#" className="text-gray-700 font-semibold hover:text-[#e3a2a2]">Skincare Consultation</a>
-                    <a href="/san-pham" className="text-gray-700 font-semibold hover:text-[#e3a2a2]">Product</a>
-                    <a href="/blog" className="text-gray-700 font-semibold hover:text-[#e3a2a2]">Blog</a>
+                    <Link to ="/ve-chung-toi" className="text-gray-700 font-semibold hover:text-[#e3a2a2]">About</Link>
+                    <Link to ="/dich-vu" className="text-gray-700 font-semibold hover:text-[#e3a2a2]">Service</Link>
+                    <Link to ="#" className="text-gray-700 font-semibold hover:text-[#e3a2a2]">Skincare Consultation</Link>
+                    <Link to ="/san-pham" className="text-gray-700 font-semibold hover:text-[#e3a2a2]">Product</Link>
+                    <Link to ="/blog" className="text-gray-700 font-semibold hover:text-[#e3a2a2]">Blog</Link>
                 </nav>
                 <Link to="/dang-nhap">
                     <button className="bg-[#edadad] text-white px-4 py-2 rounded-full hover:bg-[#e3a2a2]">Login</button>
