@@ -12,19 +12,19 @@ const services = [
 
 export default function Home() {
     return (
-        <div className="bg-[#c2661f27] min-h-screen">
+        <div className="bg-[#F5F5F5] min-h-screen">
             {/* Header */}
-            <header className="bg-[#fef8f8] shadow-md py-6 px-8 flex justify-between items-center ">
-                <h1 className="text-[#e3a2a2] text-2xl font-bold">SWD</h1>
+            <header className="bg-[#E5F5F1] shadow-md py-6 px-8 flex justify-between items-center ">
+                <h1 className="text-[#A7DFEC] text-2xl font-bold">SWD</h1>
                 <nav className="flex space-x-20">
-                    <Link to ="/ve-chung-toi" className="text-gray-700 font-semibold hover:text-[#e3a2a2]">About</Link>
-                    <Link to ="/dich-vu" className="text-gray-700 font-semibold hover:text-[#e3a2a2]">Service</Link>
-                    <Link to ="#" className="text-gray-700 font-semibold hover:text-[#e3a2a2]">Skincare Consultation</Link>
-                    <Link to ="/san-pham" className="text-gray-700 font-semibold hover:text-[#e3a2a2]">Product</Link>
-                    <Link to ="/blog" className="text-gray-700 font-semibold hover:text-[#e3a2a2]">Blog</Link>
+                    <Link to ="/ve-chung-toi" className="text-[#2B6A7C] font-semibold hover:text-[#404040]">About</Link>
+                    <Link to ="/dich-vu" className="text-[#2B6A7C] font-semibold hover:text-[#404040]">Service</Link>
+                    <Link to ="#" className="text-[#2B6A7C] font-semibold hover:text-[#404040]">Skincare Consultation</Link>
+                    <Link to ="/san-pham" className="text-[#2B6A7C] font-semibold hover:text-[#404040]">Product</Link>
+                    <Link to ="/blog" className="text-[#2B6A7C] font-semibold hover:text-[#404040]">Blog</Link>
                 </nav>
                 <Link to="/dang-nhap">
-                    <button className="bg-[#edadad] text-white px-4 py-2 rounded-full hover:bg-[#e3a2a2]">Login</button>
+                    <button className="bg-[#A7DFEC] text-white px-4 py-2 rounded-full hover:bg-[#2B6A7C]">Login</button>
                 </Link>
             </header>
 
@@ -46,7 +46,7 @@ export default function Home() {
             <section className="max-w-6xl mx-auto px-6 py-16">
                 {/* About Us */}
                 <div className="text-center mb-12">
-                    <h2 className="text-4xl font-bold text-[#e3a2a2]">Welcome to SWD</h2>
+                    <h2 className="text-4xl font-bold text-[#2B6A7C]">Welcome to SWD</h2>
                     <p className="mt-4 text-gray-600">
                         Discover a new world of skincare with our expert solutions tailored to your unique skin needs.
                     </p>
@@ -82,7 +82,7 @@ export default function Home() {
                             </div>
                             <div className="mt-4 text-center">
                                 <h3 className="text-xl font-semibold">{service.name}</h3>
-                                <button className="mt-3 px-7 py-1 bg-[#edadad] text-white rounded-full hover:bg-[#e3a2a2]">
+                                <button className="mt-3 px-7 py-1 bg-[#A7DFEC] text-white rounded-full hover:bg-[#2B6A7C]">
                                     Chọn
                                 </button>
                             </div>
@@ -92,7 +92,7 @@ export default function Home() {
 
                 {/* Customer Testimonials */}
                 <div className="mt-16 text-center">
-                    <h2 className="text-3xl font-bold text-[#e3a2a2]">What Our Customers Say</h2>
+                    <h2 className="text-3xl font-bold text-[#2B6A7C]">What Our Customers Say</h2>
                     <div className="mt-8 grid md:grid-cols-2 gap-8">
                         <div className="bg-white p-6 rounded-lg shadow-md">
                             <p className="text-gray-700">"SWD completely changed my skincare routine! My skin has never felt better."</p>
@@ -107,7 +107,7 @@ export default function Home() {
             </section>
 
             {/* Footer */}
-            <footer className="bg-[#fef8f8] text-[#646464] py-10">
+            <footer className="bg-[#E5F5F1] text-[#2B6A7C] py-10">
                 <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-6 px-6">
                     <div>
                         <h3 className="text-lg font-bold">Let's Stay Social</h3>
@@ -118,30 +118,30 @@ export default function Home() {
                         </div>
                     </div>
                     <div>
-                        <h3 className="text-[#646464] text-lg font-bold">About</h3>
+                        <h3 className="text-[#2B6A7C] text-lg font-bold">About</h3>
                         <ul className="mt-2 space-y-1">
-                            <li><a href="#" className="text-[#646464] hover:text-[#000000]">Our Story</a></li>
-                            <li><a href="#" className="text-[#646464] hover:text-[#000000]">Mission</a></li>
-                            <li><a href="#" className="text-[#646464] hover:text-[#000000]">Sustainability</a></li>
+                            <li><a href="#" className="text-[#2B6A7C] hover:text-[#000000]">Our Story</a></li>
+                            <li><a href="#" className="text-[#2B6A7C] hover:text-[#000000]">Mission</a></li>
+                            <li><a href="#" className="text-[#2B6A7C] hover:text-[#000000]">Sustainability</a></li>
                         </ul>
                     </div>
                     <div>
-                        <h3 className="text-[#646464] text-lg font-bold">Support</h3>
+                        <h3 className="text-[#2B6A7C] text-lg font-bold">Support</h3>
                         <ul className="mt-2 space-y-1">
-                            <li><a href="#" className="text-[#646464] hover:text-[#000000]">Contact Us</a></li>
-                            <li><a href="#" className="text-[#646464] hover:text-[#000000]">FAQ</a></li>
-                            <li><a href="#" className="text-[#646464] hover:text-[#000000]">Shipping & Returns</a></li>
+                            <li><a href="#" className="text-[#2B6A7C] hover:text-[#000000]">Contact Us</a></li>
+                            <li><a href="#" className="text-[#2B6A7C] hover:text-[#000000]">FAQ</a></li>
+                            <li><a href="#" className="text-[#2B6A7C] hover:text-[#000000]">Shipping & Returns</a></li>
                         </ul>
                     </div>
                     <div>
-                        <h3 className="text-[#646464] text-lg font-bold">Legal</h3>
+                        <h3 className="text-[#2B6A7C] text-lg font-bold">Legal</h3>
                         <ul className="mt-2 space-y-1">
-                            <li><a href="#" className="text-[#646464] hover:text-white">Privacy Policy</a></li>
-                            <li><a href="#" className="text-[#646464] hover:text-white">Terms of Service</a></li>
+                            <li><a href="#" className="text-[#2B6A7C] hover:text-white">Privacy Policy</a></li>
+                            <li><a href="#" className="text-[#2B6A7C] hover:text-white">Terms of Service</a></li>
                         </ul>
                     </div>
                 </div>
-                <div className="text-center mt-8 text-gray-500 text-sm">
+                <div className="text-center mt-8 text-[#2B6A7C] text-sm">
                     &copy; 2025 SWD. All rights reserved.
                 </div>
             </footer>

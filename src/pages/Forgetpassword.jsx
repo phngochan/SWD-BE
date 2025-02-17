@@ -17,24 +17,24 @@ export default function ForgetPassword() {
       className="flex items-center justify-center min-h-screen bg-cover bg-center"
       style={{ backgroundImage: "url('/images/forgot.png')" }}
     >
-      <div className="relative w-full max-w-md p-8 bg-[#E8BFB6] bg-opacity-90 rounded-lg shadow-2xl">
-        <h2 className="mb-6 text-3xl font-semibold text-center text-[#3A2A2A]">Forget Password ?</h2>
-        <h3 className="mb-6 text-center">Don’t worry! It happens. Please enter the email associated with your account.</h3>
+      <div className="relative w-full max-w-md p-8 bg-[#A7DFEC] bg-opacity-90 rounded-lg shadow-2xl">
+        <h2 className="mb-6 text-3xl font-semibold text-center text-[#2B6A7C]">Forget Password ?</h2>
+        <h3 className="mb-6 text-center text-[#2B6A7C]">Don’t worry! It happens. Please enter the email associated with your account.</h3>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label className="block mb-2 text-sm font-medium text-[#3A2A2A]">Email address</label>
+            <label className="block mb-2 text-sm font-medium text-[#2B6A7C]">Email address</label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email"
-              className="w-full px-3 py-2 border border-[#D8A7A0] rounded-3xl focus:outline-none focus:ring-2 focus:ring-[#AF8076]"
+              className="w-full px-3 py-2 border border-[#2B6A7C] rounded-3xl focus:outline-none focus:ring-2 focus:ring-[#2B6A7C]"
             />
           </div>
           <Link to="/da-doi-mat-khau">
             <button
               type="submit"
-              className="w-full px-4 py-2 font-bold text-white bg-[#AF8076] rounded-3xl hover:bg-[#8F6A5B]"
+              className="w-full px-4 py-2 font-bold text-[#2B6A7C] bg-[#ffffff] rounded-3xl hover:bg-[#8bc3d3]"
             >
               Submit
             </button>

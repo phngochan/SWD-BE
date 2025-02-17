@@ -4,19 +4,19 @@ import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa";
 
 export default function About() {
     return (
-        <div className="bg-[#c2661f27] min-h-screen">
+        <div className="bg-[#F5F5F5] min-h-screen">
             {/* Header */}
-            <header className="bg-[#fef8f8] shadow-md py-6 px-8 flex justify-between items-center">
-                <h1 className="text-[#e3a2a2] text-2xl font-bold">SWD</h1>
+            <header className="bg-[#E5F5F1] shadow-md py-6 px-8 flex justify-between items-center">
+                <h1 className="text-[#A7DFEC] text-2xl font-bold">SWD</h1>
                 <nav className="flex space-x-20">
-                    <Link to="/" className="text-gray-700 font-semibold hover:text-[#e3a2a2]">Home</Link>
-                    <Link to="/dich-vu" className="text-gray-700 font-semibold hover:text-[#e3a2a2]">Service</Link>
-                    <Link to ="#" className="text-gray-700 font-semibold hover:text-[#e3a2a2]">Skincare Consultation</Link>
-                    <Link to ="/san-pham" className="text-gray-700 font-semibold hover:text-[#e3a2a2]">Product</Link>
-                    <Link to="/blog" className="text-gray-700 font-semibold hover:text-[#e3a2a2]">Blog</Link>
+                    <Link to="/" className="text-gray-700 font-semibold hover:text-[#2B6A7C]">Home</Link>
+                    <Link to="/dich-vu" className="text-gray-700 font-semibold hover:text-[#2B6A7C]">Service</Link>
+                    <Link to ="#" className="text-gray-700 font-semibold hover:text-[#2B6A7C]">Skincare Consultation</Link>
+                    <Link to ="/san-pham" className="text-gray-700 font-semibold hover:text-[#2B6A7C]">Product</Link>
+                    <Link to="/blog" className="text-gray-700 font-semibold hover:text-[#2B6A7C]">Blog</Link>
                 </nav>
                 <Link to="/dang-nhap">
-                    <button className="bg-[#edadad] text-white px-4 py-2 rounded-full hover:bg-[#e3a2a2]">Login</button>
+                    <button className="bg-[#A7DFEC] text-white px-4 py-2 rounded-full hover:bg-[#2B6A7C]">Login</button>
                 </Link>
             </header>
 
@@ -38,7 +38,7 @@ export default function About() {
 
             <div className="max-w-5xl mx-auto px-6 py-16 text-gray-800">
                 <h2 className="text-3xl font-bold text-center mb-6">
-                    <span className="text-[#e3a2a2]">LÀN DA KHỎE ĐẸP</span> TỪ THIÊN NHIÊN - AN TOÀN VÀ HIỆU QUẢ!
+                    <span className="text-[#075E76]">LÀN DA KHỎE ĐẸP</span> TỪ THIÊN NHIÊN - AN TOÀN VÀ HIỆU QUẢ!
                 </h2>
                 <p className="text-lg text-center leading-relaxed">
                     Từ năm 1973, Revivalabs đã theo đuổi một sứ mệnh duy nhất: tạo ra những sản phẩm chăm sóc da an toàn, hiệu quả và mang lại kết quả rõ rệt với mức giá hợp lý.
@@ -59,7 +59,7 @@ export default function About() {
             </div>
 
             {/* Footer */}
-            <footer className="bg-[#fef8f8] text-[#646464] py-10">
+            <footer className="bg-[#E5F5F1] text-[#646464] py-10">
                 <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-6 px-6">
                     <div>
                         <h3 className="text-lg font-bold">Let's Stay Social</h3>
