@@ -9,6 +9,9 @@ import Blog from "../pages/Blog";
 import Services from "../pages/Services";
 import About from "../pages/About";
 import Product from "../pages/Product";
+import SkincareConsultation from "../pages/Skinconsultation";
+import Calendar from "../pages/Calendar";
+import ConfirmBooking from "../pages/ComfirmBooking";
 
 export default function AppRoute() {
     return (
@@ -22,6 +25,9 @@ export default function AppRoute() {
             <Route path={routes.blog} element={<Blog />} />
             <Route path={routes.services} element={<Services />} />
             <Route path={routes.product} element={<Product />} />
+            <Route path={routes.skinconsultation} element={<SkincareConsultation />} />
+            <Route path={routes.calendar} element={<Calendar />} />
+            <Route path={routes.confirmbooking} element={<ConfirmBooking />} />
         </Routes>
     )
 }

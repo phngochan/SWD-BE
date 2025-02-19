@@ -9,4 +9,7 @@ export const routes = {
     services: "dich-vu",
     updateprofile: "cap-nhat-thong-tin",
     product: "san-pham",
+    skinconsultation: "tu-van-cham-soc-da",
+    calendar: "lich-hen",
+    confirmbooking: "xac-nhan-dat-lich",
 }

@@ -19,7 +19,7 @@ export default function Home() {
                 <nav className="flex space-x-20">
                     <Link to ="/ve-chung-toi" className="text-[#2B6A7C] font-semibold hover:text-[#404040]">About</Link>
                     <Link to ="/dich-vu" className="text-[#2B6A7C] font-semibold hover:text-[#404040]">Service</Link>
-                    <Link to ="#" className="text-[#2B6A7C] font-semibold hover:text-[#404040]">Skincare Consultation</Link>
+                    <Link to ="/tu-van-cham-soc-da" className="text-[#2B6A7C] font-semibold hover:text-[#404040]">Skincare Consultation</Link>
                     <Link to ="/san-pham" className="text-[#2B6A7C] font-semibold hover:text-[#404040]">Product</Link>
                     <Link to ="/blog" className="text-[#2B6A7C] font-semibold hover:text-[#404040]">Blog</Link>
                 </nav>
