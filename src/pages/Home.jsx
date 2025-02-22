@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
 import { FaFacebook, FaInstagram, FaTwitter, FaHandSparkles } from "react-icons/fa";
+import Footer from "../components/Footer";
+import Navbar from "../components/Navbar";
 
 const services = [
     { name: "pro calm skin treatment", image: "/images/skincare1.png" },
@@ -14,20 +16,8 @@ export default function Home() {
     return (
         <div className="bg-[#F5F5F5] min-h-screen">
             {/* Header */}
-            <header className="bg-[#E5F5F1] shadow-md py-6 px-8 flex justify-between items-center ">
-                <h1 className="text-[#A7DFEC] text-2xl font-bold">SWD</h1>
-                <nav className="flex space-x-20">
-                    <Link to ="/ve-chung-toi" className="text-[#2B6A7C] font-semibold hover:text-[#404040]">About</Link>
-                    <Link to ="/dich-vu" className="text-[#2B6A7C] font-semibold hover:text-[#404040]">Service</Link>
-                    <Link to ="/tu-van-cham-soc-da" className="text-[#2B6A7C] font-semibold hover:text-[#404040]">Skincare Consultation</Link>
-                    <Link to ="/san-pham" className="text-[#2B6A7C] font-semibold hover:text-[#404040]">Product</Link>
-                    <Link to ="/blog" className="text-[#2B6A7C] font-semibold hover:text-[#404040]">Blog</Link>
-                </nav>
-                <Link to="/dang-nhap">
-                    <button className="bg-[#A7DFEC] text-white px-4 py-2 rounded-full hover:bg-[#2B6A7C]">Login</button>
-                </Link>
-            </header>
-
+            <Navbar />
+            
             {/* Hero Section */}
             <div
                 className="h-[500px] w-full flex items-center justify-center text-white text-center"
@@ -107,7 +97,7 @@ export default function Home() {
             </section>
 
             {/* Footer */}
-            <footer className="bg-[#E5F5F1] text-[#2B6A7C] py-10">
+            {/* <footer className="bg-[#E5F5F1] text-[#2B6A7C] py-10">
                 <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-6 px-6">
                     <div>
                         <h3 className="text-lg font-bold">Let's Stay Social</h3>
@@ -144,7 +134,8 @@ export default function Home() {
                 <div className="text-center mt-8 text-[#2B6A7C] text-sm">
                     &copy; 2025 SWD. All rights reserved.
                 </div>
-            </footer>
+            </footer> */}
+            <Footer />
         </div>
     );
 }

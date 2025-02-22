@@ -1,24 +1,13 @@
 import { Link } from "react-router-dom";
 import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa";
+import Navbar from "../components/Navbar";
 
 
 export default function About() {
     return (
         <div className="bg-[#F5F5F5] min-h-screen">
             {/* Header */}
-            <header className="bg-[#E5F5F1] shadow-md py-6 px-8 flex justify-between items-center">
-                <h1 className="text-[#A7DFEC] text-2xl font-bold">SWD</h1>
-                <nav className="flex space-x-20">
-                    <Link to="/" className="text-gray-700 font-semibold hover:text-[#2B6A7C]">Home</Link>
-                    <Link to="/dich-vu" className="text-gray-700 font-semibold hover:text-[#2B6A7C]">Service</Link>
-                    <Link to ="#" className="text-gray-700 font-semibold hover:text-[#2B6A7C]">Skincare Consultation</Link>
-                    <Link to ="/san-pham" className="text-gray-700 font-semibold hover:text-[#2B6A7C]">Product</Link>
-                    <Link to="/blog" className="text-gray-700 font-semibold hover:text-[#2B6A7C]">Blog</Link>
-                </nav>
-                <Link to="/dang-nhap">
-                    <button className="bg-[#A7DFEC] text-white px-4 py-2 rounded-full hover:bg-[#2B6A7C]">Login</button>
-                </Link>
-            </header>
+            <Navbar />
 
             {/* Hero Section */}
             <div

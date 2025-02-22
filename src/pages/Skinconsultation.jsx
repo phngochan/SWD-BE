@@ -1,4 +1,6 @@
 import { Link } from "react-router-dom";
+import Footer from "../components/Footer";
+import Navbar from "../components/Navbar";
 
 const experts = [
     { name: "Dr. Emma Johnson", specialty: "Acne & Sensitive Skin", image: "/images/expert1.png" },
@@ -9,6 +11,7 @@ const experts = [
 export default function SkincareConsultation() {
     return (
         <div className="min-h-screen bg-[#F5F5F5] p-10">
+            <Navbar />
             <h1 className="text-4xl font-bold text-[#2B6A7C] text-center">Our Skincare Experts</h1>
             <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto mt-10">
                 {experts.map((expert, index) => (
@@ -24,6 +27,7 @@ export default function SkincareConsultation() {
                     </div>
                 ))}
             </div>
+            <Footer />
         </div>
     );
 }
