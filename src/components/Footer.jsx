@@ -40,7 +40,7 @@ export default function Footer() {
             </div>
 
             {/* Chia cắt bằng đường line */}
-            <div className="w-full max-w-lg mx-auto h-px bg-[#395c74] my-8"></div>
+            <div className="w-96 max-w-lg mx-auto min-h-px rounded-xl bg-[#395c74] my-8"></div>
 
             {/* Thông tin dưới cùng */}
             <div className="text-center mt-8 text-[#2B6A7C] text-sm">
