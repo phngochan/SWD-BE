@@ -1,128 +1,89 @@
 import React, { useState } from "react";
-import { Calendar, momentLocalizer } from "react-big-calendar";
-import moment from "moment";
-import "react-big-calendar/lib/css/react-big-calendar.css";
+import Navbar from "../components/Navbar";
+import PropTypes from "prop-types";
+import Calendar from "react-calendar";
+import "react-calendar/dist/Calendar.css";
 
-const localizer = momentLocalizer(moment);
+const SkincareBooking = () => {
+    const [selectedDate, setSelectedDate] = useState(new Date());
+    const [selectedTime, setSelectedTime] = useState(null);
 
-// Danh sách khung giờ có thể đặt lịch
-const timeSlots = ["08:00 AM", "09:00 AM", "10:00 AM", "11:00 AM", "12:00 PM", "01:00 PM", "02:00 PM", "03:00 PM"];
+    const times = [
+        "08:00 AM", "09:00 AM", "10:00 AM", "11:00 AM", "12:00 PM",
+        "01:00 PM", "02:00 PM", "03:00 PM", "04:00 PM", "05:00 PM"
+    ];
 
-export default function CalendarPage() {
-  const [myEvents, setMyEvents] = useState([]);
-  const [selectedDate, setSelectedDate] = useState(null);
-  const [selectedTime, setSelectedTime] = useState("");
-  const [eventTitle, setEventTitle] = useState("");
-
-  // Khi chọn một ngày trong lịch
-  const handleSelectSlot = (slotInfo) => {
-    setSelectedDate(moment(slotInfo.start).startOf("day").toDate()); // Chỉ lấy ngày
-    setSelectedTime("");
-    setEventTitle("");
-  };
-
-  // Khi chọn một giờ
-  const handleTimeSelect = (time) => {
-    setSelectedTime(time);
-  };
-
-  // Thêm sự kiện mới
-  const handleAddEvent = () => {
-    if (!eventTitle || !selectedDate || !selectedTime) return;
-    
-    const eventDateTime = moment(selectedDate).set({
-      hour: parseInt(selectedTime.split(":")[0]),
-      minute: selectedTime.includes("PM") ? 0 + 12 * (selectedTime.startsWith("12") ? 0 : 1) : 0,
-    });
-
-    const newEvent = {
-      title: eventTitle,
-      start: eventDateTime.toDate(),
-      end: eventDateTime.add(1, "hour").toDate(),
+    const handleTimeSelect = (time) => {
+        setSelectedTime(time);
     };
 
-    setMyEvents([...myEvents, newEvent]);
-    setSelectedDate(null);
-    setSelectedTime("");
-    setEventTitle("");
-  };
+    const handleConfirm = () => {
+        // Add confirmation logic here
+        alert(`Confirmed booking for ${selectedDate.toDateString()} at ${selectedTime}`);
+    };
 
-  // Đổi màu nền cho ngày có sự kiện
-  const dayPropGetter = (date) => {
-    const hasEvent = myEvents.some((event) => moment(event.start).isSame(date, "day"));
-    if (hasEvent) {
-      return {
-        style: {
-          backgroundColor: "#ffeb3b",
-          color: "#333",
-          borderRadius: "5px",
-        },
-      };
-    }
-    return {};
-  };
+    const handleCancel = () => {
+        // Add cancel logic here
+        setSelectedTime(null);
+    };
 
-  return (
-    <div className="w-full min-h-screen bg-gray-100 p-6">
-      <div className="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-lg">
-        <h2 className="text-2xl font-semibold text-gray-700 mb-4">Lịch đặt lịch</h2>
-
-        <Calendar
-          localizer={localizer}
-          events={myEvents}
-          startAccessor="start"
-          endAccessor="end"
-          style={{ height: 500 }}
-          className="rounded-lg shadow-md"
-          selectable
-          onSelectSlot={handleSelectSlot}
-          dayPropGetter={dayPropGetter}
-        />
-
-        {/* Form đặt lịch */}
-        {selectedDate && (
-          <div className="mt-6 p-4 bg-gray-50 rounded-lg shadow-md">
-            <h3 className="text-lg font-semibold text-gray-700">
-              Đặt lịch cho ngày: {moment(selectedDate).format("DD/MM/YYYY")}
-            </h3>
-
-            {/* Chọn giờ */}
-            <div className="mt-4 grid grid-cols-4 gap-2">
-              {timeSlots.map((time) => (
-                <button
-                  key={time}
-                  className={`py-2 px-4 rounded border ${
-                    selectedTime === time ? "bg-blue-500 text-white" : "bg-white text-gray-700 border-gray-300"
-                  }`}
-                  onClick={() => handleTimeSelect(time)}
-                >
-                  {time}
-                </button>
-              ))}
+    return (
+        <div className="bg-[#F8F4F2] min-h-screen">
+            <Navbar/>
+            <div className="max-w-4xl mx-auto p-4">
+                <h2 className="text-center text-xl font-semibold my-4">Skincare Consultation with </h2>
+                <div className="bg-white p-4 rounded-lg shadow-md flex gap-6">
+                    <div>
+                        <Calendar
+                            onChange={setSelectedDate}
+                            value={selectedDate}
+                            className="border rounded-lg p-2"
+                        />
+                    </div>
+                    <div className="flex-1">
+                        <h3 className="text-lg font-semibold mb-2">Available Times for {selectedDate.toDateString()}</h3>
+                        <div className="grid grid-cols-3 gap-2">
+                            {times.map((time, index) => (
+                                <button
+                                    key={index}
+                                    className={`border p-2 rounded-lg text-xs font-medium ${selectedTime === time ? 'bg-[#A7DFEC] text-white' : 'bg-gray-100 hover:bg-[#a4b0b3]'}`}
+                                    onClick={() => handleTimeSelect(time)}
+                                    aria-label={`Select time ${time}`}
+                                >
+                                    {time}
+                                </button>
+                            ))}
+                        </div>
+                        <div className="flex justify-center gap-4 mt-4">
+                            <button
+                                className="bg-[#A7DFEC] text-white px-4 py-2 rounded-lg"
+                                onClick={handleConfirm}
+                                aria-label="Confirm booking"
+                            >
+                                Confirm
+                            </button>
+                            <button
+                                className="text-gray-500"
+                                onClick={handleCancel}
+                                aria-label="Cancel booking"
+                            >
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
+        </div>
+    );
+};
 
-            {/* Nhập tiêu đề sự kiện */}
-            <input
-              type="text"
-              placeholder="Nhập tiêu đề sự kiện..."
-              className="mt-4 w-full p-2 border border-gray-300 rounded-lg"
-              value={eventTitle}
-              onChange={(e) => setEventTitle(e.target.value)}
-            />
+SkincareBooking.propTypes = {
+    selectedDate: PropTypes.instanceOf(Date),
+    selectedTime: PropTypes.string,
+    times: PropTypes.arrayOf(PropTypes.string),
+    handleTimeSelect: PropTypes.func,
+    handleConfirm: PropTypes.func,
+    handleCancel: PropTypes.func,
+};
 
-            {/* Nút thêm sự kiện */}
-            <div className="mt-4 flex justify-end">
-              <button
-                className="px-4 py-2 bg-green-500 text-white rounded-lg shadow-md"
-                onClick={handleAddEvent}
-                disabled={!eventTitle || !selectedTime}
-              >
-                Thêm sự kiện
-              </button>
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
+export default SkincareBooking;
