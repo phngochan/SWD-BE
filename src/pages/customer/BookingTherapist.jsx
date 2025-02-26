@@ -8,7 +8,7 @@ const experts = [
     { name: "Michael Tan", specialty: "Brightening & Hyperpigmentation", image: "/images/expert3.png" },
 ];
 
-export default function SkincareConsultation() {
+export default function BookingTherapist() {
     return (
         
         <div className="min-h-screen bg-[#F5F5F5]">
@@ -20,11 +20,11 @@ export default function SkincareConsultation() {
                         <img src={expert.image} alt={expert.name} className="mx-auto w-32 h-32 rounded-full mb-4" />
                         <h3 className="text-xl font-semibold text-gray-800">{expert.name}</h3>
                         <p className="text-gray-600 mt-2">{expert.specialty}</p>
-                        {/* <Link to="/lich-hen">
+                        <Link to="/lich-hen">
                             <button className="mt-4 px-6 py-2 bg-[#A7DFEC] text-white rounded-full hover:bg-[#2B6A7C]">
                                 Book Consultation
                             </button>
-                        </Link> */}
+                        </Link>
                     </div>
                 ))}
             </div>
