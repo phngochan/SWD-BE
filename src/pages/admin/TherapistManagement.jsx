@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 // import axios from "axios";
-import Sidebar from "../components/AdminSidebar";
+import Sidebar from "../../components/AdminSidebar";
 
 export default function TherapistManagement() {
   const [therapists, setTherapists] = useState([]);

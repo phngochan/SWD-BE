@@ -7,7 +7,7 @@ const AdminSidebar = () => {
 
   const menuItems = [
     { name: "Therapist", path: "/therapist-management" },
-    { name: "Staff", path: "/staff-management" },
+    { name: "Staff", path: "/quan-ly-nhan-vien" },
   ];
 
   return (

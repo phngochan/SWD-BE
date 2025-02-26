@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { FaFacebook, FaInstagram, FaTwitter, FaHandSparkles } from "react-icons/fa";
-import Footer from "../components/Footer";
-import Navbar from "../components/Navbar";
+import Footer from "../../components/Footer";
+import Navbar from "../../components/Navbar";
 
 const services = [
     { name: "pro calm skin treatment", image: "/images/skincare1.png" },

@@ -12,4 +12,5 @@ export const routes = {
     skinconsultation: "tu-van-cham-soc-da",
     calendar: "lich-hen",
     confirmbooking: "xac-nhan-dat-lich",
+    staffmanagement: "quan-ly-nhan-vien",
 }
