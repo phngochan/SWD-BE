@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa";
 import Navbar from "../../components/Navbar";
-import Footer from "../../components/Footer";  
+import Footer from "../../components/Footer";
 
 const services = [
     { name: "pro calm skin treatment", image: "/images/skincare1.png" },
@@ -46,9 +46,11 @@ export default function Services() {
                             </div>
                             <div className="mt-4 text-center">
                                 <h3 className="text-xl font-semibold">{service.name}</h3>
-                                <button className="mt-3 px-7 py-1 bg-[#A7DFEC] text-white rounded-full hover:bg-[#2B6A7C]">
-                                    Chọn
-                                </button>
+                                <Link to={'/chon-chuyen-vien'}>
+                                    <button className="mt-4 px-6 py-2 bg-[#A7DFEC] text-white rounded-full hover:bg-[#2B6A7C]">
+                                        Đặt Lịch Hẹn
+                                    </button>
+                                </Link>
                             </div>
                         </div>
                     ))}

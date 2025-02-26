@@ -17,10 +17,12 @@ import TherapistManagement from "../pages/admin/TherapistManagement.jsx";
 import Dashboard from "../pages/manager/Dashboard.jsx";
 import ForgetPassword from "../pages/customer/Forgetpassword.jsx";
 import BookingTherapist from "../pages/customer/BookingTherapist.jsx";
+import AdditionalProducts from "../pages/customer/AdditionalProducts.jsx";
 
 export default function AppRoute() {
     return (
         <Routes>
+            {/* Customer & User */}
             <Route path={routes.home} element={<Home />} />
             <Route path={routes.about} element={<About />} />
             <Route path={routes.login} element={<Login />} />
@@ -34,6 +36,8 @@ export default function AppRoute() {
             <Route path={routes.bookingtherapist} element={<BookingTherapist />} />
             <Route path={routes.calendar} element={<Calendar />} />
             <Route path={routes.confirmbooking} element={<ConfirmBooking />} />
+            <Route path={routes.additionalproducts} element={<AdditionalProducts />} />
+            {/* Admin & Manager */}
             <Route path={routes.staffmanagement} element={<StaffManagement />} />
             <Route path='/question-management' element={<QuestionManagement />} />
             <Route path='/therapist-management' element={<TherapistManagement />} />

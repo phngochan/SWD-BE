@@ -12,6 +12,9 @@ export const routes = {
     skinconsultation: "tu-van-cham-soc-da",
     bookingtherapist: "chon-chuyen-vien", 
     calendar: "lich-hen",
+    additionalproducts: "san-pham-them",
+    skincarebooking: "dat-lich",
+
     confirmbooking: "xac-nhan-dat-lich",
     staffmanagement: "quan-ly-nhan-vien",
 }

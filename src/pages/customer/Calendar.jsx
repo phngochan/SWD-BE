@@ -20,11 +20,13 @@ const SkincareBooking = () => {
     const handleConfirm = () => {
         // Add confirmation logic here
         alert(`Confirmed booking for ${selectedDate.toDateString()} at ${selectedTime}`);
+        navigate("/")
     };
 
     const handleCancel = () => {
         // Add cancel logic here
         setSelectedTime(null);
+        navigate("/")
     };
 
     return (
