@@ -12,6 +12,10 @@ import Product from "../pages/Product";
 import SkincareConsultation from "../pages/Skinconsultation";
 import Calendar from "../pages/Calendar";
 import ConfirmBooking from "../pages/ComfirmBooking";
+import StaffManagement from "../admin/StaffManagement.jsx";
+import QuestionManagement from "../manager/QuestionManagement.jsx";
+import TherapistManagement from "../admin/TherapistManagement.jsx";
+import Dashboard from "../manager/Dashboard.jsx";
 
 export default function AppRoute() {
     return (
@@ -28,6 +32,10 @@ export default function AppRoute() {
             <Route path={routes.skinconsultation} element={<SkincareConsultation />} />
             <Route path={routes.calendar} element={<Calendar />} />
             <Route path={routes.confirmbooking} element={<ConfirmBooking />} />
+            <Route path='/staff-management' element={<StaffManagement />} />
+            <Route path='/question-management' element={<QuestionManagement />} />
+            <Route path='/therapist-management' element={<TherapistManagement />} />
+            <Route path='/dashboard' element={<Dashboard />} />
         </Routes>
     )
 }
