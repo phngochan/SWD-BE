@@ -21,8 +21,6 @@ import AdditionalProducts from "../pages/customer/AdditionalProducts.jsx";
 import ServiceManagement from "../pages/manager/ServiceManagement.jsx";
 import BlogManagement from "../pages/manager/BlogManagement.jsx";
 
-
-
 export default function AppRoute() {
     return (
         <Routes>
