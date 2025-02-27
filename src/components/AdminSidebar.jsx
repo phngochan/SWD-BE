@@ -6,8 +6,8 @@ const AdminSidebar = () => {
   const location = useLocation();
 
   const menuItems = [
-    { name: "Therapist", path: "/therapist-management" },
-    { name: "Staff", path: "/quan-ly-nhan-vien" },
+    // { name: "Therapist", path: "/therapist-management" },
+    // { name: "Staff", path: "/quan-ly-nhan-vien" },
   ];
 
   return (

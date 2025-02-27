@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 // import axios from "axios";
-import Sidebar from "../../components/AdminSidebar";
+import Sidebar from "../../components/ManagerSidebar";
 
 export default function StaffManagement() {
   const [staffMembers, setStaffMembers] = useState([]);
@@ -147,7 +147,7 @@ export default function StaffManagement() {
                   value={newStaff.phoneNumber}
                   onChange={(e) => setNewStaff({ ...newStaff, phoneNumber: e.target.value })}
                 />
-                <label className="block text-sm font-medium text-gray-700">Role</label>
+                {/* <label className="block text-sm font-medium text-gray-700">Role</label>
                 <select
                   className="border p-2 w-full mb-4 rounded"
                   value={newStaff.roleName}
@@ -158,7 +158,7 @@ export default function StaffManagement() {
                   <option value="Manager">Manager</option>
                   <option value="Therapist">Therapist</option>
                   <option value="Admin">Admin</option>
-                </select>
+                </select> */}
               </div>
               <div className="flex justify-between">
                 <button
