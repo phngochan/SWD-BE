@@ -11,14 +11,16 @@ import Product from "../pages/customer/Product.jsx";
 import SkincareConsultation from "../pages/customer/Skinconsultation.jsx";
 import Calendar from "../pages/customer/Calendar.jsx";
 import ConfirmBooking from "../pages/customer/ComfirmBooking.jsx";
-import StaffManagement from "../pages/admin/StaffManagement.jsx";
+import StaffManagement from "../pages/manager/StaffManagement.jsx";
 import QuestionManagement from "../pages/manager/QuestionManagement.jsx";
-import TherapistManagement from "../pages/admin/TherapistManagement.jsx";
+import TherapistManagement from "../pages/manager/TherapistManagement.jsx";
 import Dashboard from "../pages/manager/Dashboard.jsx";
 import ForgetPassword from "../pages/customer/Forgetpassword.jsx";
 import BookingTherapist from "../pages/customer/BookingTherapist.jsx";
 import AdditionalProducts from "../pages/customer/AdditionalProducts.jsx";
 import CheckOut from "../pages/customer/CheckOut.jsx";
+import ServiceManagement from "../pages/manager/ServiceManagement.jsx";
+import BlogManagement from "../pages/manager/BlogManagement.jsx";
 
 export default function AppRoute() {
     return (
@@ -44,6 +46,8 @@ export default function AppRoute() {
             <Route path='/question-management' element={<QuestionManagement />} />
             <Route path='/therapist-management' element={<TherapistManagement />} />
             <Route path='/dashboard' element={<Dashboard />} />
+            <Route path='/service-management' element={<ServiceManagement />} />
+            <Route path='/blog-management' element={<BlogManagement />} />
         </Routes>
     )
 }
