@@ -29,8 +29,6 @@ export default function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/booking" element={<SkincareBooking />} />
-        <Route path="/additional-products" element={<AdditionalProducts />} />
       </Routes>
       <div>
         <div className="flex flex-col items-center min-h-screen pt-[10%] pb-10% bg-[#d47a7a]">

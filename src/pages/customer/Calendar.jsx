@@ -1,12 +1,15 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 import PropTypes from "prop-types";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
+import Swal from "sweetalert2";
 
 const SkincareBooking = () => {
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [selectedTime, setSelectedTime] = useState(null);
+    const navigate = useNavigate();
 
     const times = [
         "08:00 AM", "09:00 AM", "10:00 AM", "11:00 AM", "12:00 PM",
@@ -17,10 +20,35 @@ const SkincareBooking = () => {
         setSelectedTime(time);
     };
 
+    // const handleConfirm = () => {
+    //     const confirmPurchase = window.confirm("Bạn có muốn mua thêm sản phẩm chăm sóc da mặt không?");
+    //     if (confirmPurchase) {
+    //         navigate("/san-pham-bo-sung"); // Chuyển đến trang mua sản phẩm
+    //     } else {
+    //         alert(`Xác nhận đặt lịch vào ${selectedDate.toDateString()} lúc ${selectedTime}`);
+    //     }
+    // };
     const handleConfirm = () => {
-        // Add confirmation logic here
-        alert(`Confirmed booking for ${selectedDate.toDateString()} at ${selectedTime}`);
-        navigate("/")
+        Swal.fire({
+            title: "Mua thêm sản phẩm?",
+            text: "Bạn có muốn mua thêm sản phẩm chăm sóc da mặt không?",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonColor: "#A7DFEC",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Có, mua ngay!",
+            cancelButtonText: "Không, cảm ơn",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                navigate("/san-pham-bo-sung"); // Điều hướng đến trang sản phẩm
+            } else {
+                Swal.fire(
+                    "Đặt lịch thành công!",
+                    `Bạn đã đặt lịch vào ${selectedDate.toDateString()} lúc ${selectedTime}`,
+                    "success"
+                );
+            }
+        });
     };
 
     const handleCancel = () => {
@@ -31,7 +59,7 @@ const SkincareBooking = () => {
 
     return (
         <div className="bg-[#F8F4F2] min-h-screen">
-            <Navbar/>
+            <Navbar />
             <div className="max-w-4xl mx-auto p-4">
                 <h2 className="text-center text-xl font-semibold my-4">Skincare Consultation with </h2>
                 <div className="bg-white p-4 rounded-lg shadow-md flex gap-6">
