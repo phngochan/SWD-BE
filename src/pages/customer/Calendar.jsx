@@ -40,13 +40,14 @@ const SkincareBooking = () => {
             cancelButtonText: "Không, cảm ơn",
         }).then((result) => {
             if (result.isConfirmed) {
-                navigate("/san-pham-bo-sung"); // Điều hướng đến trang sản phẩm
+                navigate("/san-pham-bo-sung-them"); // Điều hướng đến trang sản phẩm
             } else {
                 Swal.fire(
                     "Đặt lịch thành công!",
                     `Bạn đã đặt lịch vào ${selectedDate.toDateString()} lúc ${selectedTime}`,
                     "success"
-                );
+                    
+                );navigate("/xac-nhan-thong-tin");
             }
         });
     };
