@@ -61,7 +61,7 @@ export default function Product() {
                                         <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
                                     </div>
                                     <h3 className="text-xl font-semibold mt-3">{product.name}</h3>
-                                    <button className="mt-3 px-7 py-1 bg-[#A7DFEC] text-white rounded-full hover:bg-[#2B6A7C]">Mua ngay</button>
+                                    <button className="mt-3 px-7 py-1 bg-[#A7DFEC] text-white rounded-full hover:bg-[#2B6A7C]">Xem chi tiết</button>
                                 </div>
                             ))}
                         </div>

@@ -48,7 +48,7 @@ export default function Services() {
                                 <h3 className="text-xl font-semibold">{service.name}</h3>
                                 <Link to={'/chon-chuyen-vien'}>
                                     <button className="mt-4 px-6 py-2 bg-[#A7DFEC] text-white rounded-full hover:bg-[#2B6A7C]">
-                                        Đặt Lịch Hẹn
+                                        Chọn dịch vụ
                                     </button>
                                 </Link>
                             </div>

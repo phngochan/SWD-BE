@@ -22,7 +22,7 @@ export default function BookingTherapist() {
                         <p className="text-gray-600 mt-2">{expert.specialty}</p>
                         <Link to="/lich-hen">
                             <button className="mt-4 px-6 py-2 bg-[#A7DFEC] text-white rounded-full hover:bg-[#2B6A7C]">
-                                Book Consultation
+                                Chọn chuyên viên
                             </button>
                         </Link>
                     </div>
