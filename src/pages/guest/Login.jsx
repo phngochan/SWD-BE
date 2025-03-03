@@ -11,6 +11,7 @@ export default function Login() {
     e.preventDefault();
     console.log("Tên đăng nhập:", username);
     console.log("Mật khẩu:", password);
+    console.log("Đăng nhập thành công!");
   };
 
   return (
