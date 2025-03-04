@@ -21,6 +21,8 @@ import AdditionalProducts from "../pages/customer/AdditionalProducts.jsx";
 import CheckOut from "../pages/customer/CheckOut.jsx";
 import ServiceManagement from "../pages/manager/ServiceManagement.jsx";
 import BlogManagement from "../pages/manager/BlogManagement.jsx";
+import ViewBooking from "../pages/staff/ViewBooking.jsx";
+
 
 export default function AppRoute() {
     return (
@@ -41,13 +43,15 @@ export default function AppRoute() {
             <Route path={routes.confirmbooking} element={<ConfirmBooking />} />
             <Route path={routes.additionalproducts} element={<AdditionalProducts />} />
             <Route path={routes.checkout} element={<CheckOut />} />
-            {/* Admin & Manager */}
+            {/* Manager */}
             <Route path={routes.staffmanagement} element={<StaffManagement />} />
             <Route path='/question-management' element={<QuestionManagement />} />
             <Route path='/therapist-management' element={<TherapistManagement />} />
             <Route path='/dashboard' element={<Dashboard />} />
             <Route path='/service-management' element={<ServiceManagement />} />
             <Route path='/blog-management' element={<BlogManagement />} />
+            <Route path='/view-booking' element={<ViewBooking />} />
+
         </Routes>
     )
 }
