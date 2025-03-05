@@ -3,6 +3,7 @@ import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 
 const skincareRoutines = [
@@ -37,6 +38,12 @@ const skincareRoutines = [
 
 export default function AdditionalProducts() {
     const navigate = useNavigate();
+    const [selectedCount, setSelectedCount] = useState(0);
+
+    const handleSelectProduct = () => {
+        console.log("Product selected!");
+        setSelectedCount((prevCount) => prevCount + 1);
+    };
 
     const handleYes = () => {
         // Logic for adding more products
@@ -76,14 +83,24 @@ export default function AdditionalProducts() {
                                         <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
                                     </div>
                                     <h3 className="text-xl font-semibold mt-3">{product.name}</h3>
-                                    <button className="mt-3 px-7 py-1 bg-[#A7DFEC] text-white rounded-full hover:bg-[#2B6A7C]">Chọn</button>
+                                    <button
+                                        className="mt-3 px-7 py-1 bg-[#A7DFEC] text-white rounded-full hover:bg-[#2B6A7C]"
+                                        onClick={handleSelectProduct}
+                                    >
+                                        Chọn
+                                    </button>
                                 </div>
                             ))}
                         </div>
                     </div>
                 ))}
                 <div className="max-w-2xl mx-auto p-6 mt-20 bg-[#E0F7FA] rounded-lg shadow-lg border border-[#A7DFEC]">
-                    <h2 className="text-center text-2xl font-bold text-[#2B6A7C] my-4 mb-6">Bạn đã chọn những sản phẩm mình mong muốn ?</h2>
+                    <h2 className="text-center text-2xl font-bold text-[#2B6A7C] my-4 mb-6">
+                        {selectedCount === 0
+                            ? "Bạn đã chọn những sản phẩm mình mong muốn ?"
+                            : `Bạn đã chọn ${selectedCount} sản phẩm bổ sung`
+                        }
+                    </h2>
                     <div className="flex justify-center gap-4 mt-4">
                         <button
                             className="bg-[#A7DFEC] text-white px-4 py-2 rounded-lg"
