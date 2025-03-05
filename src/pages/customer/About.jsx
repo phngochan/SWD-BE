@@ -11,7 +11,7 @@ export default function About() {
 
             {/* Hero Section */}
             <div
-                className="h-[700px] w-full flex items-center justify-center text-white text-center"
+                className="h-[500px] w-full flex items-center justify-center text-white text-center"
                 style={{
                     backgroundImage: "url('/images/home.png')",
                     backgroundSize: "cover",  // Giúp ảnh bao phủ toàn bộ phần hero

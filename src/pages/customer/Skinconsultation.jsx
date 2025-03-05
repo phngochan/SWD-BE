@@ -13,6 +13,16 @@ export default function SkincareConsultation() {
         
         <div className="min-h-screen bg-[#F5F5F5]">
             <Navbar />
+            <div className="h-[500px] w-full flex items-center justify-center text-white text-center"
+                style={{
+                    backgroundImage: "url('/images/service.png')",
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                    backgroundRepeat: "no-repeat",
+                    backgroundAttachment: "fixed"
+                }}>
+                <h1 className="text-5xl font-semibold bg-opacity-50 px-6 py-4 rounded-lg">Sản phẩm chăm sóc da</h1>
+            </div>
             <h1 className="text-4xl font-bold text-[#2B6A7C] text-center">Our Skincare Experts</h1>
             <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto mt-10">
                 {experts.map((expert, index) => (
