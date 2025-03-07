@@ -3,7 +3,7 @@ import { routes } from "../../routes";
 import { Link } from "react-router-dom";
 
 
-export default function ForgetPassword() {
+export default function ForgotPassword() {
   const [email, setEmail] = useState("");
 
   const handleSubmit = (e) => {

@@ -69,7 +69,7 @@ import Navbar from "../../components/Navbar";
 import { EyeIcon } from "lucide-react";
 import { EyeOffIcon } from "lucide-react";
 
-export default function Login() {
+export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);

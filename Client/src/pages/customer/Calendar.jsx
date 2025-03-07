@@ -6,7 +6,7 @@ import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import Swal from "sweetalert2";
 
-const SkincareBooking = () => {
+const MyCalendar = () => {
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [selectedTime, setSelectedTime] = useState(null);
     const navigate = useNavigate();
@@ -108,7 +108,7 @@ const SkincareBooking = () => {
     );
 };
 
-SkincareBooking.propTypes = {
+MyCalendar.propTypes = {
     selectedDate: PropTypes.instanceOf(Date),
     selectedTime: PropTypes.string,
     times: PropTypes.arrayOf(PropTypes.string),
@@ -117,4 +117,4 @@ SkincareBooking.propTypes = {
     handleCancel: PropTypes.func,
 };
 
-export default SkincareBooking;
+export default MyCalendar;
