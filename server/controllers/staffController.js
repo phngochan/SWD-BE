@@ -1,7 +1,7 @@
 const User = require('../models/User');
 const bcrypt = require("bcryptjs");
 
-// Get all staff members (Admin only)
+// Get all staff members (Manager only)
 exports.getAllStaff = async (req, res) => {
     try {
         const staffMembers = await User.find({ roleName: "Staff" }).select('-password');
@@ -41,7 +41,7 @@ exports.updateStaff = async (req, res) => {
     }
 };
 
-// Delete staff member (Admin only)
+// Delete staff member (Manager only)
 exports.deleteStaff = async (req, res) => {
     try {
         const staff = await User.findOneAndDelete({ _id: req.params.id, roleName: "Staff" });
@@ -53,7 +53,7 @@ exports.deleteStaff = async (req, res) => {
     }
 };
 
-// Create new staff member (Admin only)
+// Create new staff member (Manager only)
 exports.createStaff = async (req, res) => {
     try {
         const { firstName, lastName, email, phoneNumber, password} = req.body;

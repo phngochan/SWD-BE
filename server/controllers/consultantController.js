@@ -41,7 +41,7 @@ exports.updateConsultant = async (req, res) => {
     }
 };
 
-// Delete consultant (Admin only)
+// Delete consultant (Manager only)
 exports.deleteConsultant = async (req, res) => {
     try {
         const consultant = await Consultant.findOneAndDelete({ _id: req.params.id });

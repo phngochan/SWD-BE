@@ -12,8 +12,8 @@ router.get('/:id', authenticate, consultantController.getConsultantById);
 // Update consultant profile
 router.put('/:id', authenticate, authorize(['Consultant']), consultantController.updateConsultant);
 
-// Delete consultant (Admin only)
-router.delete('/:id', authenticate, authorize(['Admin']), consultantController.deleteConsultant);
+// Delete consultant (Manager only)
+router.delete('/:id', authenticate, authorize(['Manager']), consultantController.deleteConsultant);
 
 // Add rating to consultant
 router.post('/:id/rate', authenticate, authorize(['Customer']), consultantController.addRating);

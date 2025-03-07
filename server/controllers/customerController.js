@@ -1,7 +1,7 @@
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 
-// Get all customers (Admin only)
+// Get all customers (Manger only)
 exports.getAllCustomers = async (req, res) => {
     try {
         const customers = await User.find({ roleName: "Customer" }).select('-password');
@@ -49,7 +49,7 @@ exports.updateCustomer = async (req, res) => {
     }
 };
 
-// Delete customer (Admin only)
+// Delete customer (Manager only)
 exports.deleteCustomer = async (req, res) => {
     try {
         const customer = await User.findOneAndDelete({ _id: req.params.id, roleName: "Customer" });

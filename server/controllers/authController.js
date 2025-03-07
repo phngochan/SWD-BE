@@ -147,7 +147,7 @@ exports.forgotPassword = async (req, res) => {
 
         // Restrict password reset to only customers
         if (user.roleName !== "Customer") {
-          return res.status(403).json({ message: "Only customers are allowed to reset their password. Please contact admin for assistance." });
+          return res.status(403).json({ message: "Only customers are allowed to reset their password. Please contact manager for assistance." });
         }
     
         const resetToken = crypto.randomBytes(32).toString("hex");
