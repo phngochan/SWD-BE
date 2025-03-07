@@ -15,7 +15,6 @@ export const routes = {
     additionalproducts: "san-pham-bo-sung",
     skincarebooking: "dat-lich",
     checkout: "xac-nhan-thong-tin",
-
     confirmbooking: "xac-nhan-dat-lich",
     staffmanagement: "quan-ly-nhan-vien",
 }
