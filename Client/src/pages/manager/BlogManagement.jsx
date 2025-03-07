@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-// import axios from "../../utils/axiosInstance"; // Use a custom Axios instance with auth
+import axios from "../../utils/axios";
 import { useForm } from "react-hook-form";
 import Sidebar from "../../components/ManagerSidebar";
 import ReactQuill from "react-quill";
