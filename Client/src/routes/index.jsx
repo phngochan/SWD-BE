@@ -36,5 +36,6 @@ export const routes = {
     additionalproducts: "/san-pham-them",
     checkout: "/thanh-toan",
     staffmanagement: "/staff-management",
+    verifyemail: "/xac-nhan-email",
   };
   

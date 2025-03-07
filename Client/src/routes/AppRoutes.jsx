@@ -73,6 +73,7 @@ import Services from "../pages/guest/Services.jsx";
 import MyCalendar from "../pages/customer/Calendar.jsx";
 import About from "../pages/guest/About.jsx";
 import ForgotPassword from "../pages/guest/Forgotpassword.jsx";
+import VerifyEmailPage from "../pages/guest/VerifyEmailPage.jsx";
 
 // import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -138,7 +139,7 @@ function AppRoute() {
         <Route path="/dang-ky" element={<RegisterPage />} />
         {/* <Route path="/quen-mat-khau" element={<ForgotPassword />} /> */}
         {/* <Route path="/doi-mat-khau" element={<ResetPassword />} /> */}
-        {/* <Route path="/verify" element={<VerifyEmailPage />} /> */}
+        <Route path="/xac-nhan-email" element={<VerifyEmailPage />} />
 
         {/* Guest & Customer Shared Pages */}
         <Route element={<ProtectedRoute allowedRoles={["Guest", "Customer"]} />}>

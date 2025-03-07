@@ -49,7 +49,7 @@ export default function RegisterPage() {
         alert("Registration successful! Please check your email to verify your account.");
         setFormData({ firstName: "", lastName: "", email: "", password: "", phoneNumber: "" });
         setErrors({});
-        navigate("/login");
+        navigate("/dang-nhap");
       }
     } catch (err) {
       setErrors((prev) => ({ ...prev, form: "An unexpected error occurred. Please try again." }));

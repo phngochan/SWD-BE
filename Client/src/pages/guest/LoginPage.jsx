@@ -90,7 +90,7 @@ export default function LoginPage() {
       else if (roleName === "Staff") redirectUrl = "/view-booking";
       else if (roleName === "Consultant") redirectUrl = "/view-booked";
       else if (roleName === "Admin") redirectUrl = "/staff-management";
-      else if (roleName === "Customer") redirectUrl = "/about";
+      else if (roleName === "Customer") redirectUrl = "/ve-chung-toi";
 
       navigate(redirectUrl);
     }
