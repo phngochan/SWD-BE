@@ -22,6 +22,7 @@ import CheckOut from "../pages/customer/CheckOut.jsx";
 import ServiceManagement from "../pages/manager/ServiceManagement.jsx";
 import BlogManagement from "../pages/manager/BlogManagement.jsx";
 import ViewBooking from "../pages/staff/ViewBooking.jsx";
+// import ViewBooked from "../pages/consultant/Viewbooked.jsx";
 
 
 export default function AppRoute() {
@@ -50,7 +51,10 @@ export default function AppRoute() {
             <Route path='/dashboard' element={<Dashboard />} />
             <Route path='/service-management' element={<ServiceManagement />} />
             <Route path='/blog-management' element={<BlogManagement />} />
+            {/* Staff */}
             <Route path='/view-booking' element={<ViewBooking />} />
+            {/* Consultant */}
+            {/* <Route path='/view-booked' element={<ViewBooked />} /> */}
 
         </Routes>
     )
