@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import { routes } from ".";
-import Login from "../pages/guest/Login.jsx";
-import Register from "../pages/guest/Register.jsx";
+import Login from "../pages/guest/LoginPage.jsx";
+import Register from "../pages/guest/RegisterPage.jsx";
 import PasswordReset from "../pages/guest/Resetpassword.jsx";
 import Home from "../pages/customer/Home.jsx";
 import Blog from "../pages/guest/Blog.jsx";
