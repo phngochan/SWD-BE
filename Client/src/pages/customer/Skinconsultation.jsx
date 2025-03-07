@@ -23,8 +23,8 @@ export default function SkincareConsultation() {
                 }}>
                 <h1 className="text-5xl font-semibold bg-opacity-50 px-6 py-4 rounded-lg">Sản phẩm chăm sóc da</h1>
             </div>
-            <h1 className="text-4xl font-bold text-[#2B6A7C] text-center">Our Skincare Experts</h1>
-            <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto mt-10">
+            <h1 className="text-4xl pt-16 font-bold text-[#2B6A7C] text-center">Our Skincare Experts</h1>
+            <div className="pb-16 grid md:grid-cols-3 gap-8 max-w-6xl mx-auto mt-10">
                 {experts.map((expert, index) => (
                     <div key={index} className="bg-white p-6 rounded-lg shadow-md text-center">
                         <img src={expert.image} alt={expert.name} className="mx-auto w-32 h-32 rounded-full mb-4" />
