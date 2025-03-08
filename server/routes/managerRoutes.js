@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const managerController = require("../controllers/managerController");
+const productController = require("../controllers/productController");
 const { authenticate, authorize } = require('../middlewares/authMiddleware');
 
 
@@ -20,18 +21,19 @@ router.delete('/users/:id', authenticate, authorize(['Manager']), managerControl
 router.put('/consultants/:id/approve', authenticate, authorize(['Manager']), managerController.approveConsultant);
 
 // Get all products
-router.get('/products', authenticate, authorize(['Manager']), managerController.getAllProducts);
+router.get('/products', authenticate, authorize(['Manager']), productController.getAllProducts);
 
 // Get product by ID
-router.get('/products/:id', authenticate, authorize(['Manager']), managerController.getProductById);
+router.get('/products/:id', authenticate, authorize(['Manager']), productController.getProductById);
 
 // Create new product
-router.post('/products', authenticate, authorize(['Manager']), managerController.createProduct);
+router.post('/products', authenticate, authorize(['Manager']), productController.createProduct);
 
 // Update product
-router.put('/products/:id', authenticate, authorize(['Manager']), managerController.updateProduct);
+router.put('/products/:id', authenticate, authorize(['Manager']), productController.updateProduct);
 
 // Delete product
-router.delete('/products/:id', authenticate, authorize(['Manager']), managerController.deleteProduct);
+router.delete('/products/:id', authenticate, authorize(['Manager']), productController.deleteProduct);
+
 
 module.exports = router;
