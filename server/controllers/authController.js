@@ -56,7 +56,7 @@ exports.register = async (req, res) => {
     
          // Send verification email
         try {
-          const verificationUrl = `${process.env.FRONT_END_URL}/verify?token=${verificationToken}`;
+          const verificationUrl = `${process.env.FRONT_END_URL}/xac-nhan-email?token=${verificationToken}`;
           await transporter.sendMail({
             from: process.env.EMAIL,
             to: user.email,

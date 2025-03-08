@@ -72,6 +72,8 @@ import SkincareConsultation from "../pages/guest/Skinconsultation.jsx";
 import Services from "../pages/guest/Services.jsx";
 import MyCalendar from "../pages/customer/Calendar.jsx";
 import About from "../pages/guest/About.jsx";
+import Blog from "../pages/guest/Blog.jsx";
+
 import ForgotPassword from "../pages/guest/Forgotpassword.jsx";
 import VerifyEmailPage from "../pages/guest/VerifyEmailPage.jsx";
 
@@ -144,11 +146,11 @@ function AppRoute() {
         {/* Guest & Customer Shared Pages */}
         <Route element={<ProtectedRoute allowedRoles={["Guest", "Customer"]} />}>
           <Route path="/ve-chung-toi" element={<About />} />
-          {/* <Route path="/blog" element={<Blog />} /> */}
+          <Route path="/blog" element={<Blog />} />
           {/* <Route path="/blog/:id" element={<BlogDetail />} /> */}
-          <Route path="/dich-vu" element={<Services />} />
-          {/* <Route path="/dich-vu/:id" element={<ServiceDetails />} /> */}
-          <Route path="/tu-van-cham-soc-da" element={<SkincareConsultation />} />
+          <Route path="/services" element={<Services />} />
+          {/* <Route path="/services/:id" element={<ServiceDetails />} /> */}
+          <Route path="/skincareconsultation" element={<SkincareConsultation />} />
           {/* <Route path="/quiz" element={<Quiz />} /> */}
         </Route>
 
