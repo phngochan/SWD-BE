@@ -19,5 +19,19 @@ router.delete('/users/:id', authenticate, authorize(['Manager']), managerControl
 // Approve consultant
 router.put('/consultants/:id/approve', authenticate, authorize(['Manager']), managerController.approveConsultant);
 
+// Get all products
+router.get('/products', authenticate, authorize(['Manager']), managerController.getAllProducts);
+
+// Get product by ID
+router.get('/products/:id', authenticate, authorize(['Manager']), managerController.getProductById);
+
+// Create new product
+router.post('/products', authenticate, authorize(['Manager']), managerController.createProduct);
+
+// Update product
+router.put('/products/:id', authenticate, authorize(['Manager']), managerController.updateProduct);
+
+// Delete product
+router.delete('/products/:id', authenticate, authorize(['Manager']), managerController.deleteProduct);
 
 module.exports = router;
