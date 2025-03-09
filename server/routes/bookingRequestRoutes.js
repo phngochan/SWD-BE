@@ -4,9 +4,11 @@ const {
   getAllBookingRequests,
   assignConsultant,
   updateBookingRequestStatus,
-  getBookingsByConsultantAndDate
+  getBookingsByConsultantAndDate,
+  getCustomerBookings,
+  cancelBookingRequest
 } = require('../controllers/bookingRequestController');
-
+const { authenticate, authorize } = require("../middlewares/authMiddleware");
 const router = express.Router();
 
 router.post('/', createBookingRequest);
