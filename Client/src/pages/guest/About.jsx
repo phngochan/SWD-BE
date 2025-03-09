@@ -35,7 +35,7 @@ export default function About() {
                 </p>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-10">
-                    <img src="/images/history.jpg" alt="Lịch sử thương hiệu" className="rounded-lg shadow-lg" />
+                    <img src="client/public/images/about_2.png" alt="Lịch sử thương hiệu" className="rounded-lg shadow-lg" />
                     <div>
                         <p className="text-lg leading-relaxed">
                             Hành trình của Revivalabs là một câu chuyện về sự đổi mới, niềm tin và sự bền vững. Từ những ngày đầu tiên, chúng tôi đã theo đuổi 100% nguyên liệu thiên nhiên, trước khi xu hướng này trở thành phổ biến trên toàn cầu.
