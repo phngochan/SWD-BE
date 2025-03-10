@@ -13,6 +13,7 @@ const paymentRoutes = require('./paymentRoutes');
 const blogRoutes = require('./blogRoutes');
 const questionRoutes = require('./questionRoutes');
 const orderProductRoutes = require("./OrderProductRoutes.js");
+const productRoutes = require('./productRoutes.js');
 
 const router = express.Router();
 
@@ -30,6 +31,7 @@ router.use('/payments', paymentRoutes);
 router.use('/blogs', blogRoutes);
 router.use('/questions', questionRoutes);
 router.use("/api/orders", orderProductRoutes);
+router.use('/product', productRoutes);
 
 
 module.exports = router;
