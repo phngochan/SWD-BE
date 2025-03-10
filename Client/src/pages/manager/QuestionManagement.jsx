@@ -17,6 +17,10 @@ import {
   Alert,
 } from "@mui/material";
 import Sidebar from "../../components/ManagerSidebar";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import axios from "../../utils/axiosInstance";
+import { FaEdit, FaTrash } from "react-icons/fa";
 
 const QuestionCard = ({ question, onDelete, onEdit }) => {
   return (
@@ -35,10 +39,10 @@ const QuestionCard = ({ question, onDelete, onEdit }) => {
         ))}
         <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
           <Button size="small" variant="outlined" color="primary" onClick={() => onEdit(question)}>
-            Edit
+            <FaEdit />
           </Button>
           <Button size="small" variant="outlined" color="error" onClick={() => onDelete(question._id)}>
-            Delete
+            <FaTrash />
           </Button>
         </Box>
       </CardContent>
@@ -55,19 +59,17 @@ const QuestionManagement = () => {
   const [newQuestion, setNewQuestion] = useState("");
   const [newAnswerOptions, setNewAnswerOptions] = useState([{ answerText: "", weight: 0 }]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [sortOrder, setSortOrder] = useState("asc");
 
   useEffect(() => {
-    fetch("/api/questions")
-      .then((res) => {
-        if (!res.ok) throw new Error("Failed to fetch questions.");
-        return res.json();
-      })
-      .then((data) => {
-        setQuestions(data);
+    axios
+      .get("/api/questions")
+      .then((response) => {
+        setQuestions(response.data);
         setLoading(false);
       })
-      .catch((err) => {
-        setError(err.message);
+      .catch((error) => {
+        setError(error.message);
         setLoading(false);
       });
   }, []);
@@ -78,7 +80,8 @@ const QuestionManagement = () => {
 
   const confirmDelete = () => {
     const { questionId } = deleteDialog;
-    fetch(`http://localhost:5000/api/questions/${questionId}`, { method: "DELETE" })
+    axios
+      .delete(`/api/questions/${questionId}`)
       .then(() => setQuestions(questions.filter((q) => q._id !== questionId)))
       .catch((err) => console.error("Error deleting question:", err));
     setDeleteDialog({ open: false, questionId: null });
@@ -102,73 +105,58 @@ const QuestionManagement = () => {
 
   const handleAdd = () => {
     if (newQuestion.trim() === "") {
-      alert("Question text cannot be empty!");
+      toast.error("Question text cannot be empty!");
       return;
     }
 
     if (newAnswerOptions.some((option) => option.answerText.trim() === "")) {
-      alert("All answer options must have text!");
+      toast.error("All answer options must have text!");
       return;
     }
 
     const questionData = { questionText: newQuestion, answerOptions: newAnswerOptions };
 
-    // Kiểm tra nếu đang chỉnh sửa câu hỏi
+    // If editing an existing question
     if (editDialog.question) {
-      console.log("Updating question:", questionData); // Kiểm tra dữ liệu đang sửa
-      fetch(`/api/questions/${editDialog.question._id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(questionData),
-      })
-        .then((res) => {
-          if (!res.ok) {
-            throw new Error("Failed to update question.");
-          }
-          return res.json();
-        })
-        .then((data) => {
-          console.log("Updated question:", data); // Kiểm tra câu hỏi đã được cập nhật
-          setQuestions(questions.map((q) => (q._id === data._id ? data : q))); // Cập nhật câu hỏi trong state
-          setEditDialog({ open: false, question: null }); // Đóng dialog sau khi cập nhật
-          setNewQuestion(""); // Xóa nội dung câu hỏi sau khi thêm
-          setNewAnswerOptions([{ answerText: "", weight: 0 }]); // Đặt lại các tùy chọn trả lời
+      axios
+        .put(`/api/questions/${editDialog.question._id}`, questionData)
+        .then((response) => {
+          setQuestions(questions.map((q) => (q._id === response.data._id ? response.data : q)));
+          setEditDialog({ open: false, question: null });
+          setNewQuestion("");
+          setNewAnswerOptions([{ answerText: "", weight: 0 }]);
         })
         .catch((err) => {
           console.error("Error updating question:", err);
-          alert("Error updating question: " + err.message);
+          toast.error("Error updating question: " + err.message);
         });
     } else {
-      console.log("Adding new question:", questionData); // Kiểm tra dữ liệu thêm mới
-      // Thêm câu hỏi mới
-      fetch("/api/questions", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(questionData),
-      })
-        .then((res) => {
-          if (!res.ok) {
-            throw new Error("Failed to add new question.");
-          }
-          return res.json();
-        })
-        .then((data) => {
-          console.log("Added new question:", data); // Kiểm tra câu hỏi mới
-          setQuestions((prevQuestions) => [...prevQuestions, data]); // Thêm câu hỏi mới vào danh sách mà không cần tải lại dữ liệu
-          setEditDialog({ open: false, question: null }); // Đóng dialog sau khi thêm
-          setNewQuestion(""); // Xóa nội dung câu hỏi sau khi thêm
-          setNewAnswerOptions([{ answerText: "", weight: 0 }]); // Đặt lại các tùy chọn trả lời
+      // Add new question
+      axios
+        .post("/api/questions", questionData)
+        .then((response) => {
+          setQuestions((prevQuestions) => [...prevQuestions, response.data]);
+          setEditDialog({ open: false, question: null });
+          setNewQuestion("");
+          setNewAnswerOptions([{ answerText: "", weight: 0 }]);
         })
         .catch((err) => {
           console.error("Error adding question:", err);
-          alert("Error adding question: " + err.message);
+          toast.error("Error adding question: " + err.message);
         });
     }
   };
 
   const filteredQuestions = questions.filter((question) =>
-    question.questionText.toLowerCase().includes(searchTerm.toLowerCase())
+    question?.questionText?.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+
+  const sortedQuestions = [...filteredQuestions].sort((a, b) => {
+    return sortOrder === "asc"
+      ? a.questionText.localeCompare(b.questionText)
+      : b.questionText.localeCompare(a.questionText);
+  });
 
   return (
     <Box sx={{ display: "flex", minHeight: "100vh", bgcolor: "#f4f6f8" }}>
@@ -190,6 +178,9 @@ const QuestionManagement = () => {
             onChange={(e) => setSearchTerm(e.target.value)}
             className="p-2 border rounded w-64 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
+          <button onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")} className="bg-gray-500 text-white px-4 py-2 rounded">
+            {sortOrder === "asc" ? "Sort Z-A" : "Sort A-Z"}
+          </button>
         </Box>
         {loading ? (
           <Box sx={{ display: "flex", justifyContent: "center", my: 4 }}>
@@ -201,7 +192,7 @@ const QuestionManagement = () => {
           </Alert>
         ) : (
           <Grid container spacing={3}>
-            {filteredQuestions.map((question) => (
+            {sortedQuestions.map((question) => (
               <Grid item xs={12} sm={6} key={question._id}>
                 <QuestionCard question={question} onDelete={handleDelete} onEdit={handleEdit} />
               </Grid>
@@ -254,19 +245,23 @@ const QuestionManagement = () => {
       </Dialog>
 
       <Dialog open={deleteDialog.open} onClose={() => setDeleteDialog({ open: false, questionId: null })}>
-        <DialogTitle>Confirm Delete</DialogTitle>
+        <DialogTitle>Confirm Deletion</DialogTitle>
         <DialogContent>
-          <DialogContentText>Are you sure you want to delete this question?</DialogContentText>
+          <DialogContentText>
+            Are you sure you want to delete this question? This action cannot be undone.
+          </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setDeleteDialog({ open: false, questionId: null })} color="primary">
             Cancel
           </Button>
-          <Button onClick={confirmDelete} color="error">
-            Delete
+          <Button onClick={confirmDelete} color="primary">
+            Confirm
           </Button>
         </DialogActions>
       </Dialog>
+
+      <ToastContainer />
     </Box>
   );
 };

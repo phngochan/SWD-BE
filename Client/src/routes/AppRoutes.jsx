@@ -88,13 +88,13 @@ import VerifyEmailPage from "../pages/guest/VerifyEmailPage.jsx";
 // import Quiz from "./pages/customer/Quiz.jsx";
 // import VerifyEmailPage from "./pages/guest/VerifyEmailPage.jsx";
 // import BlogDetail from "./pages/guest/BlogDetail.jsx";
-// import ServiceManagement from "./pages/manager/ServiceManagement.jsx";
-// import StaffManagement from "./pages/admin/StaffManagement.jsx";
-// import Dashboard from "./pages/manager/Dashboard.jsx";
-// import ConsultantManagement from "./pages/admin/ConsultantManagement.jsx";
+import ServiceManagement from "../pages/manager/ServiceManagement.jsx";
+import StaffManagement from "../pages/manager/StaffManagement.jsx";
+import Dashboard from "../pages/manager/Dashboard.jsx";
+import TherapistManagement from "../pages/manager/TherapistManagement.jsx";
 // import ResetPassword from "./pages/guest/ResetPassword.jsx";
-// import BlogManagement from "./pages/manager/BlogManagement.jsx";
-// import QuestionManagement from "./pages/manager/QuestionManagement.jsx";
+import BlogManagement from "../pages/manager/BlogManagement.jsx";
+import QuestionManagement from "../pages/manager/QuestionManagement.jsx";
 // import About from "./pages/guest/About.jsx";
 // import BookingPageCustomer from "./pages/customer/Booking.jsx";
 // import ConsultantGuest from "./pages/guest/Consultant.jsx";
@@ -121,7 +121,6 @@ function AppRoute() {
     Guest: "/ve-chung-toi",
     Customer: "/ve-chung-toi",
     Manager: "/dashboard",
-    Admin: "/staff-management",
     Staff: "/view-booking",
   };
 
@@ -165,19 +164,17 @@ function AppRoute() {
           {/* <Route path="/booking-history" element={<ViewBookingHistory />} /> */}
         </Route>
 
-        {/* Manager Pages */}ConsultantCustomer
+        {/* Manager Pages */}
         <Route element={<ProtectedRoute allowedRoles={["Manager"]} />}>
-          {/* <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/service-management" element={<ServiceManagement />} />
           <Route path="/blog-management" element={<BlogManagement />} />
-          <Route path="/question-management" element={<QuestionManagement />} /> */}
+          <Route path="/question-management" element={<QuestionManagement />} />
+          <Route path="/staff-management" element={<StaffManagement />} />
+          <Route path="/therapist-management" element={<TherapistManagement />} />
         </Route>
 
-        {/* Admin Pages */}
-        <Route element={<ProtectedRoute allowedRoles={["Admin"]} />}>
-          {/* <Route path="/staff-management" element={<StaffManagement />} />
-          <Route path="/consultant-management" element={<ConsultantManagement />} /> */}
-        </Route>
+
 
         {/* Company Shared Pages */}
         <Route element={<ProtectedRoute allowedRoles={["Manager", "Admin", "Staff", "Consultant"]} />}>

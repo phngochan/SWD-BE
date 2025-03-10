@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-// import axios from "../../utils/axiosInstance"; 
+import axios from "../../utils/axiosInstance";
 import StaffSidebar from "../../components/StaffSidebar";
 
 const ViewBooking = () => {
@@ -112,8 +112,8 @@ const ViewBooking = () => {
                 </td>
                 <td className="border p-2 text-center">
                   <span className={`p-1 rounded ${booking.status === "Pending" ? "bg-yellow-200" :
-                      booking.status === "Confirmed" ? "bg-blue-200" :
-                        booking.status === "Completed" ? "bg-green-200" : "bg-red-200"
+                    booking.status === "Confirmed" ? "bg-blue-200" :
+                      booking.status === "Completed" ? "bg-green-200" : "bg-red-200"
                     }`}>{booking.status}</span>
                 </td>
                 <td className="border p-2 text-center">

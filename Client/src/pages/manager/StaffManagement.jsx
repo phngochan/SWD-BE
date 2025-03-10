@@ -1,225 +1,224 @@
 import React, { useEffect, useState } from "react";
-// import axios from "axios";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import axios from "../../utils/axiosInstance";
 import Sidebar from "../../components/ManagerSidebar";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { FaCheck, FaLock, FaTimes } from "react-icons/fa";
+import { FaEdit, FaTrash } from "react-icons/fa";
+
+const schema = yup.object().shape({
+  firstName: yup.string().min(2, "First name must be at least 2 letters").required("First name is required"),
+  lastName: yup.string().min(2, "Last name must be at least 2 letters").required("Last name is required"),
+  email: yup.string().email("Invalid email format").required("Email is required"),
+  phoneNumber: yup.string().matches(/^\d{10,15}$/, "Phone number must be 10-15 digits long").required("Phone number is required"),
+  note: yup.string(),
+  image: yup.string().url("Invalid image URL").nullable(),
+});
 
 export default function StaffManagement() {
-  const [staffMembers, setStaffMembers] = useState([]);
-  const [newStaff, setNewStaff] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-    roleName: "Customer",
-    phoneNumber: "",
-    verified: false,
-    verificationToken: "",
-    resetPasswordToken: "",
-    resetPasswordExpires: "",
-  });
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [staff, setStaff] = useState([]);
+  const [modalData, setModalData] = useState(null);
 
-  // Lấy danh sách nhân viên từ API
-  // useEffect(() => {
-  //   axios
-  //     .get("/api/staff")
-  //     .then((res) => setStaffMembers(res.data))
-  //     .catch((err) => console.error(err));
-  // }, []);
+  useEffect(() => {
+    fetchStaff();
+  }, []);
 
-  // Xóa nhân viên
-  const handleDelete = (id) => {
-    axios
-      .delete(`/api/staff/${id}`)
-      .then(() => setStaffMembers(staffMembers.filter(staff => staff._id !== id)))
-      .catch(err => console.error(err));
-  };
-
-  // Cập nhật nhân viên
-  const handleUpdate = (staff) => {
-    const newFirstName = prompt("Nhập tên đầu tiên mới:", staff.firstName);
-    const newLastName = prompt("Nhập họ tên mới:", staff.lastName);
-    const newEmail = prompt("Nhập email mới:", staff.email);
-    const newPhoneNumber = prompt("Nhập số điện thoại mới:", staff.phoneNumber);
-    const newRoleName = prompt("Nhập vai trò mới:", staff.roleName);
-
-    if (newFirstName && newLastName && newEmail && newPhoneNumber && newRoleName) {
-      axios
-        .put(`/api/staff/${staff._id}`, {
-          firstName: newFirstName,
-          lastName: newLastName,
-          email: newEmail,
-          phoneNumber: newPhoneNumber,
-          roleName: newRoleName,
-        })
-        .then((res) => {
-          setStaffMembers(
-            staffMembers.map((s) =>
-              s._id === staff._id ? res.data : s
-            )
-          );
-        })
-        .catch((err) => console.error(err));
+  const fetchStaff = async () => {
+    try {
+      const res = await axios.get("/api/staff");
+      setStaff(res.data.map(s => ({
+        ...s,
+        verified: s.verified
+      })));
+    } catch (err) {
+      toast.error("Failed to fetch staff");
     }
   };
 
-  // Thêm nhân viên mới
-  const handleAdd = () => {
-    axios
-      .post("/api/staff", newStaff)
-      .then((res) => {
-        setStaffMembers([...staffMembers, res.data]);
-        setNewStaff({
-          firstName: "",
-          lastName: "",
-          email: "",
-          password: "",
-          roleName: "Customer",
-          phoneNumber: "",
-          verified: false,
-          verificationToken: "",
-          resetPasswordToken: "",
-          resetPasswordExpires: "",
+  const handleResetPassword = async (id) => {
+    if (!window.confirm("Are you sure you want to reset this staff member's password?")) return;
+
+    try {
+      await axios.post(`/api/staff/${id}/reset-password`);
+      toast.success("Password has been reset successfully!");
+    } catch (err) {
+      toast.error("Failed to reset password.");
+    }
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`/api/staff/${id}`);
+      setStaff((prev) => prev.filter((s) => s._id !== id));
+      toast.success("Staff deleted successfully");
+    } catch (err) {
+      toast.error("Error deleting staff");
+    }
+  };
+
+  const handleFormSubmit = async (data) => {
+    try {
+      const updatedData = {
+        ...data,
+        verified: Boolean(data.verified), // Ensure it's a boolean
+      };
+
+      if (modalData?._id) {
+        const res = await axios.put(`/api/staff/${modalData._id}`, updatedData);
+        setStaff((prev) =>
+          prev.map((s) => (s._id === modalData._id ? { ...s, ...res.data.staff } : s))
+        );
+        toast.success("Staff updated successfully");
+      } else {
+        const res = await axios.post("/api/staff", {
+          ...updatedData,
+          password: "default123",
+          roleName: "Staff"
         });
-        setIsModalOpen(false);
-      })
-      .catch((err) => console.error(err));
+        setStaff((prev) => [...prev, res.data.staff]);
+        toast.success("Staff added successfully");
+      }
+    } catch (err) {
+      toast.error("Error saving staff");
+    }
+    setModalData(null);
   };
 
   return (
     <div className="flex h-screen">
       <Sidebar />
-      <div className="flex-1 p-6 bg-white">
-        <h2 className="text-2xl font-bold mb-4">Staff Management</h2>
-
-        {/* Nút Add */}
-        <div className="mb-4">
-          <button
-            className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700"
-            onClick={() => setIsModalOpen(true)} // Mở modal khi nhấn nút Add
-          >
-            Add Staff
-          </button>
-        </div>
-
-        {/* Modal thêm nhân viên */}
-        {isModalOpen && (
-          <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
-            <div className="bg-white p-6 rounded shadow-lg w-96">
-              <h3 className="text-xl font-semibold mb-4">Add New Staff</h3>
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700">First Name</label>
-                <input
-                  type="text"
-                  className="border p-2 w-full mb-2 rounded"
-                  placeholder="First Name"
-                  value={newStaff.firstName}
-                  onChange={(e) => setNewStaff({ ...newStaff, firstName: e.target.value })}
-                />
-                <label className="block text-sm font-medium text-gray-700">Last Name</label>
-                <input
-                  type="text"
-                  className="border p-2 w-full mb-2 rounded"
-                  placeholder="Last Name"
-                  value={newStaff.lastName}
-                  onChange={(e) => setNewStaff({ ...newStaff, lastName: e.target.value })}
-                />
-                <label className="block text-sm font-medium text-gray-700">Email</label>
-                <input
-                  type="email"
-                  className="border p-2 w-full mb-2 rounded"
-                  placeholder="Email"
-                  value={newStaff.email}
-                  onChange={(e) => setNewStaff({ ...newStaff, email: e.target.value })}
-                />
-                <label className="block text-sm font-medium text-gray-700">Password</label>
-                <input
-                  type="password"
-                  className="border p-2 w-full mb-2 rounded"
-                  placeholder="Password"
-                  value={newStaff.password}
-                  onChange={(e) => setNewStaff({ ...newStaff, password: e.target.value })}
-                />
-                <label className="block text-sm font-medium text-gray-700">Phone</label>
-                <input
-                  type="text"
-                  className="border p-2 w-full mb-2 rounded"
-                  placeholder="Phone"
-                  value={newStaff.phoneNumber}
-                  onChange={(e) => setNewStaff({ ...newStaff, phoneNumber: e.target.value })}
-                />
-                {/* <label className="block text-sm font-medium text-gray-700">Role</label>
-                <select
-                  className="border p-2 w-full mb-4 rounded"
-                  value={newStaff.roleName}
-                  onChange={(e) => setNewStaff({ ...newStaff, roleName: e.target.value })}
-                >
-                  <option value="Customer">Customer</option>
-                  <option value="Staff">Staff</option>
-                  <option value="Manager">Manager</option>
-                  <option value="Therapist">Therapist</option>
-                  <option value="Admin">Admin</option>
-                </select> */}
-              </div>
-              <div className="flex justify-between">
-                <button
-                  className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700"
-                  onClick={() => setIsModalOpen(false)} // Đóng modal
-                >
-                  Cancel
-                </button>
-                <button
-                  className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700"
-                  onClick={handleAdd} // Thêm nhân viên mới
-                >
-                  Add
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Bảng nhân viên */}
-        <table className="w-full border-collapse border border-gray-300 mt-6">
-          <thead>
-            <tr className="bg-pink-300">
-              <th className="border p-2">ID</th>
-              <th className="border p-2">First Name</th>
-              <th className="border p-2">Last Name</th>
-              <th className="border p-2">Email</th>
-              <th className="border p-2">Phone</th>
-              <th className="border p-2">Role</th>
-              <th className="border p-2">Verified</th>
-              <th className="border p-2">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {staffMembers.map((staff) => (
-              <tr key={staff._id} className="text-center border-b">
-                <td className="border p-2">{staff._id}</td>
-                <td className="border p-2">{staff.firstName}</td>
-                <td className="border p-2">{staff.lastName}</td>
-                <td className="border p-2">{staff.email}</td>
-                <td className="border p-2">{staff.phoneNumber}</td>
-                <td className="border p-2">{staff.roleName}</td>
-                <td className="border p-2">{staff.verified ? "Yes" : "No"}</td>
-                <td className="border p-2">
-                  <button
-                    className="bg-red-500 text-white px-3 py-1 rounded mr-2 hover:bg-red-700"
-                    onClick={() => handleDelete(staff._id)}
-                  >
-                    Delete
-                  </button>
-                  <button
-                    className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700"
-                    onClick={() => handleUpdate(staff)}
-                  >
-                    Update
-                  </button>
-                </td>
+      <div className="flex-1 p-6 bg-gray-100">
+        <h2 className="text-3xl font-bold mb-6 text-gray-800">Staff Management</h2>
+        <button
+          className="bg-blue-500 text-white px-6 py-2 rounded-full shadow-lg hover:bg-blue-600 transition-all duration-300"
+          onClick={() => setModalData({})}
+        >
+          Add Staff
+        </button>
+        <div className="overflow-x-auto mt-6 bg-white shadow-md rounded-lg">
+          <table className="min-w-full table-auto border-collapse">
+            <thead>
+              <tr className="bg-gray-200">
+                <th className="border-b p-3 text-left">First Name</th>
+                <th className="border-b p-3 text-left">Last Name</th>
+                <th className="border-b p-3 text-left">Email</th>
+                <th className="border-b p-3 text-left">Phone</th>
+                <th className="border-b p-3 text-left">Verified</th>
+                <th className="border-b p-3 text-left">Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {staff.map((member) => (
+                <tr key={member._id} className="hover:bg-gray-100">
+                  <td className="border-b p-3">{member.firstName}</td>
+                  <td className="border-b p-3">{member.lastName}</td>
+                  <td className="border-b p-3">{member.email}</td>
+                  <td className="border-b p-3">{member.phoneNumber}</td>
+                  <td className="p-3 text-sm">
+                    {member.verified ? (
+                      <i className="fas fa-check-circle text-green-500"></i>
+                    ) : (
+                      <i className="fas fa-times-circle text-red-500"></i>
+                    )}
+                  </td>
+                  <td className="border-b p-3">
+                    <button
+                      className="bg-blue-500 text-white px-4 py-2 rounded-full mr-2 hover:bg-blue-600 transition-all duration-200"
+                      onClick={() => setModalData(member)}
+                    >
+                      <FaEdit />
+                    </button>
+                    <button
+                      className="bg-red-500 text-white px-4 py-2 rounded-full mr-2 hover:bg-red-600 transition-all duration-200"
+                      onClick={() => handleDelete(member._id)}
+                    >
+                      <FaTrash />
+                    </button>
+                    <button
+                      className="bg-yellow-500 text-white px-4 py-2 rounded-full hover:bg-yellow-600 mr-2 transition-all duration-200"
+                      onClick={() => handleResetPassword(member._id)}
+                    >
+                      <FaLock />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        {modalData !== null && <StaffForm data={modalData} onSubmit={handleFormSubmit} onClose={() => setModalData(null)} />}
+      </div>
+    </div>
+  );
+}
+
+function StaffForm({ data, onSubmit, onClose }) {
+  const { register, handleSubmit, formState: { errors }, reset, watch } = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      firstName: data.firstName || "",
+      lastName: data.lastName || "",
+      email: data.email || "",
+      phoneNumber: data.phoneNumber || "",
+      verified: data.verified || false, // Ensure `verified` has a default boolean value
+    },
+  });
+
+  useEffect(() => {
+    reset({
+      firstName: data.firstName || "",
+      lastName: data.lastName || "",
+      email: data.email || "",
+      phoneNumber: data.phoneNumber || "",
+      verified: !!data.verified, // Ensure it's always a boolean (true/false)
+    });
+  }, [data, reset]);
+
+  return (
+    <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
+      <div className="bg-white p-8 rounded-lg shadow-lg w-1/3">
+        <h2 className="text-2xl font-semibold mb-6 text-gray-800">{data?._id ? "Update" : "Add"} Staff</h2>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          {["firstName", "lastName", "email", "phoneNumber"].map((field) => (
+            <div key={field}>
+              <input
+                {...register(field)}
+                className="w-full p-3 border-2 border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
+              />
+              {errors[field] && <p className="text-red-500 text-sm">{errors[field]?.message}</p>}
+            </div>
+          ))}
+
+          {/* Verified Toggle */}
+          <div className="flex items-center mt-4">
+            <input
+              type="checkbox"
+              {...register("verified")}
+              id="verified"
+              className="mr-2"
+              checked={watch("verified")}
+              onChange={(e) => reset({ ...watch(), verified: e.target.checked })}
+            />
+            <label htmlFor="verified" className="text-sm font-medium">Verified</label>
+          </div>
+
+          <div className="flex justify-end space-x-4 mt-6">
+            <button type="submit" className="bg-blue-500 text-white px-6 py-2 rounded-full hover:bg-blue-600 transition-all duration-300">
+              Save
+            </button>
+            <button
+              type="button"
+              className="bg-gray-500 text-white px-6 py-2 rounded-full hover:bg-gray-600 transition-all duration-300"
+              onClick={onClose}
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-// import axios from "../../utils/axiosInstance";
+import axios from "../../utils/axiosInstance";
 import { useForm } from "react-hook-form";
 import Sidebar from "../../components/ManagerSidebar";
 import ReactQuill from 'react-quill';
@@ -7,6 +7,7 @@ import "react-quill/dist/quill.snow.css";
 import { Dialog, DialogActions, DialogContent, DialogTitle, Button } from "@mui/material";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { FaEdit, FaTrash } from "react-icons/fa";
 
 const ServiceManagement = () => {
   const [services, setServices] = useState([]);
@@ -120,8 +121,11 @@ const ServiceManagement = () => {
           <input {...register("image")} placeholder="Image URL" className="w-full p-2 border" />
           {editingService?.image && <img src={editingService.image} alt="Service Preview" className="w-32 h-32 object-cover mt-2" />}
           <input {...register("effectimage")} placeholder="Effect Image URL" className="w-full p-2 border" />
+          {editingService?.effectimage && <img src={editingService.effectimage} alt="Service Preview" className="w-32 h-32 object-cover mt-2" />}
           <input {...register("resultimage")} placeholder="Result Image URL" className="w-full p-2 border" />
+          {editingService?.resultimage && <img src={editingService.resultimage} alt="Service Preview" className="w-32 h-32 object-cover mt-2" />}
           <input {...register("sensationimage")} placeholder="Sensation Image URL" className="w-full p-2 border" />
+          {editingService?.sensationimage && <img src={editingService.sensationimage} alt="Service Preview" className="w-32 h-32 object-cover mt-2" />}
           <input {...register("description")} placeholder="Description" className="w-full p-2 border" />
           <ReactQuill
             value={watch("detaildescription") || ""}
@@ -147,8 +151,8 @@ const ServiceManagement = () => {
                 {service.image && <img src={service.image} alt="Service" className="w-10 h-10 object-cover mb-2" />}
                 <h4 className="text-lg font-bold">{service.name}</h4>
                 <p>{service.description}</p>
-                <button onClick={() => handleEdit(service)} className="bg-yellow-500 text-white px-3 py-1 mr-2 rounded mt-4">Edit</button>
-                <button onClick={() => openDeleteConfirmation(service)} className="bg-red-500 text-white px-3 py-1 rounded mt-4">Delete</button>
+                <button onClick={() => handleEdit(service)} className="bg-yellow-500 text-white px-3 py-1 mr-2 rounded mt-4"><FaEdit /></button>
+                <button onClick={() => openDeleteConfirmation(service)} className="bg-red-500 text-white px-3 py-1 rounded mt-4"><FaTrash /></button>
               </div>
             ))}
           </div>

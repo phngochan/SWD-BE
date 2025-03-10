@@ -1,9 +1,12 @@
 import React from "react";
-import { NavLink, useLocation } from "react-router-dom";
-import { Drawer, List, ListItemButton, ListItemText, Toolbar, Typography, Divider } from "@mui/material";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { Drawer, List, ListItemButton, ListItemText, Toolbar, Typography, Divider, Button } from "@mui/material";
+import axios from "axios";
 
 const ManagerSidebar = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const fullName = localStorage.getItem("fullName") || sessionStorage.getItem("fullName");
 
   const menuItems = [
     { name: "Dashboard", path: "/dashboard" },
@@ -11,8 +14,26 @@ const ManagerSidebar = () => {
     { name: "Blogs", path: "/blog-management" },
     { name: "Questions", path: "/question-management" },
     { name: "Therapist", path: "/therapist-management" },
-    { name: "Staff", path: "/quan-ly-nhan-vien" },
-  ];
+    { name: "Staff", path: "/staff-management" },
+  ]; const handleLogout = () => {
+    if (!window.confirm("Are you sure you want to log out?")) return;
+    axios.post("/api/auth/logout")
+      .then(() => {
+        // ✅ Clear auth data from storage
+        localStorage.removeItem("authToken");
+        localStorage.removeItem("roleName");
+        sessionStorage.removeItem("authToken");
+        sessionStorage.removeItem("roleName");
+
+        // ✅ Redirect user to login page
+        navigate("/dang-nhap");
+      })
+      .catch(error => {
+        console.error("Logout failed:", error.response?.data?.message || error.message);
+      });
+  };
+
+
 
   return (
     <Drawer
@@ -22,48 +43,71 @@ const ManagerSidebar = () => {
         flexShrink: 0,
         "& .MuiDrawer-paper": {
           width: 240,
-          backgroundColor: "#ffffff", // White background color
-          color: "#333", // Darker text color for contrast
+          backgroundColor: "#1a202c",
+          color: "white",
           padding: "10px",
-          boxShadow: "2px 0 5px rgba(0,0,0,0.1)", // Subtle shadow for depth
         },
       }}
     >
-      {/* Thanh tiêu đề */}
       <Toolbar>
-        <Typography variant="h6" sx={{ flexGrow: 1, textAlign: "left", color: "#1976d2", fontWeight: "bold", fontSize: "1.5rem" }}>
-          Manager
-        </Typography>
+        <div className="w-[150px] h-[150px] bg-cover bg-center bg-no-repeat rounded-t-lg" style={{ backgroundImage: `url(https://cdn0.iconfinder.com/data/icons/avatar-4/512/Manager-1024.png)` }} />
       </Toolbar>
-      <Divider sx={{ backgroundColor: "#1976d2" }} /> {/* Divider color matching the title */}
+      <Typography variant="h6">
+        <div className="text-center">
+          Welcome Manager <br /> {fullName}
+        </div>
+      </Typography>
+      <Divider sx={{ backgroundColor: "gray" }} />
 
       {/* Danh sách menu */}
       <List>
         {menuItems.map((item) => (
           <NavLink key={item.name} to={item.path} style={{ textDecoration: "none", color: "inherit" }}>
-            <ListItemButton
-              selected={location.pathname === item.path}
-              sx={{
-                "&.Mui-selected": {
-                  backgroundColor: "#e3f2fd", // Light blue background for selected item
-                  color: "#1976d2", // Blue text color for selected item
-                  borderRadius: "10px",
-                },
-                "&.Mui-selected:hover": {
-                  backgroundColor: "#bbdefb", // Darker blue on hover for selected item
-                  borderRadius: "10px",
-                },
-                "&:hover": {
-                  backgroundColor: "#f5f5f5", // Light gray background on hover
-                  borderRadius: "10px",
-                },
-              }}
-            >
+            <ListItemButton selected={location.pathname === item.path}>
               <ListItemText primary={item.name} />
             </ListItemButton>
           </NavLink>
         ))}
       </List>
+
+
+      {/* Change Password Button */}
+      <Button
+        onClick={() => navigate("/change-password")}
+        sx={{
+          position: "absolute",
+          bottom: "60px",
+          left: "50%",
+          transform: "translateX(-50%)",
+          width: "80%",
+          backgroundColor: "#1976d2",
+          color: "white",
+          "&:hover": {
+            backgroundColor: "#1565c0",
+          },
+        }}
+      >
+        Change Password
+      </Button>
+
+      {/* Logout Button */}
+      <Button
+        onClick={handleLogout}
+        sx={{
+          position: "absolute",
+          bottom: "10px",
+          left: "50%",
+          transform: "translateX(-50%)",
+          width: "80%",
+          backgroundColor: "#f44336",
+          color: "white",
+          "&:hover": {
+            backgroundColor: "#d32f2f",
+          },
+        }}
+      >
+        Logout
+      </Button>
     </Drawer>
   );
 };
