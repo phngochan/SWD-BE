@@ -150,6 +150,7 @@ const ServiceManagement = () => {
               <div key={service._id} className="border p-4">
                 {service.image && <img src={service.image} alt="Service" className="w-10 h-10 object-cover mb-2" />}
                 <h4 className="text-lg font-bold">{service.name}</h4>
+                <p className="text-gray-700">Price: ${service.price}</p>
                 <p>{service.description}</p>
                 <button onClick={() => handleEdit(service)} className="bg-yellow-500 text-white px-3 py-1 mr-2 rounded mt-4"><FaEdit /></button>
                 <button onClick={() => openDeleteConfirmation(service)} className="bg-red-500 text-white px-3 py-1 rounded mt-4"><FaTrash /></button>

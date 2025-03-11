@@ -95,6 +95,7 @@ import TherapistManagement from "../pages/manager/TherapistManagement.jsx";
 // import ResetPassword from "./pages/guest/ResetPassword.jsx";
 import BlogManagement from "../pages/manager/BlogManagement.jsx";
 import QuestionManagement from "../pages/manager/QuestionManagement.jsx";
+import ProductManagement from "../pages/manager/ProductManagement.jsx";
 // import About from "./pages/guest/About.jsx";
 // import BookingPageCustomer from "./pages/customer/Booking.jsx";
 // import ConsultantGuest from "./pages/guest/Consultant.jsx";
@@ -172,6 +173,7 @@ function AppRoute() {
           <Route path="/question-management" element={<QuestionManagement />} />
           <Route path="/staff-management" element={<StaffManagement />} />
           <Route path="/therapist-management" element={<TherapistManagement />} />
+          <Route path="/product-management" element={<ProductManagement />} />
         </Route>
 
 

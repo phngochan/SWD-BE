@@ -31,7 +31,7 @@ router.use('/payments', paymentRoutes);
 router.use('/blogs', blogRoutes);
 router.use('/questions', questionRoutes);
 router.use("/api/orders", orderProductRoutes);
-router.use('/product', productRoutes);
+router.use('/products', productRoutes);
 
 
 module.exports = router;

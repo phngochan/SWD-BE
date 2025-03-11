@@ -11,29 +11,30 @@ const ManagerSidebar = () => {
   const menuItems = [
     { name: "Dashboard", path: "/dashboard" },
     { name: "Services", path: "/service-management" },
+    { name: "Product", path: "/product-management" },
     { name: "Blogs", path: "/blog-management" },
     { name: "Questions", path: "/question-management" },
+  ];
+
+  const staffItems = [
     { name: "Therapist", path: "/therapist-management" },
     { name: "Staff", path: "/staff-management" },
-  ]; const handleLogout = () => {
+  ];
+
+  const handleLogout = () => {
     if (!window.confirm("Are you sure you want to log out?")) return;
     axios.post("/api/auth/logout")
       .then(() => {
-        // ✅ Clear auth data from storage
         localStorage.removeItem("authToken");
         localStorage.removeItem("roleName");
         sessionStorage.removeItem("authToken");
         sessionStorage.removeItem("roleName");
-
-        // ✅ Redirect user to login page
         navigate("/dang-nhap");
       })
       .catch(error => {
         console.error("Logout failed:", error.response?.data?.message || error.message);
       });
   };
-
-
 
   return (
     <Drawer
@@ -43,23 +44,30 @@ const ManagerSidebar = () => {
         flexShrink: 0,
         "& .MuiDrawer-paper": {
           width: 240,
-          backgroundColor: "#1a202c",
-          color: "white",
+          backgroundColor: "#1e3a8a", // ✅ Màu xanh navy
+          color: "white", // ✅ Giữ màu chữ trắng để dễ đọc
           padding: "10px",
         },
       }}
     >
       <Toolbar>
-        <div className="w-[150px] h-[150px] bg-cover bg-center bg-no-repeat rounded-t-lg" style={{ backgroundImage: `url(https://cdn0.iconfinder.com/data/icons/avatar-4/512/Manager-1024.png)` }} />
+        <div
+          className="w-[120px] h-[120px] mx-auto bg-cover bg-center bg-no-repeat rounded-full"
+          style={{
+            backgroundImage: `url(https://cdn-icons-png.flaticon.com/512/3135/3135715.png)`,
+          }}
+        />
       </Toolbar>
+
       <Typography variant="h6">
         <div className="text-center">
           Welcome Manager <br /> {fullName}
         </div>
       </Typography>
-      <Divider sx={{ backgroundColor: "gray" }} />
 
-      {/* Danh sách menu */}
+      <Divider sx={{ backgroundColor: "#4f6fb7" }} /> {/* ✅ Màu Divider sáng hơn một chút */}
+
+      {/* Danh sách menu chính */}
       <List>
         {menuItems.map((item) => (
           <NavLink key={item.name} to={item.path} style={{ textDecoration: "none", color: "inherit" }}>
@@ -70,6 +78,18 @@ const ManagerSidebar = () => {
         ))}
       </List>
 
+      <Divider sx={{ backgroundColor: "#4f6fb7", marginY: 1 }} /> {/* ✅ Giữ màu Divider hài hòa với sidebar */}
+
+      {/* Danh sách nhân sự */}
+      <List>
+        {staffItems.map((item) => (
+          <NavLink key={item.name} to={item.path} style={{ textDecoration: "none", color: "inherit" }}>
+            <ListItemButton selected={location.pathname === item.path}>
+              <ListItemText primary={item.name} />
+            </ListItemButton>
+          </NavLink>
+        ))}
+      </List>
 
       {/* Change Password Button */}
       <Button
@@ -80,17 +100,17 @@ const ManagerSidebar = () => {
           left: "50%",
           transform: "translateX(-50%)",
           width: "80%",
-          backgroundColor: "#1976d2",
-          color: "white",
+          backgroundColor: "#FFC107",
+          color: "black",
+          fontWeight: "bold",
           "&:hover": {
-            backgroundColor: "#1565c0",
+            backgroundColor: "#FFA000",
           },
         }}
       >
         Change Password
       </Button>
 
-      {/* Logout Button */}
       <Button
         onClick={handleLogout}
         sx={{
@@ -99,15 +119,17 @@ const ManagerSidebar = () => {
           left: "50%",
           transform: "translateX(-50%)",
           width: "80%",
-          backgroundColor: "#f44336",
+          backgroundColor: "#FF5722",
           color: "white",
+          fontWeight: "bold",
           "&:hover": {
-            backgroundColor: "#d32f2f",
+            backgroundColor: "#E64A19",
           },
         }}
       >
         Logout
       </Button>
+
     </Drawer>
   );
 };
