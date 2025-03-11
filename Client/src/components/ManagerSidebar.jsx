@@ -44,8 +44,8 @@ const ManagerSidebar = () => {
         flexShrink: 0,
         "& .MuiDrawer-paper": {
           width: 240,
-          backgroundColor: "#1e3a8a", // ✅ Màu xanh navy
-          color: "white", // ✅ Giữ màu chữ trắng để dễ đọc
+          backgroundColor: "#1e3a8a",
+          color: "white",
           padding: "10px",
         },
       }}
@@ -65,7 +65,7 @@ const ManagerSidebar = () => {
         </div>
       </Typography>
 
-      <Divider sx={{ backgroundColor: "#4f6fb7" }} /> {/* ✅ Màu Divider sáng hơn một chút */}
+      <Divider sx={{ backgroundColor: "#4f6fb7" }} />
 
       {/* Danh sách menu chính */}
       <List>
@@ -78,7 +78,7 @@ const ManagerSidebar = () => {
         ))}
       </List>
 
-      <Divider sx={{ backgroundColor: "#4f6fb7", marginY: 1 }} /> {/* ✅ Giữ màu Divider hài hòa với sidebar */}
+      <Divider sx={{ backgroundColor: "#4f6fb7", marginY: 1 }} />
 
       {/* Danh sách nhân sự */}
       <List>
