@@ -3,7 +3,6 @@ import { TextField, Button, Box, Typography, Alert, IconButton, InputAdornment }
 import axios from "../utils/axiosInstance";
 import { useNavigate } from "react-router-dom";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import "react-toastify/dist/ReactToastify.css";
 
 const ChangePassword = () => {
     const navigate = useNavigate();
@@ -55,66 +54,84 @@ const ChangePassword = () => {
     };
 
     return (
-        <Box maxWidth={400} mx="auto" mt={5} p={3} boxShadow={3} borderRadius={2}>
-            <Typography variant="h5" gutterBottom>Change Password</Typography>
-            {error && <Alert severity="error">{error}</Alert>}
-            {success && <Alert severity="success">{success}</Alert>}
+        <Box
+            sx={{
+                maxWidth: 400,
+                mx: "auto",
+                mt: 5,
+                p: 4,
+                boxShadow: 3,
+                borderRadius: 2,
+                bgcolor: "background.paper",
+                textAlign: "center",
+            }}
+        >
+            <Typography variant="h5" fontWeight="bold" gutterBottom>
+                Change Password
+            </Typography>
+            {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+            {success && <Alert severity="success" sx={{ mb: 2 }}>{success}</Alert>}
             <form onSubmit={handleSubmit}>
-                <TextField
-                    label="Current Password"
-                    type={showCurrentPassword ? "text" : "password"}
-                    name="CurrentPassword"
-                    fullWidth
-                    required
-                    margin="normal"
-                    onChange={handleChange}
-                    InputProps={{
-                        endAdornment: (
-                            <InputAdornment position="end">
-                                <IconButton onClick={() => setShowCurrentPassword(!showCurrentPassword)} edge="end">
-                                    {showCurrentPassword ? <Visibility /> : <VisibilityOff />}
-                                </IconButton>
-                            </InputAdornment>
-                        ),
-                    }}
-                />
-                <TextField
-                    label="New Password"
-                    type={showNewPassword ? "text" : "password"}
-                    name="newPassword"
-                    fullWidth
-                    required
-                    margin="normal"
-                    onChange={handleChange}
-                    InputProps={{
-                        endAdornment: (
-                            <InputAdornment position="end">
-                                <IconButton onClick={() => setShowNewPassword(!showNewPassword)} edge="end">
-                                    {showNewPassword ? <Visibility /> : <VisibilityOff />}
-                                </IconButton>
-                            </InputAdornment>
-                        ),
-                    }}
-                />
-                <TextField
-                    label="Confirm New Password"
-                    type={showConfirmNewPassword ? "text" : "password"}
-                    name="confirmPassword"
-                    fullWidth
-                    required
-                    margin="normal"
-                    onChange={handleChange}
-                    InputProps={{
-                        endAdornment: (
-                            <InputAdornment position="end">
-                                <IconButton onClick={() => setShowConfirmNewPassword(!showConfirmNewPassword)} edge="end">
-                                    {showConfirmNewPassword ? <Visibility /> : <VisibilityOff />}
-                                </IconButton>
-                            </InputAdornment>
-                        ),
-                    }}
-                />
-                <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 2 }}>
+                {["CurrentPassword", "newPassword", "confirmPassword"].map((field, index) => (
+                    <TextField
+                        key={field}
+                        label={
+                            field === "CurrentPassword"
+                                ? "Current Password"
+                                : field === "newPassword"
+                                    ? "New Password"
+                                    : "Confirm New Password"
+                        }
+                        type={
+                            field === "CurrentPassword"
+                                ? showCurrentPassword
+                                    ? "text"
+                                    : "password"
+                                : field === "newPassword"
+                                    ? showNewPassword
+                                        ? "text"
+                                        : "password"
+                                    : showConfirmNewPassword
+                                        ? "text"
+                                        : "password"
+                        }
+                        name={field}
+                        fullWidth
+                        required
+                        margin="normal"
+                        onChange={handleChange}
+                        InputProps={{
+                            endAdornment: (
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        onClick={() => {
+                                            if (field === "CurrentPassword") setShowCurrentPassword(!showCurrentPassword);
+                                            if (field === "newPassword") setShowNewPassword(!showNewPassword);
+                                            if (field === "confirmPassword") setShowConfirmNewPassword(!showConfirmNewPassword);
+                                        }}
+                                        edge="end"
+                                    >
+                                        {(field === "CurrentPassword" && showCurrentPassword) ||
+                                            (field === "newPassword" && showNewPassword) ||
+                                            (field === "confirmPassword" && showConfirmNewPassword) ? (
+                                            <Visibility />
+                                        ) : (
+                                            <VisibilityOff />
+                                        )}
+                                    </IconButton>
+                                </InputAdornment>
+                            ),
+                        }}
+                        sx={{
+                            '& .MuiOutlinedInput-root': {
+                                '& fieldset': { borderColor: 'primary.main' },
+                                '&:hover fieldset': { borderColor: 'primary.dark' },
+                                '&.Mui-focused fieldset': { borderColor: 'secondary.main' },
+                            },
+                        }}
+                    />
+                ))}
+                <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 3, py: 1.2, fontWeight: "bold" }}>
                     Update Password
                 </Button>
             </form>
@@ -122,7 +139,7 @@ const ChangePassword = () => {
                 variant="outlined"
                 color="secondary"
                 fullWidth
-                sx={{ mt: 2 }}
+                sx={{ mt: 2, py: 1.2, fontWeight: "bold" }}
                 onClick={() => navigate(roleName === "Manager" ? "/staff-management" : "/dashboard")}
             >
                 Back
