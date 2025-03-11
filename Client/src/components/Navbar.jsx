@@ -138,7 +138,7 @@ const Navbar = () => {
     };
 
     return (
-        <div className="w-full h-[80px] bg-[#F9FAEF] flex items-center justify-between px-6 md:px-12 lg:px-10 shadow-md relative z-10">
+        <div className="w-full h-[80px] bg-[#E5F5F1] flex items-center justify-between px-6 md:px-12 lg:px-10 shadow-md relative z-10">
             <NavLink to="/" className="w-[150px] h-[50px]">
                 <div className="w-full h-full bg-[url(/images/logo.png)] bg-cover bg-no-repeat"></div>
             </NavLink>
@@ -151,7 +151,7 @@ const Navbar = () => {
             </button>
 
             <nav
-                className={`absolute top-[80px] left-0 w-full bg-[#F9FAEF] flex flex-col items-center pacifico-regular gap-4 p-6 shadow-lg rounded-md transition-transform duration-300 md:static md:w-auto md:p-0 md:flex-row md:shadow-none md:gap-20 ${isMobileMenuOpen ? "flex" : "hidden md:flex"}`}
+                className={`absolute top-[80px] left-0 w-full bg-[#E5F5F1] flex flex-col items-center pacifico-regular gap-4 p-6 shadow-lg rounded-md transition-transform duration-300 md:static md:w-auto md:p-0 md:flex-row md:shadow-none md:gap-20 ${isMobileMenuOpen ? "flex" : "hidden md:flex"}`}
             >
                 {["About", "Services", "Blog", "SkincareConsultation", "Quiz"].map((item) => (
                     <NavLink

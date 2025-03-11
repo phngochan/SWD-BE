@@ -81,12 +81,8 @@ import VerifyEmailPage from "../pages/guest/VerifyEmailPage.jsx";
 
 // Import pages
 
-// import LoginPage from "./guest/LoginPage.jsx";
-// import Blog from "./pages/guest/Blog.jsx";
 // import Forgotpassword from "./pages/guest/Forgotpassword.jsx";
-// import RegisterPage from "./pages/guest/RegisterPage.jsx";
 // import Quiz from "./pages/customer/Quiz.jsx";
-// import VerifyEmailPage from "./pages/guest/VerifyEmailPage.jsx";
 // import BlogDetail from "./pages/guest/BlogDetail.jsx";
 import ServiceManagement from "../pages/manager/ServiceManagement.jsx";
 import StaffManagement from "../pages/manager/StaffManagement.jsx";
@@ -105,6 +101,7 @@ import ProductManagement from "../pages/manager/ProductManagement.jsx";
 // import ViewBooking from "./pages/staff/ViewBooking.jsx";
 // import ServiceDetails from "./pages/guest/ServiceDetails.jsx";
 import ChangePassword from "../components/ChangePassword.jsx";
+import BlogDetail from "../pages/guest/BlogDetail.jsx";
 // import CustomerProfile from "./pages/customer/CustomerProfile.jsx";
 // import SkincareBooking from "./pages/customer/Calendar.jsx";
 // import ViewBooked from "./pages/consultant/ViewBooked";
@@ -147,7 +144,7 @@ function AppRoute() {
         <Route element={<ProtectedRoute allowedRoles={["Guest", "Customer"]} />}>
           <Route path="/ve-chung-toi" element={<About />} />
           <Route path="/blog" element={<Blog />} />
-          {/* <Route path="/blog/:id" element={<BlogDetail />} /> */}
+          <Route path="/blog/:id" element={<BlogDetail />} />
           <Route path="/services" element={<Services />} />
           {/* <Route path="/services/:id" element={<ServiceDetails />} /> */}
           <Route path="/skincareconsultation" element={<SkincareConsultation />} />
