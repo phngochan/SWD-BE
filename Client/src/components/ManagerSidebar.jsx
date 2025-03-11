@@ -100,7 +100,7 @@ const ManagerSidebar = () => {
           left: "50%",
           transform: "translateX(-50%)",
           width: "80%",
-          backgroundColor: "#FFC107", // ✅ Màu vàng
+          backgroundColor: "#FFC107",
           color: "black",
           fontWeight: "bold",
           "&:hover": {
@@ -119,7 +119,7 @@ const ManagerSidebar = () => {
           left: "50%",
           transform: "translateX(-50%)",
           width: "80%",
-          backgroundColor: "#FF5722", // ✅ Màu cam
+          backgroundColor: "#FF5722",
           color: "white",
           fontWeight: "bold",
           "&:hover": {
