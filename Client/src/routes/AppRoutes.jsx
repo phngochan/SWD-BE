@@ -103,7 +103,7 @@ import QuestionManagement from "../pages/manager/QuestionManagement.jsx";
 // import Calendar from "./pages/customer/Calendar.jsx";
 // import ViewBooking from "./pages/staff/ViewBooking.jsx";
 // import ServiceDetails from "./pages/guest/ServiceDetails.jsx";
-// import ChangePassword from "./components/ChangePassword";
+import ChangePassword from "../components/ChangePassword.jsx";
 // import CustomerProfile from "./pages/customer/CustomerProfile.jsx";
 // import SkincareBooking from "./pages/customer/Calendar.jsx";
 // import ViewBooked from "./pages/consultant/ViewBooked";
@@ -177,8 +177,8 @@ function AppRoute() {
 
 
         {/* Company Shared Pages */}
-        <Route element={<ProtectedRoute allowedRoles={["Manager", "Admin", "Staff", "Consultant"]} />}>
-          {/* <Route path="/change-password" element={<ChangePassword />} /> */}
+        <Route element={<ProtectedRoute allowedRoles={["Manager", "Staff", "Consultant"]} />}>
+          <Route path="/change-password" element={<ChangePassword />} />
         </Route>
 
         {/* Staff Pages */}
