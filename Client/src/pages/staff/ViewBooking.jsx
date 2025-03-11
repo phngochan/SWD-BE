@@ -27,8 +27,13 @@ const ViewBooking = () => {
   }, []);
 
   const handleConsultantClick = async (consultantID, bookingID) => {
+    if (!bookingID) {
+      console.error("Invalid booking ID:", bookingID);
+      setError("Invalid booking ID");
+      return;
+    }
+
     if (consultantID) {
-      // Nếu đã có consultant, hiển thị chi tiết
       try {
         const response = await axios.get(`/api/users/${consultantID}`);
         setSelectedConsultant(response.data);
@@ -36,34 +41,49 @@ const ViewBooking = () => {
         setError(err.response?.data?.message || "Failed to fetch consultant details");
       }
     } else {
-      // Nếu chưa có consultant, lấy danh sách nhân viên không bận
       try {
-        const response = await axios.get(`/api/consultants/available/${bookingID}`);
+        console.log("Fetching available consultants for bookingID:", bookingID);
+        const response = await axios.get(`/api/consultants/available?bookingID=${bookingID}`);
         setAvailableConsultants(response.data);
         setCurrentBooking(bookingID);
       } catch (err) {
+        console.error("Error fetching available consultants:", err);
         setError(err.response?.data?.message || "Failed to fetch available consultants");
       }
     }
   };
 
 
+  const closeConsultantModal = () => {
+    setSelectedConsultant(null);
+  };
+
+
   const assignConsultant = async (bookingId, consultantID) => {
+    if (!consultantID) {
+      console.error("Consultant ID is invalid:", consultantID);
+      setError("Consultant ID is invalid");
+      return;
+    }
+
     try {
       await axios.put(`/api/bookings/assign-consultant`, { bookingID: bookingId, consultantID });
-      // Cập nhật lại danh sách bookings với consultant mới được gán
+
+      // Cập nhật UI sau khi gán thành công
       setBookings((prev) =>
         prev.map((booking) =>
           booking._id === bookingId
-            ? { ...booking, consultantID: { _id: consultantID, firstName: "Updated" } } // Cần trả về dữ liệu đầy đủ của consultant nếu có
+            ? { ...booking, consultantID: { _id: consultantID, firstName: "Updated" } }
             : booking
         )
       );
       setAvailableConsultants([]);
     } catch (err) {
+      console.error("Error assigning consultant:", err.response?.data || err);
       setError(err.response?.data?.message || "Failed to assign consultant");
     }
   };
+
 
   const handleStatusUpdate = async (id, newStatus) => {
     try {
@@ -79,6 +99,7 @@ const ViewBooking = () => {
       setError(err.message);
     }
   };
+
 
   return (
     <div className="flex">
@@ -133,62 +154,78 @@ const ViewBooking = () => {
           </tbody>
         </table>
 
+
         {/* Hiển thị chi tiết Consultant nếu đã có */}
         {selectedConsultant && (
-          <div className="mt-4 p-4 border border-gray-300">
-            <h3 className="text-xl font-semibold">Consultant Details</h3>
-            <p><strong>First Name:</strong> {selectedConsultant.firstName}</p>
-            <p><strong>Last Name:</strong> {selectedConsultant.lastName}</p>
-            <p><strong>Email:</strong> {selectedConsultant.email}</p>
-            <p><strong>Phone:</strong> {selectedConsultant.phoneNumber || "Not Available"}</p>
-            <p><strong>Role:</strong> {selectedConsultant.roleName}</p>
-            <p><strong>Verified:</strong> {selectedConsultant.verified ? "Yes" : "No"}</p>
-            <button
-              className="mt-2 px-4 py-2 bg-red-500 text-white rounded"
-              onClick={() => setSelectedConsultant(null)}
-            >
-              Close
-            </button>
+          <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
+            <div className="bg-white p-6 rounded-lg shadow-xl max-w-lg w-full">
+              <div className="flex justify-between items-center border-b pb-3">
+                <h3 className="text-xl font-semibold text-gray-800">Consultant Details</h3>
+                <button
+                  className="text-gray-500 hover:text-gray-700"
+                  onClick={closeConsultantModal}
+                >
+                  ✕
+                </button>
+              </div>
+
+              <div className="mt-4 space-y-2">
+                <div className="flex justify-between">
+                  <span className="font-medium text-gray-600">First Name:</span>
+                  <span className="text-gray-800">{selectedConsultant.firstName}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="font-medium text-gray-600">Last Name:</span>
+                  <span className="text-gray-800">{selectedConsultant.lastName}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="font-medium text-gray-600">Email:</span>
+                  <span className="text-gray-800">{selectedConsultant.email}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="font-medium text-gray-600">Phone:</span>
+                  <span className="text-gray-800">{selectedConsultant.phoneNumber || "Not Available"}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="font-medium text-gray-600">Role:</span>
+                  <span className="text-gray-800">{selectedConsultant.roleName}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="font-medium text-gray-600">Verified:</span>
+                  <span className={`font-semibold ${selectedConsultant.verified ? "text-green-600" : "text-red-600"}`}>
+                    {selectedConsultant.verified ? "Yes" : "No"}
+                  </span>
+                </div>
+              </div>
+
+              <div className="mt-6 flex justify-end">
+              </div>
+            </div>
           </div>
         )}
 
-        {/* Hiển thị danh sách chọn consultant nếu chưa được gán */}
         {availableConsultants.length > 0 && (
-          <div className="mt-4 p-4 border border-gray-300 bg-white rounded shadow-md">
-            <h3 className="text-xl font-semibold mb-2">Select an Available Consultant</h3>
-            <table className="min-w-full border border-gray-200">
-              <thead>
-                <tr className="bg-gray-200">
-                  <th className="border p-2 text-center">Name</th>
-                  <th className="border p-2 text-center">Email</th>
-                  <th className="border p-2 text-center">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {availableConsultants.map((consultant) => (
-                  <tr key={consultant._id} className="border">
-                    <td className="border p-2 text-center">
-                      {consultant.firstName} {consultant.lastName}
-                    </td>
-                    <td className="border p-2 text-center">{consultant.email}</td>
-                    <td className="border p-2 text-center">
-                      <button
-                        className="px-3 py-1 bg-blue-500 text-white rounded"
-                        onClick={() => assignConsultant(currentBooking, consultant._id)}
-                      >
-                        Assign
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            <button
-              className="mt-2 px-4 py-2 bg-gray-500 text-white rounded"
-              onClick={() => setAvailableConsultants([])}
-            >
-              Cancel
-            </button>
+          <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
+            <div className="bg-white p-6 rounded-lg shadow-xl max-w-lg w-full">
+              <h3 className="text-xl font-semibold text-gray-800 mb-4">Select a Consultant</h3>
+
+              {availableConsultants.map((consultant) => (
+                <button
+                  key={consultant._id}
+                  className="w-full text-left p-2 border-b hover:bg-gray-100"
+                  onClick={() => assignConsultant(currentBooking, consultant._id)}
+                >
+                  {consultant.firstName} {consultant.lastName}
+                </button>
+              ))}
+
+              <button
+                className="mt-4 w-full bg-gray-300 p-2 rounded text-center"
+                onClick={() => setAvailableConsultants([])}
+              >
+                Cancel
+              </button>
+            </div>
           </div>
         )}
       </div>

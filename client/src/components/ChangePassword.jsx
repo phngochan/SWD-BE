@@ -47,7 +47,7 @@ const ChangePassword = () => {
             });
 
             setSuccess(response.data.message);
-            setTimeout(() => navigate(roleName === "Manager" ? "/staff-management" : "/dashboard"), 2000);
+            setTimeout(() => navigate(roleName === "Manager" ? "/dashboard" : "/view-booking"), 2000);
         } catch (err) {
             setError(err.response?.data?.message || "Failed to change password.");
         }
@@ -140,7 +140,7 @@ const ChangePassword = () => {
                 color="secondary"
                 fullWidth
                 sx={{ mt: 2, py: 1.2, fontWeight: "bold" }}
-                onClick={() => navigate(roleName === "Manager" ? "/staff-management" : "/dashboard")}
+                onClick={() => navigate(roleName === "Manager" ? "/dashboard" : "/view-booking")}
             >
                 Back
             </Button>
