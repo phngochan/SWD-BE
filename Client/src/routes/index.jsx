@@ -38,6 +38,7 @@ export const routes = {
     checkout: "/thanh-toan",
     staffmanagement: "/staff-management",
     verifyemail: "/xac-nhan-email",
+
     
   };
   

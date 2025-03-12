@@ -92,19 +92,16 @@ import TherapistManagement from "../pages/manager/TherapistManagement.jsx";
 import BlogManagement from "../pages/manager/BlogManagement.jsx";
 import QuestionManagement from "../pages/manager/QuestionManagement.jsx";
 import ProductManagement from "../pages/manager/ProductManagement.jsx";
-// import About from "./pages/guest/About.jsx";
 // import BookingPageCustomer from "./pages/customer/Booking.jsx";
 // import ConsultantGuest from "./pages/guest/Consultant.jsx";
 // import ConsultantCustomer from "./pages/customer/Consultantbooking.jsx";
-// import ServiceGuest from "./pages/guest/Services.jsx";
 // import Calendar from "./pages/customer/Calendar.jsx";
-// import ViewBooking from "./pages/staff/ViewBooking.jsx";
 import ViewBooking from "../pages/staff/ViewBooking.jsx";
-// import ServiceDetails from "./pages/guest/ServiceDetails.jsx";
 import ChangePassword from "../components/ChangePassword.jsx";
 import BlogDetail from "../pages/guest/BlogDetail.jsx";
 import ServiceDetails from "../pages/guest/ServiceDetails.jsx";
 import BookingTherapist from "../pages/customer/BookingTherapist.jsx";
+import { Calendar } from "lucide-react";
 // import CustomerProfile from "./pages/customer/CustomerProfile.jsx";
 // import SkincareBooking from "./pages/customer/Calendar.jsx";
 // import ViewBooked from "./pages/consultant/ViewBooked";
@@ -150,17 +147,17 @@ function AppRoute() {
           <Route path="/blog/:id" element={<BlogDetail />} />
           <Route path="/services" element={<Services />} />
           <Route path="/services/:id" element={<ServiceDetails />} />
-          <Route path="/chon-chuyen-vien" element={<BookingTherapist />} />
+          <Route path="/skincareconsultation" element={<SkincareConsultation />} />
           {/* <Route path="/quiz" element={<Quiz />} /> */}
         </Route>
 
         {/* Customer Pages */}
-        <Route element={<ProtectedRoute allowedRoles={["Customer"]} />}>
+        <Route element={<ProtectedRoute allowedRoles={["Customer"]} />}> 
           {/* <Route path="/booking" element={<BookingPageCustomer />} /> */}
           <Route path="/lich-hen" element={<MyCalendar />} />
-          {/* <Route path="/consultant-customer" element={<ConsultantCustomer />} /> */}
-          {/* <Route path="/dich-vu/:id/consultant-customer" element={<ConsultantCustomer />} /> */}
-          {/* <Route path="/services/:id/consultant-customer/:idConsultant/calendar" element={<SkincareBooking />} /> */}
+          <Route path="/chon-chuyen-vien" element={<BookingTherapist />} />
+          <Route path="/services/:id/chon-chuyen-vien" element={<BookingTherapist />} />
+          <Route path="/services/:id/chon-chuyen-vien/:idConsultant/lich-hen" element={<Calendar />} />
           {/* <Route path="/customer-profile" element={<CustomerProfile />} /> */}
           {/* <Route path="/booking-history" element={<ViewBookingHistory />} /> */}
         </Route>

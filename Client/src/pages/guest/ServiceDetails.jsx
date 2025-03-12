@@ -51,10 +51,10 @@ export default function ServiceDetails() {
         }
         localStorage.setItem("serviceId", id);
         sessionStorage.setItem("serviceId", id);
-        localStorage.setItem("serviceUrl", `/services/${id}/consultant-customer`);
-        sessionStorage.setItem("serviceUrl", `/services/${id}/consultant-customer`);
-        navigate(`/services/${id}/consultant-customer`);
-        console.log("Navigating to:", `/services/${id}/consultant-customer`);
+        localStorage.setItem("serviceUrl", `/services/${id}/chon-chuyen-vien`);
+        sessionStorage.setItem("serviceUrl", `/services/${id}/chon-chuyen-vien`);
+        navigate(`/services/${id}/chon-chuyen-vien`);
+        console.log("Navigating to:", `/services/${id}/chon-chuyen-vien`);
     };
 
     const handleLoginRedirect = () => {
@@ -72,7 +72,7 @@ export default function ServiceDetails() {
             <div className="max-w-7xl mx-auto p-4 bg-white shadow-lg rounded-lg mt-10 mb-10">
                 <button
                     onClick={() => navigate("/services")}
-                    className="mb-2 text-lg text-[#2B6A7C] hover:text-[#ffc0cb] self-end"
+                    className="mb-2 text-lg text-[#2B6A7C] hover:text-[#A7DFEC] self-end"
                 >
                     ← Back to Services
                 </button>
