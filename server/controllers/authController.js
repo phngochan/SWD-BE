@@ -93,11 +93,13 @@ exports.login = async (req, res) => {
         if (!user) return res.status(400).json({ message: "Invalid email or password" });
 
         const isMatch = await bcrypt.compare(password, user.password);
+
         if (!isMatch) return res.status(400).json({ message: "Invalid email or password" });
 
         if (!user.verified) return res.status(403).json({ message: "Please verify your email before logging in." });
 
         const token = generateToken(user);
+        console.log("token");
 
         res.json({ token, user: { id: user._id, email: user.email, roleName: user.roleName, firstName: user.firstName, lastName: user.lastName } });
     } catch (error) {

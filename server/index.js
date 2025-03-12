@@ -4,13 +4,16 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
+const swagger = require('./swagger');
 
 dotenv.config();
 
 const app = express();
+const PORT = process.env.PORT || 5000;
 
 // ✅ Cấu hình CORS chuẩn
 const allowedOrigins = [
+  `http://localhost:${PORT}`,
   "http://localhost:5173",
   process.env.FRONT_END_URL, // Lấy từ biến môi trường nếu có
 ];
@@ -40,6 +43,10 @@ app.use(express.urlencoded({ extended: false }));
 const routes = require("./routes");
 app.use("/api", routes);
 
+// Swagger
+swagger(app, PORT);
+
+// MongoDB Connection
 // ✅ Kết nối MongoDB
 mongoose
   .connect(process.env.MONGO_URL)
@@ -47,7 +54,6 @@ mongoose
   .catch((err) => console.error("❌ MongoDB connection error:", err));
 
 // ✅ Xử lý lỗi cổng bị chiếm (EADDRINUSE)
-const PORT = process.env.PORT || 5000;
 const server = app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });

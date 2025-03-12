@@ -18,7 +18,11 @@ const StaffSidebar = () => {
   const fullName =
     localStorage.getItem("fullName") || sessionStorage.getItem("fullName");
 
-  const menuItems = [{ name: "Booking Request", path: "/view-booking" }];
+  const menuItems = [
+    { name: "Booking Request", path: "/view-booking" },
+    { name: "View Orders", path: "/view-order" },
+  ];
+
   const handleLogout = () => {
     if (!window.confirm("Are you sure you want to log out?")) return;
     axios.post("/api/auth/logout")

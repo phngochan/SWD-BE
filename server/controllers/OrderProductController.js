@@ -41,10 +41,7 @@ exports.updateOrderStatus = async (req, res) => {
     const { status } = req.body;
     const validTransitions = {
       "Pending": ["Confirmed", "Cancelled"],
-      "Confirmed": ["Shipped"],
-      "Shipped": ["Delivered"],
-      "Delivered": [],
-      "Cancelled": []
+      "Confirmed": ["Cancelled"],
     };
 
     const order = await OrderProduct.findById(req.params.id);
