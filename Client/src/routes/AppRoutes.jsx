@@ -100,6 +100,7 @@ import ProductManagement from "../pages/manager/ProductManagement.jsx";
 // import Calendar from "./pages/customer/Calendar.jsx";
 // import ViewBooking from "./pages/staff/ViewBooking.jsx";
 import ViewBooking from "../pages/staff/ViewBooking.jsx";
+import ViewOrder from "../pages/staff/ViewOrder.jsx";
 // import ServiceDetails from "./pages/guest/ServiceDetails.jsx";
 import ChangePassword from "../components/ChangePassword.jsx";
 import BlogDetail from "../pages/guest/BlogDetail.jsx";
@@ -186,6 +187,7 @@ function AppRoute() {
         {/* Staff Pages */}
         <Route element={<ProtectedRoute allowedRoles={["Staff"]} />}>
           <Route path="/view-booking" element={<ViewBooking />} />
+          <Route path="/view-order" element={<ViewOrder />} />
         </Route>
 
 
