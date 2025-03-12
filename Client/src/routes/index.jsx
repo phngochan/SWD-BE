@@ -30,6 +30,7 @@ export const routes = {
     services: "/dich-vu",
     product: "/san-pham",
     skinconsultation: "/tu-van-cham-soc-da",
+    therapistbooking: "/chon-chuyen-vien",
     bookingtherapist: "/dat-lich",
     calendar: "/lich-hen",
     confirmbooking: "/xac-nhan-dat-lich",
@@ -37,5 +38,6 @@ export const routes = {
     checkout: "/thanh-toan",
     staffmanagement: "/staff-management",
     verifyemail: "/xac-nhan-email",
+    
   };
   

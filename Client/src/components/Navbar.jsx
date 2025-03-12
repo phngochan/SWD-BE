@@ -174,20 +174,20 @@ const Navbar = () => {
                         </button>
                     ) : (
                         <NavLink to="/dang-nhap" className="hidden md:block bg-[#A7DFEC] text-white text-[18px] px-4 py-2 rounded-full shadow-sm hover:opacity-80">
-                            Login
+                            Đăng nhập
                         </NavLink>
                     )}
 
                     {isProfilePopupOpen && token && (
                         <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-20">
                             <div className="block px-4 py-2 text-gray-800">
-                                Welcome, {fullName}
+                                Chào mừng, {fullName}
                             </div>
                             <NavLink to="/customer-profile" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">
-                                Profile
+                                Thông tin cá nhân
                             </NavLink>
                             <button onClick={() => setShowModal(true)} className="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100">
-                                Log out
+                                Đăng xuất
                             </button>
                         </div>
                     )}

@@ -1,21 +1,116 @@
-import { Link } from "react-router-dom";
-import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa";
+// import { Link } from "react-router-dom";
+// import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa";
+// import Navbar from "../../components/Navbar";
+// import Footer from "../../components/Footer";
+
+// const services = [
+//     { name: "pro calm skin treatment", image: "/images/skincare1.png" },
+//     { name: "luxliftfacial", image: "/images/skincare2.png" },
+//     { name: "pro bright skin treatment", image: "/images/skincare3.png" },
+//     { name: "pro nanoinfusion", image: "/images/skincare1.png" },
+//     { name: "pro clear skin treatment", image: "/images/skincare2.png" },
+//     { name: "pro firm neck + skin treatment", image: "/images/skincare3.png" },
+// ];
+
+// export default function Services() {
+//     return (
+//         <div className="bg-[#F5F5F5] min-h-screen">
+//             {/* Header */}
+//             <Navbar />
+
+//             {/* Services Hero Section */}
+//             <div className="h-[500px] w-full flex items-center justify-center text-white text-center"
+//                 style={{
+//                     backgroundImage: "url('/images/service.png')",
+//                     backgroundSize: "cover",
+//                     backgroundPosition: "center",
+//                     backgroundRepeat: "no-repeat",
+//                     backgroundAttachment: "fixed"
+//                 }}>
+//                 <h1 className="text-5xl font-semibold bg-opacity-50 px-6 py-4 rounded-lg">Skincare Services</h1>
+//             </div>
+
+//             {/* Services Content */}
+//             <div className="max-w-5xl mx-auto px-6 py-16 text-[#2B6A7C]">
+//                 <h2 className="text-[#2B6A7C] text-3xl font-bold text-center mb-6">Dịch Vụ Chăm Sóc Da Chuyên Nghiệp</h2>
+//                 <p className="text-[#2B6A7C] text-lg text-center leading-relaxed pb-8">
+//                     Chúng tôi cung cấp các liệu trình chăm sóc da chuyên sâu giúp bạn có làn da khỏe mạnh, tươi sáng.
+//                 </p>
+
+//                 {/* Services List */}
+//                 <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+//                     {services.map((service, index) => (
+//                         <div key={index} className="flex flex-col items-center">
+//                             <div className="w-48 h-48 rounded-full overflow-hidden border-4 border-[#00000000]">
+//                                 <img src={service.image} alt={service.name} className="w-full h-full object-cover" />
+//                             </div>
+//                             <div className="mt-4 text-center">
+//                                 <h3 className="text-xl font-semibold">{service.name}</h3>
+//                                 <button className="mt-3 px-7 py-1 bg-[#A7DFEC] text-white rounded-full hover:bg-[#2B6A7C]">
+//                                     Chọn
+//                                 </button>
+//                             </div>
+//                         </div>
+//                     ))}
+//                 </div>
+//             </div>
+
+//             {/* Footer */}
+//             <Footer />
+//         </div>
+//     );
+// }
+import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
+import ServiceCard from "../../components/ServiceCard";
 
-const services = [
-    { name: "pro calm skin treatment", image: "/images/skincare1.png" },
-    { name: "luxliftfacial", image: "/images/skincare2.png" },
-    { name: "pro bright skin treatment", image: "/images/skincare3.png" },
-    { name: "pro nanoinfusion", image: "/images/skincare1.png" },
-    { name: "pro clear skin treatment", image: "/images/skincare2.png" },
-    { name: "pro firm neck + skin treatment", image: "/images/skincare3.png" },
-];
 
-export default function Services() {
+export default function ServiceGuest() {
+    const [services, setServices] = useState([]);
+    const navigate = useNavigate();
+    const chooseServiceRef = useRef(null);
+
+    // Fetch data from the server
+    useEffect(() => {
+        axios
+            .get("/api/services/") // Update with your actual backend API
+            .then((response) => {
+                setServices(response.data); // Assuming response.data is an array of service objects
+            })
+            .catch((error) => {
+                console.error("Error fetching services:", error);
+            });
+    }, []);
+
+    // Scroll to top on mount
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+
+    // Scroll to "Choose Your Service" section on mount
+    useEffect(() => {
+        if (chooseServiceRef.current) {
+            chooseServiceRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+            setTimeout(() => {
+                window.scrollBy({ top: 1200, behavior: "smooth" }); // Tăng giá trị 'top' để cuộn xuống nhiều hơn
+            }, 180); // Trì hoãn một chút để tránh nhảy cuộn
+        }
+    }, []);
+
+    // Scroll to top on mount
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+
+    const handleChoose = (serviceId) => {
+        navigate(`/services/${serviceId}`);
+    };
+
     return (
-        <div className="bg-[#F5F5F5] min-h-screen">
-            {/* Header */}
+        <div className="main-container w-full h-auto bg-[#F5F5F5] relative overflow-hidden mx-auto my-0 -smooth ">
             <Navbar />
 
             {/* Services Hero Section */}
@@ -30,27 +125,29 @@ export default function Services() {
                 <h1 className="text-5xl font-semibold bg-opacity-50 px-6 py-4 rounded-lg">Skincare Services</h1>
             </div>
 
-            {/* Services Content */}
-            <div className="max-w-5xl mx-auto px-6 py-16 text-[#2B6A7C]">
-                <h2 className="text-[#2B6A7C] text-3xl font-bold text-center mb-6">Dịch Vụ Chăm Sóc Da Chuyên Nghiệp</h2>
-                <p className="text-[#2B6A7C] text-lg text-center leading-relaxed pb-8">
-                    Chúng tôi cung cấp các liệu trình chăm sóc da chuyên sâu giúp bạn có làn da khỏe mạnh, tươi sáng.
-                </p>
+            <div ref={chooseServiceRef} className="w-full max-w-[1800px] h-[48px] relative z-10 mt-[37.33px] mx-auto flex items-center justify-between">
+                <div className="w-[300px] h-[1px] bg-[url(/images/line.png)] bg-cover bg-no-repeat flex-1" />
 
-                {/* Services List */}
-                <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
-                    {services.map((service, index) => (
-                        <div key={index} className="flex flex-col items-center">
-                            <div className="w-48 h-48 rounded-full overflow-hidden border-4 border-[#00000000]">
-                                <img src={service.image} alt={service.name} className="w-full h-full object-cover" />
-                            </div>
-                            <div className="mt-4 text-center">
-                                <h3 className="text-xl font-semibold">{service.name}</h3>
-                                <button className="mt-3 px-7 py-1 bg-[#A7DFEC] text-white rounded-full hover:bg-[#2B6A7C]">
-                                    Chọn
-                                </button>
-                            </div>
-                        </div>
+                <div className="flex-shrink-0 font-['Lato'] text-[40px] font-normal leading-[48px] tracking-[-0.8px] text-center px-[80px] text-[#2B6A7C] pacifico-regular">
+                    <span className="text-[50px]">C</span>
+                    họn Dịch Vụ Của Bạn
+                </div>
+
+                <div className="w-[300px] h-[1px] bg-[url(/images/line.png)] bg-cover bg-no-repeat flex-1" />
+            </div>
+
+            {/* Service cards section */}
+            <div className="w-full px-4 flex justify-center ">
+                <div className="w-full max-w-[1200px] px-4 md:px-0 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-[60px] gap-y-[20px] mt-4 mb-[40px] mx-auto place-items-center">
+                    {services.map((service) => (
+                        <ServiceCard
+                            key={service._id}
+                            image={service.image}
+                            name={service.name}
+                            description={service.description}
+                            price={service.price}
+                            onChoose={() => handleChoose(service._id)}
+                        />
                     ))}
                 </div>
             </div>
