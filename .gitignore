@@ -3,3 +3,5 @@ nodes_modules
 node_modules
 .env
 /server/node_modules
+package-lock.json
+package.json
