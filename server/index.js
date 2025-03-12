@@ -34,6 +34,10 @@ const routes = require('./routes'); // Import the routes
 // Use routes with /api prefix
 app.use('/api', routes);  // All API routes will now be prefixed with /api
 
+// Swagger
+const swagger = require('./swagger');
+swagger(app);
+
 // MongoDB Connection
 mongoose
   .connect(process.env.MONGO_URL)

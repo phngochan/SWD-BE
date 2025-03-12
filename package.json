@@ -16,5 +16,9 @@
   "bugs": {
     "url": "https://github.com/Duongtkse182382/SWD/issues"
   },
-  "homepage": "https://github.com/Duongtkse182382/SWD#readme"
+  "homepage": "https://github.com/Duongtkse182382/SWD#readme",
+  "dependencies": {
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
+  }
 }

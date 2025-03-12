@@ -8,7 +8,7 @@ const quizResultRoutes = require('./quizResultRoutes');
 // const blogRoutes = require('./blogRoutes');
 const questionRoutes = require('./questionRoutes');
 const managerRoutes = require("./managerRoutes");
-// const calendarRoutes = require("./calendarRoutes");
+const calendarRoutes = require("./calendarRoutes");
 // const consultantRoutes = require("./consultantRoutes");
 const router = express.Router();
 
@@ -16,6 +16,7 @@ router.use('/users', userRoutes);
 router.use('/managers', managerRoutes);
 router.use('/questions', questionRoutes);
 router.use('/quiz-results', quizResultRoutes);
+router.use('/calendars', calendarRoutes);
 // router.use('/consultants', consultantRoutes);
 
 module.exports = router;
