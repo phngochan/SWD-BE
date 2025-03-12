@@ -7,7 +7,7 @@ const {
   cancelOrder
 } = require("../controllers/OrderProductController");
 const router = express.Router();
-const { authenticate, authorize } = require("../middlewares/AuthMiddleware"); // Kiểm tra lại đường dẫn
+const { authenticate, authorize } = require("../middlewares/authMiddleware"); // Kiểm tra lại đường dẫn
 
 router.post("/", authenticate, authorize(["Customer"]), createOrder);
 router.get("/", authenticate, authorize(["Admin", "Staff"]), getAllOrders);
