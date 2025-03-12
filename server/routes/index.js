@@ -15,6 +15,7 @@ const questionRoutes = require('./questionRoutes');
 const calendarRoutes = require("./calendarRoutes");
 const orderProductRoutes = require("./OrderProductRoutes.js");
 const productRoutes = require('./productRoutes.js');
+const appointmentRoutes = require('./appointmentRoutes');
 
 const router = express.Router();
 
@@ -34,6 +35,7 @@ router.use('/blogs', blogRoutes);
 router.use('/questions', questionRoutes);
 router.use('/orders', orderProductRoutes);
 router.use('/products', productRoutes);
+router.use('/appointments', appointmentRoutes);
 
 
 module.exports = router;

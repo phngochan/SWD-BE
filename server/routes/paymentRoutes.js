@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { authenticate, authorize } = require("../middlewares/authMiddleware"); 
-const paymentController = require("../controllers/PaymentController");
+const paymentController = require("../controllers/paymentController");
 
 
 router.post("/receive-hook", paymentController.receivePayment); 

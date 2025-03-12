@@ -1,5 +1,5 @@
 const PayOS = require('../utils/payos'); // Assuming PayOS is your payment gateway utility
-// const Order = require("../models/Order");
+const Appointment = require("../models/Appointment");
 const Service = require("../models/Service");
 const BookingRequest = require("../models/BookingRequest");
 const User = require("../models/User");
@@ -17,8 +17,12 @@ const createEmbeddedPaymentLink = async (req, res) => {
             return res.status(404).json({ error: 1, message: 'Booking request not found' });
         }
 
-        const userId = bookingRequest.customerID;
+        // Check if the booking status is "Completed"
+        if (bookingRequest.status !== "Completed") {
+            return res.status(400).json({ error: 1, message: 'Only completed bookings can proceed to checkout' });
+        }
 
+        const userId = bookingRequest.customerID;
         const serviceId = bookingRequest.serviceID;
 
         // Fetch user and service data
@@ -36,40 +40,40 @@ const createEmbeddedPaymentLink = async (req, res) => {
 
         const transactionDateTime = new Date();
 
-        // Generate a unique order code
-        let orderCode;
+        // Generate a unique appointment code
+        let appointmentCode;
         while (1 > 0) {
-            orderCode = Number(Date.now().toString().slice(-8) + Math.floor(Math.random() * 100).toString().padStart(2, '0'));
-            const existingOrder = await Order.findOne({ orderCode });
-            if (!existingOrder) break; // Ensure unique order code
+            appointmentCode = Number(Date.now().toString().slice(-8) + Math.floor(Math.random() * 100).toString().padStart(2, '0'));
+            const existingAppointment = await Appointment.findOne({ appointmentCode });
+            if (!existingAppointment) break; // Ensure unique appointment code
         }
 
-        // Create a new order in the database
-        const newOrder = new Order({
+        // Create a new appointment in the database
+        const newAppointment = new Appointment({
             memberId: userId,
-            serviceId : serviceId,
+            serviceId: serviceId,
             status: "Pending",
             amount: service.price,
-            orderCode,
+            appointmentCode,
             description: "Service Payment",
             buyerName: user.firstName + " " + user.lastName,
             buyerEmail: user.email,
             buyerPhone: user.phoneNumber,
-            transactionDateTime : transactionDateTime
+            transactionDateTime: transactionDateTime
         });
-        await newOrder.save();
+        await newAppointment.save();
 
         // Payment link parameters
         const amount = service.price;
         const description = "Service Payment";
         const items = [{ name: service.name, quantity: 1, price: service.price }];
-        const returnUrl = process.env.RETURN_URL || "http://localhost:5173/pay-success"; // URL cho trang thành công
-        const cancelUrl = process.env.CANCEL_URL || "http://localhost:5173/pay-failed"; // URL cho trang thất bại
+        const returnUrl = process.env.RETURN_URL || "http://localhost:5173/pay-success"; // URL for success page
+        const cancelUrl = process.env.CANCEL_URL || "http://localhost:5173/pay-failed"; // URL for failure page
 
         // Create the payment link using PayOS
         try {
             const paymentLinkRes = await PayOS.createPaymentLink({
-                orderCode,
+                appointmentCode,
                 amount,
                 description,
                 items,
@@ -87,7 +91,7 @@ const createEmbeddedPaymentLink = async (req, res) => {
                     accountName: paymentLinkRes.accountName,
                     amount: paymentLinkRes.amount,
                     description: paymentLinkRes.description,
-                    orderCode: paymentLinkRes.orderCode,
+                    appointmentCode: paymentLinkRes.appointmentCode,
                     qrCode: paymentLinkRes.qrCode,
                 },
             });
@@ -111,44 +115,43 @@ const createEmbeddedPaymentLink = async (req, res) => {
     }
 };
 
-
 // Function to handle payment status (webhook)
 const receivePayment = async (req, res) => {
     try {
         let data = req.body; // Get data from the webhook
 
-        if (data.data.orderCode == 123) {
+        if (data.data.appointmentCode == 123) {
             return res.status(200).json({ error: 0, message: "Success" });
         }
 
         console.log('Webhook received:', data);
 
-        if (data.data && data.data.orderCode) {
-            const orderCode = data.data.orderCode;
+        if (data.data && data.data.appointmentCode) {
+            const appointmentCode = data.data.appointmentCode;
 
-            const order = await Order.findOne({ orderCode });
+            const appointment = await Appointment.findOne({ appointmentCode });
 
-        if (!order) {
-            console.log(`Order with orderCode ${orderCode} not found.`);
-            return res.status(404).json({ error: 1, message: "Order not found" });
-        }
+            if (!appointment) {
+                console.log(`Appointment with appointmentCode ${appointmentCode} not found.`);
+                return res.status(404).json({ error: 1, message: "Appointment not found" });
+            }
 
-        // Update order status based on payment success/failure
-        if (data.success) {
-            order.status = "Paid";
-            order.currency = data.data.currency;
-            order.paymentMethod = "PayOS"; // You can change this to match your actual payment gateway
-            order.paymentStatus = data.data.desc || "Payment Successful";
-            console.log(`Order ${orderCode} updated to Paid.`);
-        } else {
-            order.status = "Canceled";
-            order.paymentStatus = data.data.desc || "Payment Failed";
-            console.log(`Order ${orderCode} updated to Canceled.`);
-        }
+            // Update appointment status based on payment success/failure
+            if (data.success) {
+                appointment.status = "Paid";
+                appointment.currency = data.data.currency;
+                appointment.paymentMethod = "PayOS"; // You can change this to match your actual payment gateway
+                appointment.paymentStatus = data.data.desc || "Payment Successful";
+                console.log(`Appointment ${appointmentCode} updated to Paid.`);
+            } else {
+                appointment.status = "Canceled";
+                appointment.paymentStatus = data.data.desc || "Payment Failed";
+                console.log(`Appointment ${appointmentCode} updated to Canceled.`);
+            }
 
-        await order.save(); // Save the updated order status
+            await appointment.save(); // Save the updated appointment status
 
-        return res.status(200).json({ error: 0, message: "Order updated successfully", order });
+            return res.status(200).json({ error: 0, message: "Appointment updated successfully", appointment });
         }
         return res.status(400).json({ error: 1, message: "Invalid payment data" });
     } catch (error) {
