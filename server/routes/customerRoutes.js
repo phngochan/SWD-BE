@@ -1,19 +1,21 @@
-// customerRoutes.js - Routes for customer services and bookings
 const express = require('express');
-const { getAllServices, createBooking, getCustomerBookings } = require('../controllers/customerController');
-const authMiddleware = require('../middlewares/authMiddleware');
-
-const { authenticate } = require('../middlewares/authMiddleware');
-
 const router = express.Router();
+const customerController = require('../controllers/customerController');
+const { authenticate, authorize } = require('../middlewares/authMiddleware');
 
-// Route to get all services
-router.get('/services', getAllServices);
+// Get all customers (Manager only)
+router.get('/', authenticate, authorize(['Manager']), customerController.getAllCustomers);
 
-// Route to create a booking (requires authentication)
-router.post('/booking', authenticate, createBooking);
+// Get customer by ID
+router.get('/:id', authenticate, authorize(['Manager', 'Customer']), customerController.getCustomerById);
 
-// Route to get all customer bookings (requires authentication)
-router.get('/bookings', authenticate, getCustomerBookings);
+// Update customer profile
+router.put('/:id', authenticate, authorize(['Customer']), customerController.updateCustomer);
+
+// Delete customer (Manager only)
+router.delete('/:id', authenticate, authorize(['Manager']), customerController.deleteCustomer);
+
+// Change password
+router.post('/change-password', authenticate, customerController.changePassword);
 
 module.exports = router;

@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const calendarController = require('../controllers/calendarController');
+const { authenticate } = require('../middlewares/authMiddleware');
 
 /**
  * @swagger
@@ -34,7 +35,7 @@ const calendarController = require('../controllers/calendarController');
  *       400:
  *         description: Schedule is already booked
  */
-router.post('/create', calendarController.createEvent);
+router.post('/create', authenticate, calendarController.createEvent);
 
 /**
  * @swagger
@@ -61,6 +62,6 @@ router.post('/create', calendarController.createEvent);
  *                     type: string
  *                     format: date-time
  */
-router.get('/events', calendarController.getEvents);
+router.get('/events', authenticate, calendarController.getEvents);
 
 module.exports = router;

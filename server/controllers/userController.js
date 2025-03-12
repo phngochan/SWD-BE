@@ -161,9 +161,6 @@ exports.loginUser = async (req, res) => {
         redirectUrl = "/staff";
         break;
       case "Manager":
-        redirectUrl = "/manager";
-        break
-      case "Admin":
         redirectUrl = "/dashboard";
         break;
       case "Therapist":

@@ -1,8 +1,18 @@
-// filepath: e:\MAIN\FPTU\sem7\SWD\SWD\server\swagger.js
 const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 
-const options = {
+const tags = [
+  {
+    name: 'Calendars',
+    description: 'Calendar management',
+  },
+  {
+    name: 'Auth',
+    description: 'Authentication and Authorization',
+  },
+];
+
+const options = (port) => ({
   definition: {
     openapi: '3.0.0',
     info: {
@@ -12,22 +22,31 @@ const options = {
     },
     servers: [
       {
-        url: `http://localhost:${process.env.PORT || 5000}/api`,
+        url: `http://localhost:${port}/api`,
         description: 'API Server',
       },
     ],
-    tags: [
+    tags: tags,
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+        },
+      },
+    },
+    security: [
       {
-        name: 'Calendars',
-        description: 'Calendar management',
+        bearerAuth: [],
       },
     ],
   },
-  apis: [`./routes/index.js`],
-};
+  apis: ['./routes/*.js'],
+});
 
-const specs = swaggerJsdoc(options);
+const specs = (port) => swaggerJsdoc(options(port));
 
-module.exports = (app) => {
-  app.use('/docs', swaggerUi.serve, swaggerUi.setup(specs));
+module.exports = (app, port) => {
+  app.use('/docs', swaggerUi.serve, swaggerUi.setup(specs(port)));
 };
