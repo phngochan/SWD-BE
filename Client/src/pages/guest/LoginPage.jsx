@@ -89,12 +89,14 @@ export default function LoginPage() {
       if (roleName === "Manager") redirectUrl = "/dashboard";
       else if (roleName === "Staff") redirectUrl = "/view-booking";
       else if (roleName === "Consultant") redirectUrl = "/view-booked";
-      else if (roleName === "Admin") redirectUrl = "/staff-management";
       else if (roleName === "Customer") redirectUrl = "/ve-chung-toi";
 
-      navigate(redirectUrl);
+      if (window.location.pathname !== redirectUrl) {
+        navigate(redirectUrl); // ✅ Chỉ redirect nếu chưa ở đúng trang
+      }
     }
-  }, [navigate]);
+  }, []); // ✅ Không đặt navigate vào dependency array
+
 
   // Load remembered email
   useEffect(() => {
@@ -142,7 +144,6 @@ export default function LoginPage() {
       if (roleName === "Manager") redirectUrl = "/dashboard";
       else if (roleName === "Staff") redirectUrl = "/view-booking";
       else if (roleName === "Consultant") redirectUrl = "/view-booked";
-      else if (roleName === "Admin") redirectUrl = "/staff-management";
       else if (roleName === "Customer") redirectUrl = "/about";
 
       navigate(redirectUrl);

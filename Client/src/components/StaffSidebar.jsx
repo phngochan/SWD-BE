@@ -21,23 +21,16 @@ const StaffSidebar = () => {
   const menuItems = [{ name: "Booking Request", path: "/view-booking" }];
   const handleLogout = () => {
     if (!window.confirm("Are you sure you want to log out?")) return;
-    axios
-      .post("/api/auth/logout")
+    axios.post("/api/auth/logout")
       .then(() => {
-        // Clear auth data from storage
         localStorage.removeItem("authToken");
         localStorage.removeItem("roleName");
         sessionStorage.removeItem("authToken");
         sessionStorage.removeItem("roleName");
-
-        // Redirect user to login page
-        navigate("/login");
+        navigate("/dang-nhap");
       })
-      .catch((error) => {
-        console.error(
-          "Logout failed:",
-          error.response?.data?.message || error.message
-        );
+      .catch(error => {
+        console.error("Logout failed:", error.response?.data?.message || error.message);
       });
   };
 
@@ -49,7 +42,7 @@ const StaffSidebar = () => {
         flexShrink: 0,
         "& .MuiDrawer-paper": {
           width: 240,
-          backgroundColor: "#1a202c",
+          backgroundColor: "#1e3a8a",
           color: "white",
           padding: "10px",
         },
@@ -57,18 +50,20 @@ const StaffSidebar = () => {
     >
       <Toolbar>
         <div
-          className="w-[150px] h-[150px] bg-cover bg-center bg-no-repeat rounded-t-lg"
+          className="w-[120px] h-[120px] mx-auto bg-cover bg-center bg-no-repeat rounded-full"
           style={{
-            backgroundImage: `url(https://cdn-icons-png.flaticon.com/512/3789/3789820.png)`,
+            backgroundImage: `url(https://cdn-icons-png.flaticon.com/512/3135/3135715.png)`,
           }}
         />
       </Toolbar>
+
       <Typography variant="h6">
         <div className="text-center">
           Welcome Staff <br /> {fullName}
         </div>
       </Typography>
-      <Divider sx={{ backgroundColor: "gray" }} />
+
+      <Divider sx={{ backgroundColor: "#4f6fb7" }} />
 
       {/* Danh sách menu */}
       <List>
@@ -85,6 +80,8 @@ const StaffSidebar = () => {
         ))}
       </List>
 
+      <Divider sx={{ backgroundColor: "#4f6fb7", marginY: 1 }} />
+
       {/* Change Password Button */}
       <Button
         onClick={() => navigate("/change-password")}
@@ -94,17 +91,17 @@ const StaffSidebar = () => {
           left: "50%",
           transform: "translateX(-50%)",
           width: "80%",
-          backgroundColor: "#1976d2",
-          color: "white",
+          backgroundColor: "#FFC107",
+          color: "black",
+          fontWeight: "bold",
           "&:hover": {
-            backgroundColor: "#1565c0",
+            backgroundColor: "#FFA000",
           },
         }}
       >
         Change Password
       </Button>
 
-      {/* Logout Button */}
       <Button
         onClick={handleLogout}
         sx={{
@@ -113,10 +110,11 @@ const StaffSidebar = () => {
           left: "50%",
           transform: "translateX(-50%)",
           width: "80%",
-          backgroundColor: "#f44336",
+          backgroundColor: "#FF5722",
           color: "white",
+          fontWeight: "bold",
           "&:hover": {
-            backgroundColor: "#d32f2f",
+            backgroundColor: "#E64A19",
           },
         }}
       >

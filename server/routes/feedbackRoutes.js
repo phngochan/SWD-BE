@@ -1,8 +1,17 @@
 const express = require('express');
-const { createFeedback, getFeedbackByBooking } = require('../controllers/feedbackController');
+const { 
+    createFeedback,
+    getFeedbackByBooking,
+    getAverageServiceRating, 
+    getAverageConsultantRating  
+} = require('../controllers/feedbackController');
+const { authenticate } = require('../middlewares/AuthMiddleware'); // Require authentication
+
 const router = express.Router();
 
-router.post('/', createFeedback); // Create a new feedback
-router.get('/:bookingRequestId', getFeedbackByBooking); // Get feedback by booking request ID
+router.get('/service-rating', authenticate, getAverageServiceRating); // Lấy rating trung bình của dịch vụ
+router.get('/consultant-rating', authenticate, getAverageConsultantRating); // Lấy rating trung bình của tư vấn viên
+router.post('/', authenticate, createFeedback); // Require authentication to create feedback
+router.get('/:bookingRequestId', authenticate, getFeedbackByBooking); // Secure route
 
 module.exports = router;
