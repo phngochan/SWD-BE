@@ -99,9 +99,10 @@ import ProductManagement from "../pages/manager/ProductManagement.jsx";
 // import ServiceGuest from "./pages/guest/Services.jsx";
 // import Calendar from "./pages/customer/Calendar.jsx";
 // import ViewBooking from "./pages/staff/ViewBooking.jsx";
-// import ServiceDetails from "./pages/guest/ServiceDetails.jsx";
 import ChangePassword from "../components/ChangePassword.jsx";
 import BlogDetail from "../pages/guest/BlogDetail.jsx";
+import ServiceDetails from "../pages/guest/ServiceDetails.jsx";
+import BookingTherapist from "../pages/customer/BookingTherapist.jsx";
 // import CustomerProfile from "./pages/customer/CustomerProfile.jsx";
 // import SkincareBooking from "./pages/customer/Calendar.jsx";
 // import ViewBooked from "./pages/consultant/ViewBooked";
@@ -146,8 +147,8 @@ function AppRoute() {
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:id" element={<BlogDetail />} />
           <Route path="/services" element={<Services />} />
-          {/* <Route path="/services/:id" element={<ServiceDetails />} /> */}
-          <Route path="/skincareconsultation" element={<SkincareConsultation />} />
+          <Route path="/services/:id" element={<ServiceDetails />} />
+          <Route path="/chon-chuyen-vien" element={<BookingTherapist />} />
           {/* <Route path="/quiz" element={<Quiz />} /> */}
         </Route>
 
