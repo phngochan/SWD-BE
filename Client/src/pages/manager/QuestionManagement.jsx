@@ -38,12 +38,18 @@ const QuestionCard = ({ question, onDelete, onEdit }) => {
           </Typography>
         ))}
         <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
-          <Button size="small" variant="outlined" color="primary" onClick={() => onEdit(question)}>
+          <button
+            onClick={() => onEdit(question)}
+            className="bg-yellow-500 text-white px-3 py-1 rounded transition-all duration-300 ease-in-out hover:scale-105 active:scale-95"
+          >
             <FaEdit />
-          </Button>
-          <Button size="small" variant="outlined" color="error" onClick={() => onDelete(question._id)}>
+          </button>
+          <button
+            onClick={() => onDelete(question._id)}
+            className="bg-red-500 text-white px-3 py-1 rounded transition-all duration-300 ease-in-out hover:scale-105 active:scale-95"
+          >
             <FaTrash />
-          </Button>
+          </button>
         </Box>
       </CardContent>
     </Card>
@@ -134,8 +140,11 @@ const QuestionManagement = () => {
       // Add new question
       axios
         .post("/api/questions", questionData)
+        .then(() => {
+          return axios.get("/api/questions"); // Gọi lại API để lấy danh sách mới
+        })
         .then((response) => {
-          setQuestions((prevQuestions) => [...prevQuestions, response.data]);
+          setQuestions(response.data); // Cập nhật lại danh sách
           setEditDialog({ open: false, question: null });
           setNewQuestion("");
           setNewAnswerOptions([{ answerText: "", weight: 0 }]);
