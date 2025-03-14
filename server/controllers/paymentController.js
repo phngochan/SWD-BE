@@ -17,10 +17,6 @@ const createEmbeddedPaymentLink = async (req, res) => {
             return res.status(404).json({ error: 1, message: 'Booking request not found' });
         }
 
-        // Check if the booking status is "Completed"
-        if (bookingRequest.status !== "Comfirmed") {
-            return res.status(400).json({ error: 1, message: 'Only completed bookings can proceed to checkout' });
-        }
 
         const userId = bookingRequest.customerID;
         const serviceId = bookingRequest.serviceID;
@@ -73,13 +69,14 @@ const createEmbeddedPaymentLink = async (req, res) => {
         // Create the payment link using PayOS
         try {
             const paymentLinkRes = await PayOS.createPaymentLink({
-                appointmentCode,
+                orderCode: appointmentCode,
                 amount,
                 description,
                 items,
                 returnUrl,
                 cancelUrl,
             });
+            console.log("PayOS Response:", paymentLinkRes);
 
             return res.json({
                 error: 0,
@@ -91,7 +88,7 @@ const createEmbeddedPaymentLink = async (req, res) => {
                     accountName: paymentLinkRes.accountName,
                     amount: paymentLinkRes.amount,
                     description: paymentLinkRes.description,
-                    appointmentCode: paymentLinkRes.appointmentCode,
+                    orderCode: paymentLinkRes.orderCode,
                     qrCode: paymentLinkRes.qrCode,
                 },
             });
@@ -120,14 +117,15 @@ const receivePayment = async (req, res) => {
     try {
         let data = req.body; // Get data from the webhook
 
-        if (data.data.appointmentCode == 123) {
+        if (data.data.orderCode == 123) {
             return res.status(200).json({ error: 0, message: "Success" });
         }
 
         console.log('Webhook received:', data);
 
-        if (data.data && data.data.appointmentCode) {
-            const appointmentCode = data.data.appointmentCode;
+        if (data.data && data.data.orderCode) {
+            const appointmentCode = data.data.orderCode;
+            console.log(appointmentCode);
 
             const appointment = await Appointment.findOne({ appointmentCode });
 

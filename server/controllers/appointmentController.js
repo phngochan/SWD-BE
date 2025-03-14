@@ -80,8 +80,9 @@ const deleteAppointment = async (req, res) => {
 
 const getAppointmentByAppointmentCode = async (req, res) => {
     try {
-        const { appointmentCode } = req.params;
-        const appointment = await Appointment.findOne({ appointmentCode: appointmentCode.toLowerCase() }); // Không phân biệt hoa thường
+        const { orderCode } = req.params;
+        console.log("Received orderCode:", orderCode);
+        const appointment = await Appointment.findOne({ appointmentCode: orderCode }); // Không phân biệt hoa thường
 
         if (!appointment) {
             return res.status(404).json({ message: "Appointment not found" });
