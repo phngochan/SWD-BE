@@ -18,7 +18,7 @@ const createEmbeddedPaymentLink = async (req, res) => {
         }
 
         // Check if the booking status is "Completed"
-        if (bookingRequest.status !== "Completed") {
+        if (bookingRequest.status !== "Comfirmed") {
             return res.status(400).json({ error: 1, message: 'Only completed bookings can proceed to checkout' });
         }
 
