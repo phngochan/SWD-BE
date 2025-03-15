@@ -76,10 +76,10 @@ export default function BookingTherapist() {
   const handleBookingNow = async (consultantId) => {
     localStorage.setItem("consultantId", consultantId);
     sessionStorage.setItem("consultantId", consultantId);
-    localStorage.setItem("serviceUrl", `/services/${id}/consultant-customer/${consultantId}/calendar`);
-    sessionStorage.setItem("serviceUrl", `/services/${id}/consultant-customer/${consultantId}/calendar`);
-    navigate(`/services/${id}/consultant-customer/${consultantId}/calendar`);
-    console.log("Navigating to:", `/services/${id}/consultant-customer/${consultantId}/calendar`);
+    localStorage.setItem("serviceUrl", `/services/${id}/chon-chuyen-vien/${consultantId}/lich-hen`);
+    sessionStorage.setItem("serviceUrl", `/services/${id}/chon-chuyen-vien/${consultantId}/lich-hen`);
+    navigate(`/services/${id}/chon-chuyen-vien/${consultantId}/lich-hen`);
+    console.log("Navigating to:", `/services/${id}/chon-chuyen-vien/${consultantId}/lich-hen`);
   };
 
   return (
@@ -124,7 +124,7 @@ export default function BookingTherapist() {
                   onClick={() => handleViewMore(index)}
                 >
                   <span className="text-[16px] font-bold leading-[20px] text-[#2B6A7C]">
-                    {visibleNoteIndex === index ? "Hide" : "View More"}
+                    {visibleNoteIndex === index ? "Hide" : "Xem thêm"}
                   </span>
                 </button>
                 <button
@@ -132,7 +132,7 @@ export default function BookingTherapist() {
                   onClick={() => handleBookingNow(consultant._id)}
                 >
                   <span className="text-[16px] font-bold leading-[20px] text-[#2B6A7C]">
-                    Booking Now
+                    Đặt ngay
                   </span>
                 </button>
               </div>
@@ -153,7 +153,7 @@ export default function BookingTherapist() {
           }}
         >
           <span className="text-[20px] font-bold leading-[24px] text-[#2B6A7C]">
-            We can choose consultant for you
+            Hãy để cho chúng tôi đặt cho bạn
           </span>
         </button>
 

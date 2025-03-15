@@ -1,14 +1,26 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 import PropTypes from "prop-types";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import Swal from "sweetalert2";
+import axios from "../../utils/axiosInstance";
+import { toast } from "react-toastify";
+
 
 const MyCalendar = () => {
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [selectedTime, setSelectedTime] = useState(null);
+    const [events, setEvents] = useState([]);
+    const [consultants, setConsultants] = useState([]);
+    const [availableTimes, setAvailableTimes] = useState([]);
+    const [selectedService, setSelectedService] = useState("");
+    const [selectedConsultant, setSelectedConsultant] = useState("");
+    const [showConfirmModal, setShowConfirmModal] = useState(false);
+    const id = localStorage.getItem("consultantId");
+    const serviceId = localStorage.getItem("serviceId");
+    const [serviceName, setServiceName] = useState("");
     const navigate = useNavigate();
 
     const times = [
@@ -16,46 +28,187 @@ const MyCalendar = () => {
         "01:00 PM", "02:00 PM", "03:00 PM", "04:00 PM", "05:00 PM"
     ];
 
+    useEffect(() => {
+        const fetchService = async () => {
+            try {
+                const res = await axios.get(`/api/services/${serviceId}`);
+                setServiceName(res.data.name);
+            } catch (err) {
+                console.error("Failed to fetch service name");
+            }
+        };
+
+        if (serviceId) {
+            fetchService();
+        }
+    }, [serviceId]);
+
+    useEffect(() => {
+        const fetchConsultantById = async () => {
+            try {
+                if (id && id !== "null") { // Kiểm tra cả null dạng string
+                    const res = await axios.get(`/api/consultants/${id}`);
+                    setConsultants(res.data);
+                }
+            } catch (err) {
+                toast.error("Failed to fetch consultant");
+            }
+        };
+
+        fetchConsultantById();
+    }, [id]); // Chỉ chạy khi id thay đổi
+
+    useEffect(() => {
+        const fetchEvents = async () => {
+            try {
+                const response = await axios.get("/api/calendars/events", {
+                    params: {
+                        service: selectedService,
+                        consultant: selectedConsultant
+                    }
+                });
+                setEvents(response.data);
+            } catch (error) {
+                console.error("Error fetching events:", error);
+            }
+        };
+
+        if (selectedService && selectedConsultant) {
+            fetchEvents();
+        }
+    }, [selectedService, selectedConsultant]);
+
+    useEffect(() => {
+        const updateAvailableTimes = () => {
+            const now = new Date();
+            const selectedDay = new Date(selectedDate);
+            const currentTime = now.getHours() * 60 + now.getMinutes();
+
+            let filteredTimes;
+            if (selectedDay.toDateString() === now.toDateString()) {
+                filteredTimes = times.filter(time => {
+                    const [hour, minute] = time.split(/[: ]/);
+                    const timeInMinutes = (parseInt(hour) % 12 + (time.includes("PM") ? 12 : 0)) * 60 + parseInt(minute);
+                    return timeInMinutes > currentTime;
+                });
+            } else {
+                filteredTimes = times;
+            }
+
+            setAvailableTimes(filteredTimes);
+            if (filteredTimes.length > 0) {
+                setSelectedTime(filteredTimes[0]);
+            } else {
+                setSelectedTime(null);
+            }
+        };
+
+        updateAvailableTimes();
+    }, [selectedDate]);
+
+
     const handleTimeSelect = (time) => {
         setSelectedTime(time);
     };
 
     // const handleConfirm = () => {
-    //     const confirmPurchase = window.confirm("Bạn có muốn mua thêm sản phẩm chăm sóc da mặt không?");
-    //     if (confirmPurchase) {
-    //         navigate("/san-pham-bo-sung"); // Chuyển đến trang mua sản phẩm
-    //     } else {
-    //         alert(`Xác nhận đặt lịch vào ${selectedDate.toDateString()} lúc ${selectedTime}`);
-    //     }
+    //     Swal.fire({
+    //         title: "Bạn đã chắc chắn thời gian đặt lịch?",
+    //         text: "",
+    //         icon: "question",
+    //         showCancelButton: true,
+    //         confirmButtonColor: "#A7DFEC",
+    //         cancelButtonColor: "#d33",
+    //         confirmButtonText: "Có, xác nhận!",
+    //         cancelButtonText: "Chưa!",
+    //     }).then((result) => {
+    //         if (result.isConfirmed) {
+    //             navigate("/than-toan"); // Điều hướng đến trang sản phẩm
+    //         } else {
+    //             Swal.fire(
+    //                 "Đặt lịch thành công!",
+    //                 `Bạn đã đặt lịch vào ${selectedDate.toDateString()} lúc ${selectedTime}`,
+    //                 "success"
+
+    //             ); navigate("/xac-nhan-thong-tin");
+    //         }
+    //     });
     // };
-    const handleConfirm = () => {
-        Swal.fire({
-            title: "Mua thêm sản phẩm?",
-            text: "Bạn có muốn mua thêm sản phẩm chăm sóc da mặt không?",
-            icon: "question",
-            showCancelButton: true,
-            confirmButtonColor: "#A7DFEC",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Có, mua ngay!",
-            cancelButtonText: "Không, cảm ơn",
-        }).then((result) => {
-            if (result.isConfirmed) {
-                navigate("/san-pham-bo-sung"); // Điều hướng đến trang sản phẩm
-            } else {
-                Swal.fire(
-                    "Đặt lịch thành công!",
-                    `Bạn đã đặt lịch vào ${selectedDate.toDateString()} lúc ${selectedTime}`,
-                    "success"
-                    
-                );navigate("/xac-nhan-thong-tin");
-            }
-        });
+    const handleConfirmBooking = () => {
+        setShowConfirmModal(true); // Chỉ hiển thị popup, không gửi API
+    };
+
+    const handleConfirm = async () => {
+        await createBookingRequest(); // Gửi API sau khi người dùng bấm Confirm
+        setShowConfirmModal(false); // Đóng popup sau khi gửi thành công
+
+        const successMessage = document.createElement("div");
+        successMessage.innerText = `Successfully booked for ${selectedDate.toDateString()} at ${selectedTime}`;
+        successMessage.style.position = "fixed";
+        successMessage.style.top = "10%";
+        successMessage.style.left = "50%";
+        successMessage.style.transform = "translate(-50%, -10%)";
+        successMessage.style.backgroundColor = "#4CAF50";
+        successMessage.style.color = "white";
+        successMessage.style.padding = "10px";
+        successMessage.style.borderRadius = "5px";
+        successMessage.style.zIndex = "1000";
+        successMessage.style.fontSize = "14px";
+        document.body.appendChild(successMessage);
+
+        window.location.href = "/ve-chung-toi"; // Chuyển trang sau khi booking
     };
 
     const handleCancel = () => {
-        // Add cancel logic here
-        setSelectedTime(null);
-        navigate("/")
+        localStorage.setItem("serviceId", serviceId); // Lưu dịch vụ đã chọn
+        window.location.href = "/chon-chuyen-vien"; // Chuyển về trang consultant khi bấm Cancel
+    };
+
+    const isTimeDisabled = (time) => {
+        const now = new Date();
+        const selectedDay = new Date(selectedDate);
+        const currentTime = now.getHours() * 60 + now.getMinutes();
+        const [hour, minute] = time.split(/[: ]/);
+        const timeInMinutes = (parseInt(hour) % 12 + (time.includes("PM") ? 12 : 0)) * 60 + parseInt(minute);
+
+        return selectedDay.toDateString() === now.toDateString() && timeInMinutes <= currentTime;
+    };
+
+    const tileDisabled = ({ date, view }) => {
+        if (view === 'month') {
+            return date < new Date().setHours(0, 0, 0, 0);
+        }
+        return false;
+    };
+
+    const createBookingRequest = async () => {
+        if (!serviceId || !selectedTime || !selectedDate) {
+            toast.error("Please select a service, date, and time.");
+            return;
+        }
+        const localDate = new Date(selectedDate.getTime() - selectedDate.getTimezoneOffset() * 60000);
+
+        try {
+            const payload = {
+                serviceID: serviceId,
+                customerID: localStorage.getItem("userId") || sessionStorage.getItem("userId"),
+                date: localDate.toISOString().split("T")[0],
+                time: selectedTime,
+                consultantID: id && id !== "null" ? id : null,
+                status: "Pending",
+                isConsultantAssignedByCustomer: !!id,
+            };
+
+            const response = await axios.post("/api/booking-requests/", payload);
+
+            if (response.status === 201) {
+                toast.success("Booking request created successfully!");
+                // Chỉ ẩn popup sau khi người dùng bấm Cancel hoặc hết thời gian chờ
+            }
+        } catch (error) {
+            console.error("Error creating booking request:", error);
+            toast.error("Failed to create booking request.");
+        }
     };
 
     return (
@@ -69,6 +222,7 @@ const MyCalendar = () => {
                             onChange={setSelectedDate}
                             value={selectedDate}
                             className="border rounded-lg p-2"
+                            tileDisabled={tileDisabled}
                         />
                     </div>
                     <div className="flex-1">
@@ -80,6 +234,7 @@ const MyCalendar = () => {
                                     className={`border p-2 rounded-lg text-xs font-medium ${selectedTime === time ? 'bg-[#A7DFEC] text-white' : 'bg-gray-100 hover:bg-[#a4b0b3]'}`}
                                     onClick={() => handleTimeSelect(time)}
                                     aria-label={`Select time ${time}`}
+                                    disabled={isTimeDisabled(time)}
                                 >
                                     {time}
                                 </button>
@@ -88,21 +243,38 @@ const MyCalendar = () => {
                         <div className="flex justify-center gap-4 mt-4">
                             <button
                                 className="bg-[#A7DFEC] text-white px-4 py-2 rounded-lg"
-                                onClick={handleConfirm}
+                                onClick={handleConfirmBooking}
                                 aria-label="Confirm booking"
                             >
-                                Confirm
+                                Chọn
                             </button>
                             <button
                                 className="text-gray-500"
                                 onClick={handleCancel}
                                 aria-label="Cancel booking"
                             >
-                                Cancel
+                                Hủy
                             </button>
                         </div>
                     </div>
                 </div>
+                {showConfirmModal && (
+                    <div className="fixed inset-0 bg-black bg-opacity-10 z-50 flex justify-center items-center transition-opacity duration-300 backdrop-blur-md">
+                        <div className="bg-white p-8 rounded-xl shadow-2xl w-96">
+                            <h2 className="text-xl font-bold text-center text-[#2B6A7C] mb-6 ">Xác nhận thông tin đặt lịch</h2>
+                            <p className="text-gray-700 mb-2 "><strong className="text-[#2B6A7C]">Dịch vụ:</strong> {serviceName}</p>
+                            <p className="text-gray-700 mb-2 "><strong className="text-[#2B6A7C]">Ngày:</strong> {selectedDate.toDateString()}</p>
+                            <p className="text-gray-700 mb-2 "><strong className="text-[#2B6A7C]">Thời gian:</strong> {selectedTime}</p>
+                            {consultants && id !== "null" && (
+                                <p className="text-gray-700 mb-4"><strong className="text-[#2B6A7C]">Chuyên viên:</strong> {consultants.firstName} {consultants.lastName}</p>
+                            )}
+                            <div className="flex justify-end gap-4 mt-6">
+                                <button className="bg-[#2B6A7C] text-white px-4 py-2 rounded-lg shadow-lg hover:bg-[#A7DFEC] transition duration-300 rounded-xl" onClick={handleConfirm}>Xác nhận</button>
+                                <button className="bg-gray-300 px-4 py-2 rounded-lg hover:bg-gray-400 transition duration-300 rounded-xl" onClick={() => setShowConfirmModal(false)}>Hủy</button>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );
@@ -118,3 +290,4 @@ MyCalendar.propTypes = {
 };
 
 export default MyCalendar;
+

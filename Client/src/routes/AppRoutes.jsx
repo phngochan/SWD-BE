@@ -159,7 +159,7 @@ function AppRoute() {
           <Route path="/lich-hen" element={<MyCalendar />} />
           <Route path="/chon-chuyen-vien" element={<BookingTherapist />} />
           <Route path="/services/:id/chon-chuyen-vien" element={<BookingTherapist />} />
-          <Route path="/services/:id/chon-chuyen-vien/:idConsultant/lich-hen" element={<Calendar />} />
+          <Route path="/services/:id/chon-chuyen-vien/:idConsultant/lich-hen" element={<MyCalendar />} />
           {/* <Route path="/customer-profile" element={<CustomerProfile />} /> */}
           {/* <Route path="/booking-history" element={<ViewBookingHistory />} /> */}
         </Route>
