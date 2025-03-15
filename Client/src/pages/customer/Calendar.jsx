@@ -21,6 +21,9 @@ const MyCalendar = () => {
     const id = localStorage.getItem("consultantId");
     const serviceId = localStorage.getItem("serviceId");
     const [serviceName, setServiceName] = useState("");
+    const [serviceImage, setServiceImage] = useState("");
+    const [consultantImage, setConsultantImage] = useState("");
+
     const navigate = useNavigate();
 
     const times = [
@@ -33,6 +36,7 @@ const MyCalendar = () => {
             try {
                 const res = await axios.get(`/api/services/${serviceId}`);
                 setServiceName(res.data.name);
+                setServiceImage(res.data.image);
             } catch (err) {
                 console.error("Failed to fetch service name");
             }
@@ -49,6 +53,8 @@ const MyCalendar = () => {
                 if (id && id !== "null") { // Kiểm tra cả null dạng string
                     const res = await axios.get(`/api/consultants/${id}`);
                     setConsultants(res.data);
+                    setConsultantImage(res.data.image);
+
                 }
             } catch (err) {
                 toast.error("Failed to fetch consultant");
@@ -258,23 +264,62 @@ const MyCalendar = () => {
                         </div>
                     </div>
                 </div>
-                {showConfirmModal && (
+                {/* {showConfirmModal && (
                     <div className="fixed inset-0 bg-black bg-opacity-10 z-50 flex justify-center items-center transition-opacity duration-300 backdrop-blur-md">
                         <div className="bg-white p-8 rounded-xl shadow-2xl w-96">
                             <h2 className="text-xl font-bold text-center text-[#2B6A7C] mb-6 ">Xác nhận thông tin đặt lịch</h2>
                             <p className="text-gray-700 mb-2 "><strong className="text-[#2B6A7C]">Dịch vụ:</strong> {serviceName}</p>
-                            <p className="text-gray-700 mb-2 "><strong className="text-[#2B6A7C]">Ngày:</strong> {selectedDate.toDateString()}</p>
-                            <p className="text-gray-700 mb-2 "><strong className="text-[#2B6A7C]">Thời gian:</strong> {selectedTime}</p>
+                            <img src={serviceImage} alt="Service" className="w-32 h-32 rounded-lg object-cover" />
                             {consultants && id !== "null" && (
                                 <p className="text-gray-700 mb-4"><strong className="text-[#2B6A7C]">Chuyên viên:</strong> {consultants.firstName} {consultants.lastName}</p>
                             )}
+                            <img src={consultantImage} alt="Consultant" className="w-32 h-32 rounded-lg object-cover" />
+                            <p className="text-gray-700 mb-2 "><strong className="text-[#2B6A7C]">Ngày:</strong> {selectedDate.toDateString()}</p>
+                            <p className="text-gray-700 mb-2 "><strong className="text-[#2B6A7C]">Thời gian:</strong> {selectedTime}</p>
+
                             <div className="flex justify-end gap-4 mt-6">
                                 <button className="bg-[#2B6A7C] text-white px-4 py-2 rounded-lg shadow-lg hover:bg-[#A7DFEC] transition duration-300 rounded-xl" onClick={handleConfirm}>Xác nhận</button>
                                 <button className="bg-gray-300 px-4 py-2 rounded-lg hover:bg-gray-400 transition duration-300 rounded-xl" onClick={() => setShowConfirmModal(false)}>Hủy</button>
                             </div>
                         </div>
                     </div>
+                )} */}
+                {showConfirmModal && (
+    <div className="fixed inset-0 bg-black bg-opacity-30 z-50 flex justify-center items-center backdrop-blur-sm">
+        <div className="bg-white p-8 rounded-3xl shadow-2xl w-[600px] max-w-[90%] animate-fadeIn transform transition-all duration-300 ease-in-out">
+            <h2 className="text-3xl font-semibold text-center text-[#2B6A7C] mb-6">Xác nhận thông tin đặt lịch</h2>
+            <div className="space-y-6 mb-8">
+                <div className="flex items-center justify-between">
+                    <p className="text-gray-700 font-medium text-lg"><strong className="text-[#2B6A7C]">Dịch vụ:</strong> {serviceName}</p>
+                    <img src={serviceImage} alt="Service" className="w-20 h-20 rounded-lg object-cover shadow-sm" />
+                </div>
+                {consultants && id !== "null" && (
+                    <div className="flex items-center justify-between">
+                        <p className="text-gray-700 font-medium text-lg"><strong className="text-[#2B6A7C]">Chuyên viên:</strong> {consultants.firstName} {consultants.lastName}</p>
+                        <img src={consultantImage} alt="Consultant" className="w-20 h-20 rounded-lg object-cover shadow-sm" />
+                    </div>
                 )}
+                <p className="text-gray-700 font-medium text-lg"><strong className="text-[#2B6A7C]">Ngày:</strong> {selectedDate.toDateString()}</p>
+                <p className="text-gray-700 font-medium text-lg"><strong className="text-[#2B6A7C]">Thời gian:</strong> {selectedTime}</p>
+            </div>
+
+            <div className="flex justify-center gap-6">
+                <button 
+                    className="bg-[#2B6A7C] text-white px-8 py-3 rounded-lg shadow-md hover:bg-[#1E4F60] transition duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-[#2B6A7C] focus:ring-opacity-50"
+                    onClick={handleConfirm}
+                >
+                    Xác nhận
+                </button>
+                <button 
+                    className="bg-gray-300 text-gray-700 px-8 py-3 rounded-lg shadow-md hover:bg-gray-400 transition duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-opacity-50"
+                    onClick={() => setShowConfirmModal(false)}
+                >
+                    Hủy
+                </button>
+            </div>
+        </div>
+    </div>
+)}
             </div>
         </div>
     );

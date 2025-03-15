@@ -137,8 +137,8 @@ export default function ServiceGuest() {
             </div>
 
             {/* Service cards section */}
-            <div className="w-full px-4 flex justify-center ">
-                <div className="w-full max-w-[1200px] px-4 md:px-0 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-[60px] gap-y-[20px] mt-4 mb-[40px] mx-auto place-items-center">
+            <div className="mt-3 w-full px-4 flex justify-center ">
+                <div className=" w-full max-w-[1200px] px-4 md:px-0 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-[60px] gap-y-[20px] mt-4 mb-[40px] mx-auto place-items-center">
                     {services.map((service) => (
                         <ServiceCard
                             key={service._id}

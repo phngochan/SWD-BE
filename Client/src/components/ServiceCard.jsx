@@ -5,7 +5,6 @@ const ServiceCard = ({ image, name, description, price, onChoose }) => {
   return (
     <motion.div
       className="flex flex-col items-center justify-between w-[300px] h-[450px] relative bg-[#F5F5F5] p-6 rounded-lg shadow-lg border border-gray-200"
-      animate={{ y: [0, -10, 0] }}
       transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
     >
       {/* Image */}
@@ -30,12 +29,6 @@ const ServiceCard = ({ image, name, description, price, onChoose }) => {
 
       {/* Choose Button with Small Pulsing Dot */}
       <div className="relative mt-[10px] flex items-center justify-center">
-        {/* Small Pulsing Dot */}
-        <span className="absolute top-[-10px] right-[-10px] flex size-3">
-          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#A7DFEC] opacity-75"></span>
-          <span className="relative inline-flex size-3 rounded-full bg-[#2B6A7C]"></span>
-        </span>
-
         {/* Button */}
         <motion.button
           className="w-[169px] h-[44px] bg-[#A7DFEC] rounded-full border-solid border-[1.333px]  flex items-center justify-center hover:bg-[#2B6A7C] hover:text-white transition duration-300 relative z-10"
