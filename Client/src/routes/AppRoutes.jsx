@@ -110,6 +110,7 @@ import { Calendar } from "lucide-react";
 // import ViewBookingHistory from "./pages/customer/BookingHistory.jsx";
 import { PaySuccess } from "../pages/staff/PaySuccess";
 import { PayFailed } from "../pages/staff/PayFailed";
+import Product from "../pages/guest/Product.jsx";
 
 
 axios.defaults.baseURL = import.meta.env.VITE_API_URL;
@@ -152,6 +153,7 @@ function AppRoute() {
           <Route path="/services" element={<Services />} />
           <Route path="/services/:id" element={<ServiceDetails />} />
           <Route path="/skincareconsultation" element={<SkincareConsultation />} />
+          <Route path="/products" element={<Product />} />
           {/* <Route path="/quiz" element={<Quiz />} /> */}
         </Route>
 
