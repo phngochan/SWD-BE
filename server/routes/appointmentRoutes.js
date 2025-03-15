@@ -13,7 +13,7 @@ router.get("/member", authenticate, appointmentController.getAppointmentsByMembe
 router.get("/", authenticate, authorize(["Manager"]), appointmentController.getAllAppointments);
 
 // Lấy đơn hàng theo ID (Tất cả người dùng có thể xem)
-router.get("/:appointmentCode", authenticate, appointmentController.getAppointmentByAppointmentCode);
+router.get("/:orderCode", authenticate, appointmentController.getAppointmentByAppointmentCode);
 
 router.delete("/:id", appointmentController.deleteAppointment);
 module.exports = router;

@@ -108,6 +108,8 @@ import { Calendar } from "lucide-react";
 // import SkincareBooking from "./pages/customer/Calendar.jsx";
 // import ViewBooked from "./pages/consultant/ViewBooked";
 // import ViewBookingHistory from "./pages/customer/BookingHistory.jsx";
+import { PaySuccess } from "../pages/staff/PaySuccess";
+import { PayFailed } from "../pages/staff/PayFailed";
 
 
 axios.defaults.baseURL = import.meta.env.VITE_API_URL;
@@ -154,7 +156,7 @@ function AppRoute() {
         </Route>
 
         {/* Customer Pages */}
-        <Route element={<ProtectedRoute allowedRoles={["Customer"]} />}> 
+        <Route element={<ProtectedRoute allowedRoles={["Customer"]} />}>
           {/* <Route path="/booking" element={<BookingPageCustomer />} /> */}
           <Route path="/lich-hen" element={<MyCalendar />} />
           <Route path="/chon-chuyen-vien" element={<BookingTherapist />} />
@@ -186,6 +188,8 @@ function AppRoute() {
         <Route element={<ProtectedRoute allowedRoles={["Staff"]} />}>
           <Route path="/view-booking" element={<ViewBooking />} />
           <Route path="/view-order" element={<ViewOrder />} />
+          <Route path="/pay-success" element={<PaySuccess />} />
+          <Route path="/pay-failed" element={<PayFailed />} />
         </Route>
 
 
