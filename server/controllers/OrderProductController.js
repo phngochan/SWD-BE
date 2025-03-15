@@ -3,51 +3,62 @@ const OrderProduct = require("../models/OrderProduct");
 // Tạo đơn hàng sản phẩm
 exports.createOrder = async (req, res) => {
   try {
-    const { productID, quantity } = req.body;
-    if (!productID || !quantity) {
-      return res.status(400).json({ error: "Missing required fields" });
+    const { items } = req.body;
+    if (!items || !Array.isArray(items) || items.length === 0) {
+      return res.status(400).json({ error: "Order must contain at least one item" });
     }
 
-    const newOrder = new OrderProduct({
-      customerID: req.user.id,
-      productID,
-      quantity,
-      status: "Pending",
-    });
+    const newOrder = new OrderProduct({ customerID: req.user.id, status: "Pending" });
+    const savedOrder = await newOrder.save();
 
-    const order = await newOrder.save();
-    res.status(201).json(order);
+    const orderItems = await Promise.all(
+      items.map(async (item) => {
+        const orderItem = new OrderItem({ orderID: savedOrder._id, productID: item.productID, quantity: item.quantity });
+        return await orderItem.save();
+      })
+    );
+
+    savedOrder.items = orderItems.map(item => item._id);
+    await savedOrder.save();
+
+    res.status(201).json(savedOrder);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to create order" });
   }
 };
 
-// Lấy danh sách đơn hàng
+
+
 exports.getAllOrders = async (req, res) => {
   try {
     const orders = await OrderProduct.find()
       .populate("customerID", "firstName lastName email")
-      .populate("productID", "name price");
+      .populate({
+        path: "items",
+        populate: { path: "productID", select: "name price" }
+      });
+
     res.status(200).json(orders);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
 
-// Cập nhật trạng thái đơn hàng
+// 🔹 Cập nhật trạng thái đơn hàng
 exports.updateOrderStatus = async (req, res) => {
   try {
     const { status } = req.body;
     const validTransitions = {
       "Pending": ["Confirmed", "Cancelled"],
-      "Confirmed": ["Cancelled"],
+      "Confirmed": [, "Cancelled"],
+
     };
 
     const order = await OrderProduct.findById(req.params.id);
     if (!order) return res.status(404).json({ message: "Order not found" });
 
-    if (!validTransitions[order.status].includes(status)) {
+    if (!validTransitions[order.status] || !validTransitions[order.status].includes(status)) {
       return res.status(400).json({ message: `Invalid status transition from '${order.status}' to '${status}'` });
     }
 
@@ -59,18 +70,22 @@ exports.updateOrderStatus = async (req, res) => {
   }
 };
 
-// Lấy danh sách đơn hàng của khách hàng
+// 🔹 Lấy danh sách đơn hàng của khách hàng
 exports.getCustomerOrders = async (req, res) => {
   try {
     const orders = await OrderProduct.find({ customerID: req.user.id })
-      .populate("productID", "name price");
+      .populate({
+        path: "items",
+        populate: { path: "productID", select: "name price" }
+      });
+
     res.json({ orders });
   } catch (error) {
     res.status(500).json({ message: "Internal server error" });
   }
 };
 
-// Hủy đơn hàng
+// 🔹 Hủy đơn hàng
 exports.cancelOrder = async (req, res) => {
   try {
     const order = await OrderProduct.findById(req.params.id);
