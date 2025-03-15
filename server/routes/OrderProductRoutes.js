@@ -4,15 +4,18 @@ const {
   getAllOrders,
   updateOrderStatus,
   getCustomerOrders,
-  cancelOrder
+  cancelOrder,
+  getOrderById
 } = require("../controllers/OrderProductController");
+
 const router = express.Router();
-const { authenticate, authorize } = require("../middlewares/authMiddleware"); // Kiểm tra lại đường dẫn
+const { authenticate, authorize } = require("../middlewares/AuthMiddleware");
 
 router.post("/", authenticate, authorize(["Customer"]), createOrder);
 router.get("/", authenticate, authorize(["Staff"]), getAllOrders);
 router.put("/:id/status", authenticate, authorize(["Staff"]), updateOrderStatus);
 router.get("/my-orders", authenticate, authorize(["Customer"]), getCustomerOrders);
 router.put("/:id/cancel", authenticate, authorize(["Customer"]), cancelOrder);
+router.get("/:id", authenticate, getOrderById);
 
 module.exports = router;

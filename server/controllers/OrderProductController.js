@@ -49,10 +49,10 @@ exports.getAllOrders = async (req, res) => {
 exports.updateOrderStatus = async (req, res) => {
   try {
     const { status } = req.body;
+
     const validTransitions = {
       "Pending": ["Confirmed", "Cancelled"],
-      "Confirmed": [, "Cancelled"],
-
+      "Confirmed": ["Cancelled"]
     };
 
     const order = await OrderProduct.findById(req.params.id);
@@ -66,24 +66,33 @@ exports.updateOrderStatus = async (req, res) => {
     await order.save();
     res.status(200).json({ message: "Order status updated successfully", order });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error("Error updating order status:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 };
 
 // 🔹 Lấy danh sách đơn hàng của khách hàng
 exports.getCustomerOrders = async (req, res) => {
   try {
+    console.log("User ID:", req.user.id); // Debug ID của người dùng
+
     const orders = await OrderProduct.find({ customerID: req.user.id })
       .populate({
         path: "items",
         populate: { path: "productID", select: "name price" }
       });
 
+    if (!orders) {
+      return res.status(404).json({ message: "No orders found" });
+    }
+
     res.json({ orders });
   } catch (error) {
-    res.status(500).json({ message: "Internal server error" });
+    console.error("Error fetching customer orders:", error); // In lỗi chi tiết
+    res.status(500).json({ message: "Internal server error", error: error.message });
   }
 };
+
 
 // 🔹 Hủy đơn hàng
 exports.cancelOrder = async (req, res) => {
@@ -104,5 +113,18 @@ exports.cancelOrder = async (req, res) => {
     res.status(200).json({ message: "Order cancelled successfully", order });
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });
+  }
+};
+exports.getOrderById = async (req, res) => {
+  try {
+    const order = await OrderProduct.findById(req.params.id)
+      .populate("customerID", "firstName lastName email")
+      .populate("items.productID", "productName price");
+
+    if (!order) return res.status(404).json({ message: "Order not found" });
+
+    res.status(200).json(order);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 };

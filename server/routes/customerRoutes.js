@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const customerController = require('../controllers/customerController');
-const { authenticate, authorize } = require('../middlewares/authMiddleware');
+const { authenticate, authorize } = require('../middlewares/AuthMiddleware');
 
 // Get all customers (Manager only)
 router.get('/', authenticate, authorize(['Manager']), customerController.getAllCustomers);

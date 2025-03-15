@@ -2,7 +2,7 @@ const express = require('express');
 const { body } = require('express-validator');
 const router = express.Router();
 const ConsultantController = require('../controllers/consultantController');
-const { authenticate, authorize } = require('../middlewares/authMiddleware');
+const { authenticate, authorize } = require('../middlewares/AuthMiddleware');
 
 
 // Get all consultants
