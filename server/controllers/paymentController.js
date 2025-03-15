@@ -17,6 +17,9 @@ const createEmbeddedPaymentLink = async (req, res) => {
             return res.status(404).json({ error: 1, message: 'Booking request not found' });
         }
 
+        if (bookingRequest.status !== "Completed") {
+            return res.status(400).json({ error: 1, message: 'Booking request is not completed yet' });
+        }
 
         const userId = bookingRequest.customerID;
         const serviceId = bookingRequest.serviceID;
