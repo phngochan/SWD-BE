@@ -15,6 +15,10 @@ exports.addOrderItem = async (req, res) => {
   try {
     const { orderID, productID, quantity } = req.body;
 
+    if (!orderID || !productID || !quantity) {
+      return res.status(400).json({ message: "Thiếu dữ liệu đầu vào." });
+    }
+
     const newOrderItem = new OrderItem({
       orderID,
       productID,
@@ -22,8 +26,10 @@ exports.addOrderItem = async (req, res) => {
     });
 
     await newOrderItem.save();
+
     res.status(201).json({ message: "Order item added successfully", newOrderItem });
   } catch (error) {
+    console.error("Lỗi chi tiết:", error); // Ghi log lỗi chi tiết
     res.status(500).json({ error: "Failed to add order item" });
   }
 };

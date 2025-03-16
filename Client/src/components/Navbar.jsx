@@ -1,97 +1,14 @@
-// import { useState } from "react";
-// import { NavLink, useLocation } from "react-router-dom";
-// import { Link } from "react-router-dom";
-
-// export default function Navbar() {
-//     const location = useLocation();
-//     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-
-//     // Kiểm tra xem có token hay không
-//     const token = localStorage.getItem('token');
-
-//     // Check if the current path is "/login" or "/register"
-//     const isLoginPage = location.pathname === "/login" || location.pathname === "/register";
-
-//     // Hàm để lấy đường dẫn với -customer nếu có token
-//     const getNavLink = (path) => {
-//         return token ? `${path}-customer` : path;
-//     };
-
-//     return (
-//         <div className="bg-[#E5F5F1] shadow-md py-6 px-8 flex justify-between items-center">
-//             {/* Logo */}
-//             <Link to="/">
-//                 <img src="/images/logo.png" alt="SWD Logo" className="h-10 w-16" />
-//             </Link>
-
-//             {/* Mobile Menu Button */}
-//             <button
-//                 className="md:hidden text-[#2B6A7C] text-[30px] z-20"
-//                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-//             >
-//                 ☰
-//             </button>
-
-//             {/* Navigation Links */}
-//             <nav className={`flex space-x-20 text-[17px] font-semibold ${isMobileMenuOpen ? 'flex bg-[#F9FAEF] p-4 rounded-lg shadow-lg absolute top-[100px] left-0 right-0' : 'hidden'} md:flex`}>
-//                 <NavLink
-//                     to={getNavLink("/ve-chung-toi")}
-//                     className={({ isActive }) =>
-//                         `text-center ${isActive ? 'text-[#404040]' : 'text-[#2B6A7C]'}`}
-//                 >
-//                     About
-//                 </NavLink>
-//                 <NavLink
-//                     to={getNavLink("/dich-vu")}
-//                     className={({ isActive }) =>
-//                         `text-center ${isActive ? 'text-[#404040]' : 'text-[#2B6A7C]'}`}
-//                 >
-//                     Services
-//                 </NavLink>
-//                 <NavLink
-//                     to={getNavLink("/tu-van-cham-soc-da")}
-//                     className={({ isActive }) =>
-//                         `text-center ${isActive ? 'text-[#404040]' : 'text-[#2B6A7C]'}`}
-//                 >
-//                     Skincare Consultation
-//                 </NavLink>
-//                 <NavLink
-//                     to={getNavLink("/san-pham")}
-//                     className={({ isActive }) =>
-//                         `text-center ${isActive ? 'text-[#404040]' : 'text-[#2B6A7C]'}`}
-//                 >
-//                     Product
-//                 </NavLink>
-//                 <NavLink
-//                     to={getNavLink("/blog")}
-//                     className={({ isActive }) =>
-//                         `text-center ${isActive ? 'text-[#404040]' : 'text-[#2B6A7C]'}`}
-//                 >
-//                     Blog
-//                 </NavLink>
-//             </nav>
-
-//             {/* Conditional Login Button */}
-//             {!isLoginPage && (
-//                 <Link to="/dang-nhap">
-//                     <button className="bg-[#A7DFEC] text-white px-4 py-2 rounded-full hover:bg-[#2B6A7C]">Login</button>
-//                 </Link>
-//             )}
-//         </div>
-//     );
-// }
-
 import { useState, useEffect } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import axios from '../utils/axiosInstance';
 
-const Navbar = () => {
+const Navbar = ({cart}) => {
     const location = useLocation();
     const navigate = useNavigate();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isProfilePopupOpen, setIsProfilePopupOpen] = useState(false);
+    const [cartIsOpen, setCartIsOpen] = useState(false);
     const [token, setToken] = useState(localStorage.getItem("authToken") || sessionStorage.getItem("authToken"));
     const fullName = localStorage.getItem("fullName") || sessionStorage.getItem("fullName");
     const [showModal, setShowModal] = useState(false);
@@ -116,7 +33,8 @@ const Navbar = () => {
     }, [showModal]);
 
 
-    const isLoginPage = location.pathname === "/dang-nhap" || location.pathname === "/dang-ky" || location.pathname === "/customer-profile" || location.pathname === "/forgot-password";
+    // const isLoginPage = location.pathname === "/dang-nhap" || location.pathname === "/dang-ky" || location.pathname === "/customer-profile" || location.pathname === "/forgot-password";
+    const isLoginPage = ["/dang-nhap", "/dang-ky", "/customer-profile", "/forgot-password"].includes(location.pathname);
 
     const handleLogout = () => {
         if (!showModal) return;
@@ -167,7 +85,35 @@ const Navbar = () => {
             </nav>
 
             {!isLoginPage && (
-                <div className="relative">
+                <div className="relative flex items-center gap-6">
+                    {token && (
+                        <button onClick={() => setCartIsOpen(!cartIsOpen)} className="relative">
+                            <i className="fa-solid fa-cart-shopping text-[#2B6A7C] text-[30px]"></i>
+                            {cart?.length > 0 && (
+                                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                                    {cart.length}
+                                </span>
+                            )}
+                        </button>
+                    )}
+
+{cartIsOpen && cart?.length > 0 && (
+                        <div className="absolute right-0 top-8 mt-o w-52 bg-white border border-gray-200 rounded-lg shadow-lg z-20 max-h-[300px] overflow-y-auto">
+                            <h3 className="px-4 py-2 text-lg font-semibold border-b">Giỏ hàng</h3>
+                            <ul className="max-h-60 overflow-auto">
+                                {cart.map((item, index) => (
+                                    <li key={index} className="flex justify-between items-center px-4 py-2">
+                                        <span>{item.productName}</span>
+                                        <span>{item.price.toLocaleString()} VND</span>
+                                    </li>
+                                ))}
+                            </ul>
+                            <NavLink to="/cart" className="block px-4 py-2 text-center text-[#2B6A7C] hover:bg-gray-100">
+                                Xem giỏ hàng
+                            </NavLink>
+                        </div>
+                    )}
+
                     {token ? (
                         <button onClick={() => setIsProfilePopupOpen(!isProfilePopupOpen)}>
                             <i className="fas fa-user text-[#2B6A7C] text-[30px]"></i>
@@ -179,7 +125,7 @@ const Navbar = () => {
                     )}
 
                     {isProfilePopupOpen && token && (
-                        <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-20">
+                        <div className="absolute right-0 top-8 mt-o w-52 bg-white border border-gray-200 rounded-lg shadow-lg z-20 ">
                             <div className="block px-4 py-2 text-gray-800">
                                 Chào mừng, {fullName}
                             </div>
@@ -204,13 +150,13 @@ const Navbar = () => {
                                 className="py-2 px-6 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 transition"
                                 onClick={() => setShowModal(false)}
                             >
-                                Cancel
+                                Hủy
                             </button>
                             <button
                                 className="py-2 px-6 bg-[#A7DFEC] text-white rounded-lg hover:bg-[#2B6A7C] transition"
                                 onClick={handleLogout}
                             >
-                                Log out
+                                Đăng xuất
                             </button>
                         </div>
                     </div>
