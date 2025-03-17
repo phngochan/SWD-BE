@@ -2,7 +2,7 @@ const express = require('express');
 const { body } = require('express-validator');
 const router = express.Router();
 const ConsultantController = require('../controllers/consultantController');
-const { authenticate, authorize } = require('../middlewares/AuthMiddleware');
+const { authenticate, authorize } = require('../middlewares/authMiddleware');
 
 
 // Get all consultants
@@ -35,5 +35,7 @@ router.post(
 
 // Reset password for consultant (Manager only)
 router.post('/:id/reset-password', authenticate, authorize(['Manager']), ConsultantController.resetPassword);
+
+router.get('/available/:bookingID',authenticate, authorize(['Staff']), ConsultantController.getAvailableConsultants);
 
 module.exports = router;

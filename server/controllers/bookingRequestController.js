@@ -40,26 +40,6 @@ exports.getAllBookingRequests = async (req, res) => {
   }
 };
 
-exports.assignConsultant = async (req, res) => {
-  try {
-    const { consultantID } = req.body;
-    const bookingRequest = await BookingRequest.findByIdAndUpdate(
-      req.params.id,
-      { consultantID },
-      { new: true }
-    );
-
-    if (!bookingRequest) {
-      return res.status(404).json({ message: "Booking Request not found" });
-    }
-
-    await logUserActivity("Assigned Consultant")(req, res, () => { });
-    res.status(200).json(bookingRequest);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
 exports.assignService = async (req, res) => {
   try {
     const { serviceID } = req.body;
@@ -384,7 +364,7 @@ exports.updateBookingStatus = async (req, res) => {
         return res.status(400).json({ message: 'Invalid action' });
     }
 
-    const updatedBooking = await Booking.findByIdAndUpdate(
+    const updatedBooking = await BookingRequest.findByIdAndUpdate(
       bookingId,
       { status: newStatus },
       { new: true }
@@ -397,5 +377,24 @@ exports.updateBookingStatus = async (req, res) => {
     res.json(updatedBooking);
   } catch (error) {
     res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};
+
+exports.assignConsultant = async (req, res) => {
+  const { bookingId } = req.params;
+  const { consultantId } = req.body;
+
+  try {
+    const updatedBooking = await BookingRequest.findByIdAndUpdate(
+      bookingId,
+      { consultantID: consultantId },
+      { new: true }
+    ).populate("consultantID"); // Ensure populated response
+
+    if (!updatedBooking) return res.status(404).json({ message: "Booking not found" });
+
+    res.json(updatedBooking);
+  } catch (error) {
+    res.status(500).json({ message: "Error assigning consultant", error });
   }
 };
