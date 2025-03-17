@@ -6,11 +6,13 @@ const UserSchema = new Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   roleName: { type: String, enum: ["Customer", "Staff", "Manager", "Consultant"], required: true },
+  roleId: { type: Schema.Types.ObjectId, ref: 'Role' },
   phoneNumber: { type: String },
   createdDate: { type: Date, default: Date.now },
   updatedDate: { type: Date, default: Date.now },
-  verified: { type: Boolean, default: false }, 
+  verified: { type: Boolean, default: false },
   verificationToken: { type: String },
+  verificationTokenCreatedAt: { type: Date },
   resetPasswordToken: { type: String },
   resetPasswordExpires: { type: Date }
 });
