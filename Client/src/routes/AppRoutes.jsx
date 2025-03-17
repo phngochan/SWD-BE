@@ -104,13 +104,15 @@ import BlogDetail from "../pages/guest/BlogDetail.jsx";
 import ServiceDetails from "../pages/guest/ServiceDetails.jsx";
 import BookingTherapist from "../pages/customer/BookingTherapist.jsx";
 import { Calendar } from "lucide-react";
-// import CustomerProfile from "./pages/customer/CustomerProfile.jsx";
+import CustomerProfile from "../pages/customer/ProfileUpdate.jsx";
+
 // import SkincareBooking from "./pages/customer/Calendar.jsx";
 // import ViewBooked from "./pages/consultant/ViewBooked";
 // import ViewBookingHistory from "./pages/customer/BookingHistory.jsx";
 import { PaySuccess } from "../pages/staff/PaySuccess";
 import { PayFailed } from "../pages/staff/PayFailed";
 import Product from "../pages/guest/Product.jsx";
+import ViewBookingHistory from "../pages/customer/ViewBookingHistory.jsx";
 
 
 axios.defaults.baseURL = import.meta.env.VITE_API_URL;
@@ -164,8 +166,8 @@ function AppRoute() {
           <Route path="/chon-chuyen-vien" element={<BookingTherapist />} />
           <Route path="/services/:id/chon-chuyen-vien" element={<BookingTherapist />} />
           <Route path="/services/:id/chon-chuyen-vien/:idConsultant/lich-hen" element={<MyCalendar />} />
-          {/* <Route path="/customer-profile" element={<CustomerProfile />} /> */}
-          {/* <Route path="/booking-history" element={<ViewBookingHistory />} /> */}
+          <Route path="/thong-tin-ca-nhan" element={<CustomerProfile />} />
+          <Route path="/lich-su-dat-lich" element={<ViewBookingHistory />} />
         </Route>
 
         {/* Manager Pages */}

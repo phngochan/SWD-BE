@@ -10,8 +10,8 @@ const CustomerSidebar = () => {
   const [showModal, setShowModal] = useState(false);
 
   const menuItems = [
-    { name: "Account Details", path: "/customer-profile" },
-    { name: "Booking History", path: "/booking-history" },
+    { name: "Chi tiết tài khoản", path: "/thong-tin-ca-nhan" },
+    { name: "Lịch sử đặt", path: "/lich-su-dat-lich" },
   ];
 
   const handleLogout = () => {
@@ -55,7 +55,7 @@ const CustomerSidebar = () => {
           }}
         />
         <Typography variant="h6" sx={{ color: "#2B6A7C", textAlign: "center" }}>
-          Welcome <br /> {fullName}
+          Chào mừng, <br /> {fullName}
         </Typography>
       </Toolbar>
       <Divider sx={{ backgroundColor: "#2B6A7C" }} />
@@ -86,7 +86,7 @@ const CustomerSidebar = () => {
           fontSize: "14px",
         }}
       >
-        Logout
+        Đăng xuất
       </Button>
 
       {/* Custom Logout Modal */}

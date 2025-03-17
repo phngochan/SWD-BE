@@ -129,7 +129,7 @@ const Navbar = ({cart}) => {
                             <div className="block px-4 py-2 text-gray-800">
                                 Chào mừng, {fullName}
                             </div>
-                            <NavLink to="/customer-profile" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">
+                            <NavLink to="/thong-tin-ca-nhan" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">
                                 Thông tin cá nhân
                             </NavLink>
                             <button onClick={() => setShowModal(true)} className="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100">
