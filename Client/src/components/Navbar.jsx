@@ -143,8 +143,8 @@ const Navbar = ({cart}) => {
             {showModal && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
                     <div className="bg-white p-6 rounded-xl shadow-lg max-w-sm w-full text-center">
-                        <h3 className="text-xl font-bold text-gray-800 mb-4">Log out Confirmation</h3>
-                        <p className="text-gray-600">Are you sure you want to log out?</p>
+                        <h3 className="text-xl font-bold text-gray-800 mb-4">Xác nhận đăng xuất</h3>
+                        <p className="text-gray-600">Bạn có muốn đăng xuất không?</p>
                         <div className="flex justify-center gap-4 mt-4">
                             <button
                                 className="py-2 px-6 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 transition"

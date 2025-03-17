@@ -324,7 +324,7 @@ const CustomerProfile = () => {
                                     <Grid item xs={12}>
                                         <TextField
                                             label="Mật khẩu hiện tại"
-                                            name="Mật khẩu hiện tại"
+                                            name="currentPassword"
                                             sx={{
                                                 "& .MuiOutlinedInput-root": {
                                                     "& fieldset": {
@@ -373,8 +373,8 @@ const CustomerProfile = () => {
 
                                     <Grid item xs={12}>
                                         <TextField
-                                            label="Mật khẩu mới"
-                                            name="Mật khẩu mới"
+                                            label="Mât khẩu mới"
+                                            name="newPassword"
                                             sx={{
                                                 "& .MuiOutlinedInput-root": {
                                                     "& fieldset": {
@@ -424,7 +424,7 @@ const CustomerProfile = () => {
                                     <Grid item xs={12}>
                                         <TextField
                                             label="Xác nhận mật khẩu mới"
-                                            name="Xác nhận mật khẩu mới"
+                                            name="confirmPassword"
                                             sx={{
                                                 "& .MuiOutlinedInput-root": {
                                                     "& fieldset": {
