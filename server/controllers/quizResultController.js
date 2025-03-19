@@ -6,7 +6,7 @@ const determineSkinType = (answers) => {
     const totalWeight = answers.reduce((sum, answer) => sum + (answer.weight || 0), 0);
     const minWeight = answers.length * 1; // 17 (if all answers are the lowest weight)
     const maxWeight = answers.length * 4; // 68 (if all answers are the highest weight)
-    
+
     const range = maxWeight - minWeight;
     const normalizedScore = ((totalWeight - minWeight) / range) * 100;
 
@@ -58,7 +58,7 @@ const saveQuizResult = async (req, res) => {
 const getAllResults = async (req, res) => {
     try {
         let { page = 1, limit = 10, sortBy = "createdDate", order = "desc", skinType } = req.query;
-        
+
         page = parseInt(page);
         limit = parseInt(limit);
         order = order === "asc" ? 1 : -1; // Convert order to MongoDB format

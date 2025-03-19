@@ -5,10 +5,10 @@ const User = require('../models/User');
 const authenticate = (req, res, next) => {
     // Log the incoming request and check for token
     console.log('Incoming request for authentication:', req.method, req.url);
-    
+
     const token = req.header("Authorization")?.split(" ")[1]; // Ensure "Bearer <token>" format
     console.log('Authorization token:', token ? '[TOKEN PRESENT]' : '[NO TOKEN]');
-    
+
     if (!token) {
         console.log('No token found. Access denied.');
         return res.status(401).json({ message: "Access denied. No token provided." });
@@ -21,13 +21,13 @@ const authenticate = (req, res, next) => {
 
         req.user = { id: decoded.id, roleName: decoded.roleName };
         console.log(`User authenticated: ${req.user.id}, Role: ${req.user.roleName}`);
-        
+
         next();
     } catch (error) {
         console.error('Token verification failed:', error.message);
         res.status(400).json({ message: "Invalid token." });
     }
-}; 
+};
 
 // Middleware to authorize roles
 const authorize = (allowedRoles) => (req, res, next) => {

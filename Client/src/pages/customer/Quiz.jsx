@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom"; // Import navigate for redirection
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
-import axios from "axios";
+import axios from "../../utils/axiosInstance";
 import { motion } from "framer-motion";
 
 const Quiz = () => {
@@ -47,26 +47,26 @@ const Quiz = () => {
     const token = localStorage.getItem("authToken");
 
     if (!token) {
-        setShowLoginModal(true);
-        return;
+      setShowLoginModal(true);
+      return;
     }
 
     console.log("Submitting answers:", answers); // Debug: Kiểm tra xem answers có dữ liệu không
 
     try {
-        const response = await axios.post(
-            "/api/quiz-results/save",
-            { answers },
-            { headers: { Authorization: `Bearer ${token}` } }
-        );
+      const response = await axios.post(
+        "/api/quiz-results/save",
+        { answers },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
 
-        console.log("Response from server:", response.data); // Debug: Kiểm tra phản hồi từ server
-        setQuizResult(response.data.quizResult);
+      console.log("Response from server:", response.data); // Debug: Kiểm tra phản hồi từ server
+      setQuizResult(response.data.quizResult);
     } catch (error) {
-        console.error("Error submitting quiz:", error);
-        setError("Something went wrong. Please try again.");
+      console.error("Error submitting quiz:", error);
+      setError("Something went wrong. Please try again.");
     }
-};
+  };
 
 
   const handleLoginRedirect = () => {
