@@ -113,6 +113,7 @@ import { PaySuccess } from "../pages/staff/PaySuccess";
 import { PayFailed } from "../pages/staff/PayFailed";
 import Product from "../pages/guest/Product.jsx";
 import ViewBookingHistory from "../pages/customer/ViewBookingHistory.jsx";
+import Quiz from "../pages/customer/Quiz.jsx";
 
 
 axios.defaults.baseURL = import.meta.env.VITE_API_URL;
@@ -156,7 +157,7 @@ function AppRoute() {
           <Route path="/services/:id" element={<ServiceDetails />} />
           <Route path="/skincareconsultation" element={<SkincareConsultation />} />
           <Route path="/products" element={<Product />} />
-          {/* <Route path="/quiz" element={<Quiz />} /> */}
+          <Route path="/quiz" element={<Quiz />} />
         </Route>
 
         {/* Customer Pages */}
