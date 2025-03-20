@@ -1,5 +1,21 @@
 const Question = require("../models/Question");
 
+/**
+ * @swagger
+ * /questions:
+ *   get:
+ *     summary: Get all questions
+ *     tags: [Questions]
+ *     responses:
+ *       200:
+ *         description: List of all questions
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Question'
+ */
 const getAllQuestions = async (req, res) => {
     try {
         const questions = await Question.find();
@@ -9,6 +25,33 @@ const getAllQuestions = async (req, res) => {
     }
 };
 
+/**
+ * @swagger
+ * /questions:
+ *   post:
+ *     summary: Add a new question
+ *     tags: [Questions]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               questionText:
+ *                 type: string
+ *               answerOptions:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *     responses:
+ *       201:
+ *         description: Question has been added successfully!
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Question'
+ */
 const addQuestion = async (req, res) => {
     try {
         const { questionText, answerOptions } = req.body;
