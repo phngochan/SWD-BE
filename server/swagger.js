@@ -27,7 +27,7 @@ const options = (port) => ({
     },
     servers: [
       {
-        url: `https://swd-be-ghwo.onrender.com/api`,
+        url: `https://https://swd-48hh.onrender.com/api`,
         description: 'Global Server',
       },
       {
