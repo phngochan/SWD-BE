@@ -3,7 +3,8 @@ const {
     createFeedback,
     getFeedbackByBooking,
     getAverageServiceRating, 
-    getAverageConsultantRating  
+    getAverageConsultantRating,
+    getAllFeedback
 } = require('../controllers/feedbackController');
 const { authenticate } = require('../middlewares/authMiddleware'); // Require authentication
 
@@ -13,5 +14,6 @@ router.get('/service-rating', authenticate, getAverageServiceRating); // Lấy r
 router.get('/consultant-rating', authenticate, getAverageConsultantRating); // Lấy rating trung bình của tư vấn viên
 router.post('/', authenticate, createFeedback); // Require authentication to create feedback
 router.get('/:bookingRequestId', authenticate, getFeedbackByBooking); // Secure route
+router.get('/', authenticate, getAllFeedback); // Require authentication to get all feedbacks
 
 module.exports = router;

@@ -34,8 +34,13 @@ export default function ServiceDetails() {
                 setService(null);
             });
 
+        const token = localStorage.getItem("authToken") || sessionStorage.getItem("authToken");
         axios
-            .get(`/api/comments/services/${id}/feedbacks`)
+            .get(`/api/feedbacks?serviceId=${id}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
             .then((response) => setComments(response.data))
             .catch((error) => {
                 console.error("Error fetching comments:", error);
@@ -125,8 +130,8 @@ export default function ServiceDetails() {
                             {comments.map((comment, index) => (
                                 <div key={index} className="border-b border-gray-200 pb-6">
                                     <p className="font-semibold text-gray-800 text-lg">{comment.user}</p>
-                                    <p className="text-gray-700 mt-2 leading-relaxed">{comment.text}</p>
-                                    <span className="text-yellow-500 text-xl mt-2 inline-block">⭐ {comment.rating}</span>
+                                    <p className="text-gray-700 mt-2 leading-relaxed">{comment.serviceComment}</p>
+                                    <span className="text-yellow-500 text-xl mt-2 inline-block">⭐ {comment.serviceRating}</span>
                                 </div>
                             ))}
                         </div>

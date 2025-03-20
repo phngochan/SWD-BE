@@ -1,5 +1,4 @@
 const Feedback = require('../models/Feedback');
-const BookingRequest = require('../models/BookingRequest'); // Ensure BookingRequest is imported
 
 exports.createFeedback = async (req, res) => {
   try {
