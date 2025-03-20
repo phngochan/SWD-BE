@@ -8,7 +8,6 @@ const Navbar = ({ cart, setCart }) => {
     const navigate = useNavigate();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isProfilePopupOpen, setIsProfilePopupOpen] = useState(false);
-    const [cartIsOpen, setCartIsOpen] = useState(false);
     const [token, setToken] = useState(localStorage.getItem("authToken") || sessionStorage.getItem("authToken"));
     const fullName = localStorage.getItem("fullName") || sessionStorage.getItem("fullName");
     const [showModal, setShowModal] = useState(false);
@@ -57,6 +56,7 @@ const Navbar = ({ cart, setCart }) => {
                 localStorage.removeItem("roleName");
                 localStorage.removeItem("fullName");
                 localStorage.removeItem("userId");
+                localStorage.removeItem("orderID"); // Clear orderID on logout
                 sessionStorage.removeItem("authToken");
                 sessionStorage.removeItem("roleName");
                 sessionStorage.removeItem("fullName");
@@ -107,7 +107,7 @@ const Navbar = ({ cart, setCart }) => {
             {!isLoginPage && (
                 <div className="relative flex items-center gap-6">
                     {token && (
-                        <button onClick={() => setCartIsOpen(!cartIsOpen)} className="relative">
+                        <button onClick={() => navigate("/product-detail")} className="relative">
                             <i className="fa-solid fa-cart-shopping text-[#2B6A7C] text-[30px]"></i>
                             {cart?.length > 0 && (
                                 <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
@@ -115,30 +115,6 @@ const Navbar = ({ cart, setCart }) => {
                                 </span>
                             )}
                         </button>
-                    )}
-
-                    {cartIsOpen && cart?.length > 0 && (
-                        <div className="absolute right-0 top-8 mt-o w-52 bg-white border border-gray-200 rounded-lg shadow-lg z-20 max-h-[300px] overflow-y-auto">
-                            <h3 className="px-4 py-2 text-lg font-semibold border-b">Giỏ hàng</h3>
-                            <ul className="max-h-60 overflow-auto">
-                                {cart.map((item, index) => (
-                                    <li key={index} className="flex justify-between items-center px-4 py-2">
-                                        <span>{item.productName}</span>
-                                        <span>{item.price.toLocaleString()} VND</span>
-                                        <input
-                                            type="number"
-                                            value={item.quantity}
-                                            min="1"
-                                            onChange={(e) => handleQuantityChange(index, parseInt(e.target.value))}
-                                            className="w-12 text-center border rounded"
-                                        />
-                                    </li>
-                                ))}
-                            </ul>
-                            <NavLink to="/product-detail" className="block px-4 py-2 text-center text-[#2B6A7C] hover:bg-gray-100">
-                                Xem giỏ hàng
-                            </NavLink>
-                        </div>
                     )}
 
                     {token ? (
