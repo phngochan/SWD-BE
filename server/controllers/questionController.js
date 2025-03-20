@@ -72,6 +72,43 @@ const addQuestion = async (req, res) => {
     }
 };
 
+/**
+ * @swagger
+ * /questions/{id}:
+ *   put:
+ *     summary: Update a question
+ *     tags: [Questions]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The question ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               questionText:
+ *                 type: string
+ *               answerOptions:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *     responses:
+ *       200:
+ *         description: Question has been updated successfully!
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Question'
+ *       404:
+ *         description: Question is not found
+ */
+
 const updateQuestion = async (req, res) => {
     try {
         const { questionText, answerOptions } = req.body;
@@ -97,6 +134,42 @@ const updateQuestion = async (req, res) => {
     }
 };
 
+/**
+ * @swagger
+ * /questions/{id}:
+ *   put:
+ *     summary: Update a question
+ *     tags: [Questions]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The question ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               questionText:
+ *                 type: string
+ *               answerOptions:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *     responses:
+ *       200:
+ *         description: Question has been updated successfully!
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Question'
+ *       404:
+ *         description: Question is not found
+ */
 const deleteQuestion = async (req, res) => {
     try {
         const { id } = req.params;
