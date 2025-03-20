@@ -122,13 +122,13 @@ export default function ServiceGuest() {
                     backgroundRepeat: "no-repeat",
                     backgroundAttachment: "fixed"
                 }}>
-                <h1 className="text-5xl font-semibold bg-opacity-50 px-6 py-4 rounded-lg">Skincare Services</h1>
+                <h1 className="text-5xl font-semibold bg-opacity-50 px-6 py-4 rounded-lg">Dịch vụ chăm sóc da</h1>
             </div>
 
             <div ref={chooseServiceRef} className="w-full max-w-[1800px] h-[48px] relative z-10 mt-[37.33px] mx-auto flex items-center justify-between">
                 <div className="w-[300px] h-[1px] bg-[url(/images/line.png)] bg-cover bg-no-repeat flex-1" />
 
-                <div className="flex-shrink-0 font-['Lato'] text-[40px] font-normal leading-[48px] tracking-[-0.8px] text-center px-[80px] text-[#2B6A7C] pacifico-regular">
+                <div className="flex-shrink-0 text-[40px] font-semibold leading-[48px] tracking-[-0.8px] text-center px-[80px] text-[#2B6A7C] pacifico-regular">
                     <span className="text-[50px]">C</span>
                     họn Dịch Vụ Của Bạn
                 </div>

@@ -97,12 +97,12 @@ const Quiz = () => {
       <Navbar />
       <div className="bg-white p-6 m-8 rounded-xl shadow-lg max-w-3xl w-full">
         <h2 className="text-3xl font-semibold text-center pacifico-regular text-gray-800 mb-8">
-          Skincare Quiz
+          Trắc nghiệm chăm sóc da
         </h2>
 
         <div className="text-center mb-4">
           <p>
-            Question {currentQuestionIndex + 1} of {questions.length}
+            Câu hỏi {currentQuestionIndex + 1} trong {questions.length}
           </p>
           <div className="w-full bg-gray-200 rounded-full h-2">
             <div
@@ -145,7 +145,7 @@ const Quiz = () => {
               className="py-2 px-6 bg-[#A7DFEC] text-white rounded-lg hover:bg-[#2B6A7C] transition"
               onClick={handlePrevQuestion}
             >
-              Previous
+              Trước
             </button>
           )}
           {currentQuestionIndex < questions.length - 1 ? (
@@ -157,14 +157,14 @@ const Quiz = () => {
                 } text-white rounded-lg hover:bg-[#2B6A7C] transition`}
               onClick={handleNextQuestion}
             >
-              Next
+              Tiếp
             </button>
           ) : (
             <button
               className="py-2 px-6 bg-[#2B6A7C] text-white rounded-lg hover:bg-[#2B6A7C] transition"
               onClick={handleSubmitQuiz}
             >
-              Submit
+              Xem kết quả
             </button>
           )}
         </div>
@@ -174,14 +174,14 @@ const Quiz = () => {
         <div className="fixed inset-0 bg-[#faf5f0] bg-opacity-50 flex justify-center items-center z-50">
           <div className="bg-white p-6 rounded-xl shadow-lg max-w-sm w-full">
             <h3 className="text-xl font-bold text-gray-800 mb-4 pacifico-regular">
-              Your Skin Type: {quizResult.skinType}
+              Loại da của bạn: {quizResult.skinType}
             </h3>
             <p>{quizResult.recommendation}</p>
             <button
               className="mt-4 py-2 px-6 bg-[#A7DFEC] text-white rounded-lg hover:bg-[#2B6A7C] transition"
               onClick={() => setQuizResult(null)}
             >
-              Close
+              Đóng
             </button>
           </div>
         </div>
@@ -192,7 +192,7 @@ const Quiz = () => {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
           <div className="bg-white p-6 rounded-xl shadow-lg max-w-sm w-full text-center">
             <h3 className="text-xl font-bold text-gray-800 mb-4">
-              Log in to save your results
+              Đăng nhập để xem kết quả
             </h3>
             <p className="text-gray-600">You need to be logged in to save your quiz results. Do you want to log in now?</p>
             <div className="flex justify-center gap-4 mt-4">
@@ -200,13 +200,13 @@ const Quiz = () => {
                 className="py-2 px-6 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 transition"
                 onClick={() => setShowLoginModal(false)}
               >
-                Cancel
+                Đóng
               </button>
               <button
                 className="py-2 px-6 bg-[#A7DFEC] text-white rounded-lg hover:bg-[#2B6A7C] transition"
                 onClick={handleLoginRedirect}
               >
-                Log In
+                Đăng nhập
               </button>
             </div>
           </div>
@@ -236,7 +236,7 @@ const Quiz = () => {
           whileHover={{ scale: 1.1, rotate: 5, boxShadow: "0 8px 25px rgba(0, 0, 0, 0.3)" }}
           whileTap={{ scale: 0.95 }}
         >
-          Book Now
+          Đặt dịch vụ ngay
         </motion.button>
       </div>
 

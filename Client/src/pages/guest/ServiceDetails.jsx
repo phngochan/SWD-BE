@@ -74,7 +74,7 @@ export default function ServiceDetails() {
                     onClick={() => navigate("/services")}
                     className="mb-2 text-lg text-[#2B6A7C] hover:text-[#A7DFEC] self-end"
                 >
-                    ← Back to Services
+                    ← Trở về danh sách dịch vụ
                 </button>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center bg-white p-8 rounded-lg shadow-lg">

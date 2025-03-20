@@ -10,7 +10,7 @@ const quizResultSchema = new Schema({
       weight: { type: Number, required: true }
     }
   ],
-  skinType: { type: String, enum: ["Oily", "Dry", "Combination", "Normal"], required: true },
+  skinType: { type: String, enum: ["Da dầu", "Da khô", "Da hỗn hợp", "Da khỏe"], required: true },
   createdDate: { type: Date, default: Date.now }
 });
 

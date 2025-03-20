@@ -3,7 +3,7 @@ import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import axios from '../utils/axiosInstance';
 
-const Navbar = ({cart}) => {
+const Navbar = ({ cart }) => {
     const location = useLocation();
     const navigate = useNavigate();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -97,7 +97,7 @@ const Navbar = ({cart}) => {
                         </button>
                     )}
 
-{cartIsOpen && cart?.length > 0 && (
+                    {cartIsOpen && cart?.length > 0 && (
                         <div className="absolute right-0 top-8 mt-o w-52 bg-white border border-gray-200 rounded-lg shadow-lg z-20 max-h-[300px] overflow-y-auto">
                             <h3 className="px-4 py-2 text-lg font-semibold border-b">Giỏ hàng</h3>
                             <ul className="max-h-60 overflow-auto">
