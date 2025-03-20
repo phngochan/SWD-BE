@@ -133,43 +133,6 @@ const updateQuestion = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
-
-/**
- * @swagger
- * /questions/{id}:
- *   put:
- *     summary: Update a question
- *     tags: [Questions]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *         description: The question ID
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               questionText:
- *                 type: string
- *               answerOptions:
- *                 type: array
- *                 items:
- *                   type: string
- *     responses:
- *       200:
- *         description: Question has been updated successfully!
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Question'
- *       404:
- *         description: Question is not found
- */
 const deleteQuestion = async (req, res) => {
     try {
         const { id } = req.params;

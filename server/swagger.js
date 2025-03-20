@@ -1,5 +1,6 @@
 const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
+const questionSchema = require('./schemas/QuestionSchema');
 
 const tags = [
   {
@@ -38,6 +39,9 @@ const options = (port) => ({
           scheme: 'bearer',
           bearerFormat: 'JWT',
         },
+      },
+      schemas: {
+        ...questionSchema,
       },
     },
     security: [
