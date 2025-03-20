@@ -3,6 +3,8 @@ const Appointment = require("../models/Appointment");
 const Service = require("../models/Service");
 const BookingRequest = require("../models/BookingRequest");
 const User = require("../models/User");
+const OrderProduct = require("../models/OrderProduct");
+const OrderItem = require("../models/OrderItem");
 const dotenv = require('dotenv');
 dotenv.config();
 
@@ -161,4 +163,111 @@ const receivePayment = async (req, res) => {
     }
 };
 
-module.exports = { createEmbeddedPaymentLink, receivePayment };
+// Function to create a payment link for an order
+const createOrderPaymentLink = async (req, res) => {
+    try {
+        const { orderId } = req.params;
+
+        const order = await OrderProduct.findById(orderId).populate("customerID");
+        if (!order) {
+            return res.status(404).json({ error: 1, message: "Order not found" });
+        }
+
+        const orderItems = await OrderItem.find({ orderID: orderId }).populate("productID");
+        if (!orderItems.length) {
+            return res.status(400).json({ error: 1, message: "No items in the order" });
+        }
+
+        let totalAmount = 0;
+        let items = [];
+        orderItems.forEach(item => {
+            totalAmount += item.productID.price * item.quantity;
+            items.push({ name: item.productID.name, quantity: item.quantity, price: item.productID.price });
+        });
+
+        const orderCode = `ORDER_${orderId}`;
+
+        const description = "Payment for ordered products";
+        const returnUrl = process.env.RETURN_URL || "http://localhost:5173/pay-success";
+        const cancelUrl = process.env.CANCEL_URL || "http://localhost:5173/pay-failed";
+
+        try {
+            const paymentLinkRes = await PayOS.createPaymentLink({
+                orderCode,
+                amount: totalAmount,
+                description,
+                items,
+                returnUrl,
+                cancelUrl,
+            });
+
+            return res.json({
+                error: 0,
+                message: "Success",
+                data: {
+                    checkoutUrl: paymentLinkRes.checkoutUrl,
+                    qrCode: paymentLinkRes.qrCode,
+                    amount: paymentLinkRes.amount,
+                    description: paymentLinkRes.description,
+                    orderCode: paymentLinkRes.orderCode,
+                },
+            });
+
+        } catch (error) {
+            console.log(error);
+            return res.json({
+                error: -1,
+                message: "Failed to create payment link",
+                data: null,
+            });
+        }
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            error: 1,
+            message: "Internal server error",
+            data: null,
+        });
+    }
+};
+
+// Function to handle payment status webhook for order payments
+const receiveOrderPayment = async (req, res) => {
+    try {
+        let data = req.body;
+
+        if (data.data && data.data.orderCode) {
+            const orderCode = data.data.orderCode.replace("ORDER_", "");
+            const order = await OrderProduct.findById(orderCode);
+
+            if (!order) {
+                return res.status(404).json({ error: 1, message: "Order not found" });
+            }
+
+            if (data.success) {
+                order.status = "Confirmed";
+            } else {
+                order.status = "Cancelled";
+            }
+
+            await order.save();
+            return res.status(200).json({ error: 0, message: "Order payment updated successfully", order });
+        }
+
+        return res.status(400).json({ error: 1, message: "Invalid payment data" });
+
+    } catch (error) {
+        console.error("Error processing webhook:", error);
+        return res.status(500).json({ error: 1, message: "Internal server error" });
+    }
+};
+
+module.exports = { 
+    createEmbeddedPaymentLink, 
+    receivePayment, 
+    createOrderPaymentLink, 
+    receiveOrderPayment 
+};
+
+
