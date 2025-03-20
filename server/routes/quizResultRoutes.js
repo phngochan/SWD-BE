@@ -3,7 +3,7 @@ const {
     saveQuizResult,
     getAllResults,
     getUserResults,
-} = require("../controllers/QuizResultController");
+} = require("../controllers/quizResultController");
 const { authenticate, authorize } = require("../middlewares/authMiddleware");
 
 const router = express.Router();
