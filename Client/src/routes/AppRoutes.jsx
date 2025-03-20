@@ -59,7 +59,7 @@
 //         </Routes>
 //     )
 // }
-
+// import { useState, useEffect } from "react";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -114,6 +114,8 @@ import { PayFailed } from "../pages/staff/PayFailed";
 import Product from "../pages/guest/Product.jsx";
 import ViewBookingHistory from "../pages/customer/ViewBookingHistory.jsx";
 import Quiz from "../pages/customer/Quiz.jsx";
+import ProductDetail from "../pages/guest/ProductDetail.jsx";
+
 
 
 axios.defaults.baseURL = import.meta.env.VITE_API_URL;
@@ -121,6 +123,7 @@ axios.defaults.withCredentials = true;
 
 function AppRoute() {
   const userRole = localStorage.getItem("roleName"); // Get user role
+
 
   // Define default pages for each role
   const roleRoutes = {
@@ -158,6 +161,7 @@ function AppRoute() {
           <Route path="/skincareconsultation" element={<SkincareConsultation />} />
           <Route path="/products" element={<Product />} />
           <Route path="/quiz" element={<Quiz />} />
+          <Route path="/product-detail" element={<ProductDetail />} />
         </Route>
 
         {/* Customer Pages */}

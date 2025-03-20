@@ -13,6 +13,11 @@ const Quiz = () => {
   const [error, setError] = useState(null);
   const [showLoginModal, setShowLoginModal] = useState(false); // State for modal
   const navigate = useNavigate(); // Hook for navigation
+  const [cart, setCart] = useState([]);
+  const cartData = JSON.parse(localStorage.getItem("cart")) || [];
+  useEffect(() => {
+    setCart(cartData);
+  }, []);
 
   useEffect(() => {
     const fetchQuestions = async () => {
@@ -94,7 +99,7 @@ const Quiz = () => {
 
   return (
     <div className="bg-gray-100 min-h-screen flex flex-col items-center">
-      <Navbar />
+      <Navbar cart={cart} setCart={setCart} /> {/* Pass setCart to Navbar */}
       <div className="bg-white p-6 m-8 rounded-xl shadow-lg max-w-3xl w-full">
         <h2 className="text-3xl font-semibold text-center pacifico-regular text-gray-800 mb-8">
           Trắc nghiệm chăm sóc da

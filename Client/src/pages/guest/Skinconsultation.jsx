@@ -10,6 +10,11 @@ export default function Skinconsultation() {
     const { id } = useParams();
     const [visibleNoteIndex, setVisibleNoteIndex] = useState(null);
     const [consultants, setConsultants] = useState([]);
+    const [cart, setCart] = useState([]);
+    const cartData = JSON.parse(localStorage.getItem("cart")) || [];
+    useEffect(() => {
+        setCart(cartData);
+    }, []);
 
     useEffect(() => {
         fetchConsultants();
@@ -50,7 +55,7 @@ export default function Skinconsultation() {
 
     return (
         <div className="main-container w-full min-h-screen bg-[#F5F5F5] font-['Lato']">
-            <Navbar />
+            <Navbar cart={cart} setCart={setCart} /> {/* Pass setCart to Navbar */}
             {/* Services Hero Section */}
             <div className="h-[500px] w-full flex items-center justify-center text-white text-center"
                 style={{

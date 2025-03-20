@@ -3,7 +3,7 @@ import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import axios from '../utils/axiosInstance';
 
-const Navbar = ({ cart }) => {
+const Navbar = ({ cart, setCart }) => {
     const location = useLocation();
     const navigate = useNavigate();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -32,8 +32,21 @@ const Navbar = ({ cart }) => {
         };
     }, [showModal]);
 
+    useEffect(() => {
+        const handleStorageChange = () => {
+            const updatedCart = JSON.parse(localStorage.getItem("cart")) || [];
+            setCart(updatedCart);
+        };
+        window.addEventListener("storage", handleStorageChange); // Correct event listener
+        return () => window.removeEventListener("storage", handleStorageChange);
+    }, [setCart]);
 
-    // const isLoginPage = location.pathname === "/dang-nhap" || location.pathname === "/dang-ky" || location.pathname === "/customer-profile" || location.pathname === "/forgot-password";
+    useEffect(() => {
+        if (cart && typeof cart === 'object') {
+            localStorage.setItem('cart', JSON.stringify(cart));
+        }
+    }, [cart]);
+
     const isLoginPage = ["/dang-nhap", "/dang-ky", "/customer-profile", "/forgot-password"].includes(location.pathname);
 
     const handleLogout = () => {
@@ -53,6 +66,13 @@ const Navbar = ({ cart }) => {
             .catch(error => {
                 console.error("Logout failed:", error.response?.data?.message || error.message);
             });
+    };
+
+    const handleQuantityChange = (index, newQuantity) => {
+        const updatedCart = [...cart];
+        updatedCart[index].quantity = newQuantity;
+        setCart(updatedCart);
+        localStorage.setItem("cart", JSON.stringify(updatedCart));
     };
 
     return (
@@ -105,10 +125,17 @@ const Navbar = ({ cart }) => {
                                     <li key={index} className="flex justify-between items-center px-4 py-2">
                                         <span>{item.productName}</span>
                                         <span>{item.price.toLocaleString()} VND</span>
+                                        <input
+                                            type="number"
+                                            value={item.quantity}
+                                            min="1"
+                                            onChange={(e) => handleQuantityChange(index, parseInt(e.target.value))}
+                                            className="w-12 text-center border rounded"
+                                        />
                                     </li>
                                 ))}
                             </ul>
-                            <NavLink to="/cart" className="block px-4 py-2 text-center text-[#2B6A7C] hover:bg-gray-100">
+                            <NavLink to="/product-detail" className="block px-4 py-2 text-center text-[#2B6A7C] hover:bg-gray-100">
                                 Xem giỏ hàng
                             </NavLink>
                         </div>

@@ -68,10 +68,17 @@ import Footer from "../../components/Footer";
 import ServiceCard from "../../components/ServiceCard";
 
 
+
 export default function ServiceGuest() {
     const [services, setServices] = useState([]);
     const navigate = useNavigate();
     const chooseServiceRef = useRef(null);
+    const [cart, setCart] = useState([]);
+    const cartData = JSON.parse(localStorage.getItem("cart")) || [];
+    useEffect(() => {
+        setCart(cartData);
+    }, []);
+
 
     // Fetch data from the server
     useEffect(() => {
@@ -111,7 +118,7 @@ export default function ServiceGuest() {
 
     return (
         <div className="main-container w-full h-auto bg-[#F5F5F5] relative overflow-hidden mx-auto my-0 -smooth ">
-            <Navbar />
+            <Navbar cart={cart} setCart={setCart} /> {/* Pass setCart to Navbar */}
 
             {/* Services Hero Section */}
             <div className="h-[500px] w-full flex items-center justify-center text-white text-center"

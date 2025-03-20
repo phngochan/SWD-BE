@@ -43,6 +43,12 @@ export default function ServiceDetails() {
             });
     }, [id]);
 
+    const [cart, setCart] = useState([]);
+    const cartData = JSON.parse(localStorage.getItem("cart")) || [];
+    useEffect(() => {
+        setCart(cartData);
+    }, []);
+
     const handleBookingNow = async () => {
         const token = localStorage.getItem("authToken") || sessionStorage.getItem("authToken");
         if (!token) {
@@ -67,7 +73,7 @@ export default function ServiceDetails() {
 
     return (
         <div className="main-container w-full h-auto bg-[#f9faef] relative overflow-hidden mx-auto my-0">
-            <Navbar />
+            <Navbar cart={cart} setCart={setCart} /> {/* Pass setCart to Navbar */}
 
             <div className="max-w-7xl mx-auto p-4 bg-white shadow-lg rounded-lg mt-10 mb-10">
                 <button

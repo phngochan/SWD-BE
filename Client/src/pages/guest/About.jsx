@@ -1,13 +1,20 @@
 import { Link } from "react-router-dom";
 import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa";
 import Navbar from "../../components/Navbar";
-
+import { useState, useEffect } from "react";
 
 export default function About() {
+
+    const [cart, setCart] = useState([]);
+    const cartData = JSON.parse(localStorage.getItem("cart")) || [];
+    useEffect(() => {
+        setCart(cartData);
+    }, []);
+
     return (
         <div className="bg-[#F5F5F5] min-h-screen">
             {/* Header */}
-            <Navbar />
+            <Navbar cart={cart} setCart={setCart} /> {/* Pass setCart to Navbar */}
 
             {/* Hero Section */}
             <div

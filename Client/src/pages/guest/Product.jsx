@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom"; // Import useNavigate
 import axios from "../../utils/axiosInstance";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
@@ -9,8 +9,15 @@ export default function Product() {
   const [cart, setCart] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showLoginModal, setShowLoginModal] = useState(false); // State for login modal
+  const [showQuantityModal, setShowQuantityModal] = useState(false); // State for quantity modal
+  const [selectedProduct, setSelectedProduct] = useState(null); // State for selected product
+  const [quantity, setQuantity] = useState(1); // State for quantity
+  const [items, setItems] = useState([]);
 
   const token = localStorage.getItem("authToken") || sessionStorage.getItem("authToken");
+
+  const navigate = useNavigate(); // Initialize useNavigate
 
   // Fetch products from the backend
   useEffect(() => {
@@ -28,35 +35,63 @@ export default function Product() {
     fetchProducts();
   }, []);
 
+  useEffect(() => {
+    const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
+    setCart(storedCart);
+  }, []);
+
+  // Function to add product to cart
   const addToCart = async (product) => {
     if (!token) {
-      alert("Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng.");
+      setShowLoginModal(true);
       return;
     }
 
+    setSelectedProduct(product);
+    setShowQuantityModal(true);
+  };
+
+  const handleAddToCart = async () => {
+    const updatedCart = [...cart, { ...selectedProduct, quantity }];
+    setCart(updatedCart);
+    localStorage.setItem("cart", JSON.stringify(updatedCart)); // Save cart to localStorage
+
     try {
-      // const orderID = localStorage.getItem("orderID"); // Lấy orderID từ localStorage hoặc state nếu có
-      const response = await axios.post(
-        "/api/order-items",
-        {
-          // orderID: orderID, // ID của đơn hàng hiện tại
-          productID: product._id,
-          quantity: 1, // Số lượng sản phẩm, mặc định là 1
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      if (response.status === 201) {
-        alert("Sản phẩm đã được thêm vào giỏ hàng!");
+      let orderID = localStorage.getItem("orderID");
+      if (!orderID) {
+        const orderResponse = await axios.post("/api/orders", {
+          items: [{ productID: selectedProduct._id, quantity }],
+        });
+        orderID = orderResponse.data.order._id;
+        localStorage.setItem("orderID", orderID);
       } else {
-        alert("Thêm vào giỏ hàng thất bại.");
+        await axios.post("/api/order-items", {
+          orderID,
+          productID: selectedProduct._id,
+          quantity,
+        });
       }
     } catch (error) {
-      console.error("Lỗi khi thêm vào giỏ hàng:", error);
-      alert("Đã xảy ra lỗi khi thêm sản phẩm vào giỏ hàng.");
+      console.error("Failed to add item to order:", error.response?.data || error.message);
+    }
+
+    setShowQuantityModal(false);
+    setQuantity(1);
+  };
+
+  const handleLoginRedirect = () => {
+    setShowLoginModal(false);
+    navigate("/dang-nhap");
+  };
+
+  const handleCheckout = async () => {
+    try {
+      const response = await axios.post("/api/orders", { items: cart });
+      localStorage.removeItem("cart");
+      setCart([]);
+      navigate("/order-success", { state: { orderId: response.data.order._id } });
+    } catch (error) {
+      console.error("Checkout failed:", error);
     }
   };
 
@@ -70,7 +105,7 @@ export default function Product() {
 
   return (
     <div className="bg-[#F5F5F5] min-h-screen">
-      <Navbar cart={cart} />
+      <Navbar cart={cart} setCart={setCart} /> {/* Pass setCart to Navbar */}
 
       {/* Hero Section */}
       <div
@@ -132,6 +167,85 @@ export default function Product() {
       </div>
 
       <Footer />
+
+      {/* Custom Login Modal */}
+      {showLoginModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white p-6 rounded-xl shadow-lg max-w-sm w-full text-center">
+            <h3 className="text-xl font-bold text-gray-800 mb-4">
+              Đăng nhập để thêm sản phẩm vào giỏ hàng
+            </h3>
+            <p className="text-gray-600">Bạn cần đăng nhập để thêm sản phẩm vào giỏ hàng. Bạn có muốn đăng nhập không?</p>
+            <div className="flex justify-center gap-4 mt-4">
+              <button
+                className="py-2 px-6 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 transition"
+                onClick={() => setShowLoginModal(false)}
+              >
+                Đóng
+              </button>
+              <button
+                className="py-2 px-6 bg-[#A7DFEC] text-white rounded-lg hover:bg-[#2B6A7C] transition"
+                onClick={handleLoginRedirect}
+              >
+                Đăng nhập
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Quantity Modal */}
+      {showQuantityModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white p-6 rounded-xl shadow-lg max-w-sm w-full text-center">
+            <h3 className="text-xl font-bold text-gray-800 mb-4">
+              Chọn số lượng sản phẩm
+            </h3>
+            <div className="flex justify-center items-center mb-4">
+              <button
+                className="px-4 py-2 bg-gray-300 text-gray-800 rounded-l-lg hover:bg-gray-400 transition"
+                onClick={() => setQuantity(quantity > 1 ? quantity - 1 : 1)}
+              >
+                -
+              </button>
+              <span className="px-4 py-2 bg-white text-gray-800 border border-gray-300">
+                {quantity}
+              </span>
+              <button
+                className="px-4 py-2 bg-gray-300 text-gray-800 rounded-r-lg hover:bg-gray-400 transition"
+                onClick={() => setQuantity(quantity + 1)}
+              >
+                +
+              </button>
+            </div>
+            <div className="flex justify-center gap-4 mt-4">
+              <button
+                className="py-2 px-6 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 transition"
+                onClick={() => setShowQuantityModal(false)}
+              >
+                Đóng
+              </button>
+              <button
+                className="py-2 px-6 bg-[#A7DFEC] text-white rounded-lg hover:bg-[#2B6A7C] transition"
+                onClick={handleAddToCart}
+              >
+                Thêm vào giỏ hàng
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {cart.length > 0 && (
+        <div className="text-center mt-8">
+          <button
+            onClick={handleCheckout}
+            className="px-6 py-3 bg-[#A7DFEC] text-white rounded-full hover:bg-[#2B6A7C] transition duration-300"
+          >
+            Thanh toán
+          </button>
+        </div>
+      )}
     </div>
   );
 }

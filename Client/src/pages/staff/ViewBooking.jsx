@@ -225,7 +225,7 @@ const ViewBooking = () => {
                     )
                   }
                 >
-                  {booking.consultantID?.firstName || "Not Assigned"}
+                  {booking.consultantID?.lastName || "Not Assigned"}
                 </td>
 
                 <td className="border p-2 text-center">

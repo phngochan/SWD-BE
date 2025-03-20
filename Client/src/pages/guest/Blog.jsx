@@ -4,11 +4,16 @@ import Footer from "../../components/Footer";
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom'; // for navigation
 import { motion } from "framer-motion";
-import  BlogCard from '../../components/BlogCard';
+import BlogCard from '../../components/BlogCard';
 
 export default function Blog() {
     const [blogPosts, setBlogPosts] = useState([]);
     const navigate = useNavigate(); // Hook to programmatically navigate
+    const [cart, setCart] = useState([]);
+    const cartData = JSON.parse(localStorage.getItem("cart")) || [];
+    useEffect(() => {
+        setCart(cartData);
+    }, []);
 
     // Fetch blog posts data from server
     useEffect(() => {
@@ -29,7 +34,7 @@ export default function Blog() {
 
     return (
         <div className="main-container w-full h-auto bg-[#f9faef] relative overflow-hidden mx-auto my-0">
-            <Navbar />
+            <Navbar cart={cart} setCart={setCart} /> {/* Pass setCart to Navbar */}
 
             {/* Blog Hero Section */}
             <div className="h-[500px] w-full flex items-center justify-center text-white text-center"

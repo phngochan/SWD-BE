@@ -1,4 +1,5 @@
 const OrderProduct = require("../models/OrderProduct");
+const OrderItem = require("../models/OrderItem");
 
 // Tạo đơn hàng sản phẩm
 exports.createOrder = async (req, res) => {
