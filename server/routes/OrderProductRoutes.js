@@ -6,6 +6,7 @@ const {
   getCustomerOrders,
   cancelOrder,
   getOrderById,
+  getCartByCustomerId, // Import the new function
 } = require("../controllers/OrderProductController");
 const { authenticate, authorize } = require("../middlewares/authMiddleware");
 
@@ -17,5 +18,6 @@ router.put("/:id/status", authenticate, authorize(["Staff"]), updateOrderStatus)
 router.get("/my-orders", authenticate, authorize(["Customer"]), getCustomerOrders);
 router.put("/:id/cancel", authenticate, authorize(["Customer"]), cancelOrder);
 router.get("/:id", authenticate, getOrderById);
+router.get("/cart", authenticate, authorize(["Customer"]), getCartByCustomerId); // Add the new route
 
 module.exports = router;

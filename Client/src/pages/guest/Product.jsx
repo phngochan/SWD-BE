@@ -58,6 +58,7 @@ export default function Product() {
 
     try {
       let orderID = localStorage.getItem("orderID");
+      const userId = localStorage.getItem("userId");
       if (!orderID) {
         const orderResponse = await axios.post("/api/orders", {
           items: [{ productID: selectedProduct._id, quantity }],
@@ -65,11 +66,20 @@ export default function Product() {
         orderID = orderResponse.data.order._id;
         localStorage.setItem("orderID", orderID);
       } else {
-        await axios.post("/api/order-items", {
-          orderID,
-          productID: selectedProduct._id,
-          quantity,
-        });
+        const orderResponse = await axios.get(`/api/orders/${orderID}`);
+        if (orderResponse.data.customerID !== userId) {
+          const newOrderResponse = await axios.post("/api/orders", {
+            items: [{ productID: selectedProduct._id, quantity }],
+          });
+          orderID = newOrderResponse.data.order._id;
+          localStorage.setItem("orderID", orderID);
+        } else {
+          await axios.post("/api/order-items", {
+            orderID,
+            productID: selectedProduct._id,
+            quantity,
+          });
+        }
       }
     } catch (error) {
       console.error("Failed to add item to order:", error.response?.data || error.message);
@@ -92,6 +102,16 @@ export default function Product() {
       navigate("/order-success", { state: { orderId: response.data.order._id } });
     } catch (error) {
       console.error("Checkout failed:", error);
+    }
+  };
+
+  const handleViewCart = async () => {
+    try {
+      const response = await axios.get("/api/orders/cart");
+      setCart(response.data.items);
+      navigate("/product-detail");
+    } catch (error) {
+      console.error("Failed to fetch cart items:", error);
     }
   };
 
@@ -131,6 +151,7 @@ export default function Product() {
             <div
               key={product._id}
               className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
+              onClick={handleViewCart} // Navigate to product detail page on card click
             >
               {/* Product Image */}
               <div className="w-full h-48 overflow-hidden">
@@ -154,7 +175,7 @@ export default function Product() {
                   {product.availability ? "Còn hàng" : "Hết hàng"}
                 </p>
                 <button
-                  onClick={() => addToCart(product)}
+                  onClick={(e) => { e.stopPropagation(); addToCart(product); }}
                   className="w-full px-4 py-2 bg-[#A7DFEC] text-white rounded-full hover:bg-[#2B6A7C] transition duration-300"
                   disabled={!product.availability}
                 >

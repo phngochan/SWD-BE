@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "../../utils/axiosInstance";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 
@@ -8,9 +9,53 @@ export default function ProductDetail() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
-        setCart(storedCart);
+        const fetchOrderItems = async () => {
+            try {
+                const orderID = localStorage.getItem("orderID");
+                if (orderID) {
+                    const response = await axios.get(`/api/order-items/${orderID}`);
+                    console.log("API Response:", response.data);
+                    setCart(response.data);
+                } else {
+                    const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
+                    setCart(storedCart);
+                }
+            } catch (error) {
+                console.error("Failed to fetch order items:", error);
+            }
+        };
+
+        fetchOrderItems();
     }, []);
+
+    const handleQuantityChange = async (index, newQuantity) => {
+        const updatedCart = [...cart];
+        updatedCart[index].quantity = newQuantity;
+        setCart(updatedCart);
+        localStorage.setItem("cart", JSON.stringify(updatedCart));
+
+        try {
+            await axios.put(`/api/order-items/${updatedCart[index]._id}`, {
+                quantity: newQuantity,
+            });
+        } catch (error) {
+            console.error("Failed to update item quantity:", error);
+        }
+    };
+
+    const handleDeleteItem = async (index) => {
+        const updatedCart = [...cart];
+        const itemId = updatedCart[index]._id;
+        updatedCart.splice(index, 1);
+        setCart(updatedCart);
+        localStorage.setItem("cart", JSON.stringify(updatedCart));
+
+        try {
+            await axios.delete(`/api/order-items/${itemId}`);
+        } catch (error) {
+            console.error("Failed to delete item:", error);
+        }
+    };
 
     const handleCheckout = () => {
         // Handle checkout logic here
@@ -18,7 +63,7 @@ export default function ProductDetail() {
     };
 
     const totalQuantity = cart.reduce((total, product) => total + product.quantity, 0);
-    const totalPrice = cart.reduce((total, product) => total + product.price * product.quantity, 0);
+    const totalPrice = cart.reduce((total, product) => total + (product.productID?.price || 0) * product.quantity, 0);
 
     return (
         <div className="bg-[#F5F5F5] min-h-screen">
@@ -30,38 +75,56 @@ export default function ProductDetail() {
                     <p className="text-center">Giỏ hàng của bạn đang trống.</p>
                 ) : (
                     <div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                            {cart.map((product, index) => (
-                                <div
-                                    key={index}
-                                    className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
-                                >
-                                    {/* Product Image */}
-                                    <div className="w-full h-48 overflow-hidden">
-                                        <img
-                                            src={product.imgURL || "/images/default-product.png"}
-                                            alt={product.productName}
-                                            className="w-full h-full object-cover"
-                                        />
-                                    </div>
-
-                                    {/* Product Details */}
-                                    <div className="p-6">
-                                        <h3 className="text-xl font-semibold mb-2">{product.productName}</h3>
-                                        <p className="text-gray-600 mb-4">{product.description}</p>
-                                        <p className="text-lg font-bold text-[#2B6A7C] mb-4">
-                                            {product.price.toLocaleString()} VND
-                                        </p>
-                                        <p
-                                            className={`text-sm mb-4 ${product.availability ? "text-green-500" : "text-red-500"}`}
-                                        >
-                                            {product.availability ? "Còn hàng" : "Hết hàng"}
-                                        </p>
-                                        <p className="text-sm mb-4">Số lượng: {product.quantity}</p> {/* Display quantity */}
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
+                        <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-md overflow-hidden">
+                            <thead>
+                                <tr>
+                                    <th className="px-4 py-2 border-b text-center">Hình ảnh</th>
+                                    <th className="px-4 py-2 border-b text-center">Tên sản phẩm</th>
+                                    <th className="px-4 py-2 border-b">Mô tả</th>
+                                    <th className="px-4 py-2 border-b text-center">Giá</th>
+                                    <th className="px-4 py-2 border-b text-center">Tình trạng</th>
+                                    <th className="px-4 py-2 border-b text-center">Số lượng</th>
+                                    <th className="px-4 py-2 border-b text-center">Hành động</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {cart.map((product, index) => (
+                                    <tr key={index} className="hover:bg-gray-100 transition duration-300">
+                                        <td className="px-4 py-2 border-b text-center">
+                                            <img
+                                                src={product.productID?.imgURL || "/images/default-product.png"}
+                                                className="w-24 h-24 object-cover mx-auto"
+                                            />
+                                        </td>
+                                        <td className="px-4 py-2 border-b text-center">{product.productID?.productName}</td>
+                                        <td className="px-4 py-2 border-b">{product.productID?.description}</td>
+                                        <td className="px-4 py-2 border-b text-lg font-bold text-[#2B6A7C] text-center">
+                                            {(product.productID?.price || 0).toLocaleString()} VND
+                                        </td>
+                                        <td className={`px-4 py-2 border-b text-sm text-center ${product.productID?.availability ? "text-green-500" : "text-red-500"}`}>
+                                            {product.productID?.availability ? "Còn hàng" : "Hết hàng"}
+                                        </td>
+                                        <td className="px-4 py-2 border-b text-center">
+                                            <input
+                                                type="number"
+                                                value={product.quantity}
+                                                min="1"
+                                                onChange={(e) => handleQuantityChange(index, parseInt(e.target.value))}
+                                                className="w-12 text-center border rounded"
+                                            />
+                                        </td>
+                                        <td className="px-4 py-2 border-b text-center">
+                                            <button
+                                                onClick={() => handleDeleteItem(index)}
+                                                className="px-4 py-2 bg-red-500 text-white rounded-full hover:bg-red-700 transition duration-300"
+                                            >
+                                                Xóa
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
                         <div className="text-center mt-8">
                             <p className="text-lg font-bold">Tổng số sản phẩm: {totalQuantity}</p>
                             <p className="text-lg font-bold">Tổng số tiền: {totalPrice.toLocaleString()} VND</p>
@@ -72,7 +135,7 @@ export default function ProductDetail() {
                     <div className="text-center mt-8">
                         <button
                             onClick={handleCheckout}
-                            className="px-6 py-3 bg-[#A7DFEC] text-white rounded-full hover:bg-[#2B6A7C] transition duration-300"
+                            className="px-6 py-3 bg-[#FF5722] text-white rounded-full hover:bg-[#E64A19] transition duration-300"
                         >
                             Thanh toán
                         </button>

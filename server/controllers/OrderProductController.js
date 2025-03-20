@@ -125,7 +125,25 @@ exports.getOrderById = async (req, res) => {
     if (!order) return res.status(404).json({ message: "Order not found" });
 
     const items = await OrderItem.find({ orderID: order._id })
-      .populate("productID", "name price");
+      .populate("productID", "productName price");
+
+    res.status(200).json({ ...order.toObject(), items });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Lấy giỏ hàng dựa trên customer ID
+exports.getCartByCustomerId = async (req, res) => {
+  try {
+    const customerID = req.user.id;
+    const order = await OrderProduct.findOne({ customerID, status: "Pending" })
+      .populate("customerID", "firstName lastName email");
+
+    if (!order) return res.status(404).json({ message: "Cart not found" });
+
+    const items = await OrderItem.find({ orderID: order._id })
+      .populate("productID", "productName price imgURL description availability");
 
     res.status(200).json({ ...order.toObject(), items });
   } catch (error) {
