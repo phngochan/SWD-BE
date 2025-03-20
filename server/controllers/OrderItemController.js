@@ -1,4 +1,5 @@
 const OrderItem = require("../models/OrderItem");
+const OrderProduct = require("../models/OrderProduct");
 
 // Lấy tất cả sản phẩm của một đơn hàng
 exports.getOrderItems = async (req, res) => {
@@ -19,6 +20,18 @@ exports.addOrderItem = async (req, res) => {
       return res.status(400).json({ message: "Thiếu dữ liệu đầu vào." });
     }
 
+    // Kiểm tra OrderProduct tồn tại và thuộc về user hiện tại
+    const order = await OrderProduct.findById(orderID);
+    if (!order) {
+      return res.status(404).json({ message: "Order không tồn tại" });
+    }
+    if (order.customerID.toString() !== req.user.id) {
+      return res.status(403).json({ message: "Bạn không có quyền thêm item vào đơn này" });
+    }
+    if (order.status !== "Pending") {
+      return res.status(400).json({ message: "Chỉ thêm sản phẩm khi đơn hàng đang ở trạng thái Pending" });
+    }
+
     const newOrderItem = new OrderItem({
       orderID,
       productID,
@@ -27,10 +40,10 @@ exports.addOrderItem = async (req, res) => {
 
     await newOrderItem.save();
 
-    res.status(201).json({ message: "Order item added successfully", newOrderItem });
+    res.status(201).json({ message: "Đã thêm sản phẩm vào đơn hàng", item: newOrderItem });
   } catch (error) {
-    console.error("Lỗi chi tiết:", error); // Ghi log lỗi chi tiết
-    res.status(500).json({ error: "Failed to add order item" });
+    console.error("Lỗi chi tiết:", error);
+    res.status(500).json({ error: "Thêm sản phẩm thất bại" });
   }
 };
 
@@ -39,12 +52,20 @@ exports.deleteOrderItem = async (req, res) => {
   try {
     const orderItem = await OrderItem.findById(req.params.id);
     if (!orderItem) {
-      return res.status(404).json({ message: "Order item not found" });
+      return res.status(404).json({ message: "Order item không tồn tại" });
+    }
+
+    const order = await OrderProduct.findById(orderItem.orderID);
+    if (!order || order.customerID.toString() !== req.user.id) {
+      return res.status(403).json({ message: "Bạn không có quyền xóa item này" });
+    }
+    if (order.status !== "Pending") {
+      return res.status(400).json({ message: "Chỉ xóa sản phẩm khi đơn hàng đang ở trạng thái Pending" });
     }
 
     await orderItem.deleteOne();
-    res.status(200).json({ message: "Order item deleted successfully" });
+    res.status(200).json({ message: "Đã xóa sản phẩm khỏi đơn hàng" });
   } catch (error) {
-    res.status(500).json({ error: "Failed to delete order item" });
+    res.status(500).json({ error: "Xóa sản phẩm thất bại" });
   }
 };

@@ -5,11 +5,11 @@ const {
   updateOrderStatus,
   getCustomerOrders,
   cancelOrder,
-  getOrderById
+  getOrderById,
 } = require("../controllers/OrderProductController");
+const { authenticate, authorize } = require("../middlewares/AuthMiddleware");
 
 const router = express.Router();
-const { authenticate, authorize } = require("../middlewares/AuthMiddleware");
 
 router.post("/", authenticate, authorize(["Customer"]), createOrder);
 router.get("/", authenticate, authorize(["Staff"]), getAllOrders);

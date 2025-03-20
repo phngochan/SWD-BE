@@ -15,7 +15,7 @@ const {
   getBookingById,
   updateBookingStatus
 } = require('../controllers/bookingRequestController');
-const { authenticate, authorize } = require("../middlewares/authMiddleware");
+const { authenticate, authorize } = require("../middlewares/AuthMiddleware");
 
 const router = express.Router();
 

@@ -8,20 +8,23 @@ exports.createOrder = async (req, res) => {
       return res.status(400).json({ error: "Order must contain at least one item" });
     }
 
+    // Tạo đơn hàng chính
     const newOrder = new OrderProduct({ customerID: req.user.id, status: "Pending" });
     const savedOrder = await newOrder.save();
 
+    // Tạo các order item
     const orderItems = await Promise.all(
       items.map(async (item) => {
-        const orderItem = new OrderItem({ orderID: savedOrder._id, productID: item.productID, quantity: item.quantity });
+        const orderItem = new OrderItem({
+          orderID: savedOrder._id,
+          productID: item.productID,
+          quantity: item.quantity
+        });
         return await orderItem.save();
       })
     );
 
-    savedOrder.items = orderItems.map(item => item._id);
-    await savedOrder.save();
-
-    res.status(201).json(savedOrder);
+    res.status(201).json({ order: savedOrder, items: orderItems });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to create order" });
@@ -29,21 +32,23 @@ exports.createOrder = async (req, res) => {
 };
 
 
-
 exports.getAllOrders = async (req, res) => {
   try {
     const orders = await OrderProduct.find()
-      .populate("customerID", "firstName lastName email")
-      .populate({
-        path: "items",
-        populate: { path: "productID", select: "name price" }
-      });
+      .populate("customerID", "firstName lastName email");
 
-    res.status(200).json(orders);
+    const results = await Promise.all(orders.map(async (order) => {
+      const items = await OrderItem.find({ orderID: order._id })
+        .populate("productID", "name price");
+      return { ...order.toObject(), items };
+    }));
+
+    res.status(200).json(results);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
+
 
 // 🔹 Cập nhật trạng thái đơn hàng
 exports.updateOrderStatus = async (req, res) => {
@@ -71,24 +76,20 @@ exports.updateOrderStatus = async (req, res) => {
   }
 };
 
+
 // 🔹 Lấy danh sách đơn hàng của khách hàng
 exports.getCustomerOrders = async (req, res) => {
   try {
-    console.log("User ID:", req.user.id); // Debug ID của người dùng
+    const orders = await OrderProduct.find({ customerID: req.user.id });
 
-    const orders = await OrderProduct.find({ customerID: req.user.id })
-      .populate({
-        path: "items",
-        populate: { path: "productID", select: "name price" }
-      });
+    const results = await Promise.all(orders.map(async (order) => {
+      const items = await OrderItem.find({ orderID: order._id })
+        .populate("productID", "name price");
+      return { ...order.toObject(), items };
+    }));
 
-    if (!orders) {
-      return res.status(404).json({ message: "No orders found" });
-    }
-
-    res.json({ orders });
+    res.json({ orders: results });
   } catch (error) {
-    console.error("Error fetching customer orders:", error); // In lỗi chi tiết
     res.status(500).json({ message: "Internal server error", error: error.message });
   }
 };
@@ -115,16 +116,20 @@ exports.cancelOrder = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
 exports.getOrderById = async (req, res) => {
   try {
     const order = await OrderProduct.findById(req.params.id)
-      .populate("customerID", "firstName lastName email")
-      .populate("items.productID", "productName price");
+      .populate("customerID", "firstName lastName email");
 
     if (!order) return res.status(404).json({ message: "Order not found" });
 
-    res.status(200).json(order);
+    const items = await OrderItem.find({ orderID: order._id })
+      .populate("productID", "name price");
+
+    res.status(200).json({ ...order.toObject(), items });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
+
