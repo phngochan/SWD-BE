@@ -9,16 +9,16 @@ const ManagerSidebar = () => {
   const fullName = localStorage.getItem("fullName") || sessionStorage.getItem("fullName");
 
   const menuItems = [
-    { name: "Dashboard", path: "/dashboard" },
-    { name: "Services", path: "/service-management" },
-    { name: "Product", path: "/product-management" },
+    { name: "Bảng thống kê", path: "/dashboard" },
+    { name: "Dịch vụ", path: "/service-management" },
+    { name: "Sản phẩm", path: "/product-management" },
     { name: "Blogs", path: "/blog-management" },
-    { name: "Questions", path: "/question-management" },
+    { name: "Câu hỏi", path: "/question-management" },
   ];
 
   const staffItems = [
-    { name: "Therapist", path: "/therapist-management" },
-    { name: "Staff", path: "/staff-management" },
+    { name: "Chuyên viên", path: "/therapist-management" },
+    { name: "Quản lý", path: "/staff-management" },
   ];
 
   const handleLogout = () => {
@@ -61,7 +61,7 @@ const ManagerSidebar = () => {
 
       <Typography variant="h6">
         <div className="text-center">
-          Welcome Manager <br /> {fullName}
+          Chào mừng quản lý <br /> {fullName}
         </div>
       </Typography>
 
@@ -108,7 +108,7 @@ const ManagerSidebar = () => {
           },
         }}
       >
-        Change Password
+        Đổi mật khẩu
       </Button>
 
       <Button
@@ -127,7 +127,7 @@ const ManagerSidebar = () => {
           },
         }}
       >
-        Logout
+        Đăng xuất
       </Button>
 
     </Drawer>

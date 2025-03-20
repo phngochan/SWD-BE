@@ -22,7 +22,6 @@ const ServiceManagement = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOrder, setSortOrder] = useState("asc");
 
-
   useEffect(() => {
     fetchServices();
   }, []);
@@ -107,50 +106,52 @@ const ServiceManagement = () => {
     .filter(service => service.name.toLowerCase().includes(searchQuery.toLowerCase()))
     .sort((a, b) => sortOrder === "asc" ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name));
 
-
+  const formatPrice = (price) => {
+    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " VND";
+  };
 
   return (
     <div className="flex">
       <Sidebar />
       <div className="p-6 w-full">
         <ToastContainer />
-        <h2 className="text-2xl font-bold mb-4">Service Management</h2>
+        <h2 className="text-2xl font-bold mb-4">Quản lý Dịch vụ</h2>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 bg-gray-100 p-4 rounded">
-          <input {...register("name", { required: true })} placeholder="Name" className="w-full p-2 border" />
-          <input {...register("price", { required: true })} placeholder="Price" className="w-full p-2 border" />
-          <input {...register("image")} placeholder="Image URL" className="w-full p-2 border" />
-          {editingService?.image && <img src={editingService.image} alt="Service Preview" className="w-32 h-32 object-cover mt-2" />}
-          <input {...register("effectimage")} placeholder="Effect Image URL" className="w-full p-2 border" />
-          {editingService?.effectimage && <img src={editingService.effectimage} alt="Service Preview" className="w-32 h-32 object-cover mt-2" />}
-          <input {...register("resultimage")} placeholder="Result Image URL" className="w-full p-2 border" />
-          {editingService?.resultimage && <img src={editingService.resultimage} alt="Service Preview" className="w-32 h-32 object-cover mt-2" />}
-          <input {...register("sensationimage")} placeholder="Sensation Image URL" className="w-full p-2 border" />
-          {editingService?.sensationimage && <img src={editingService.sensationimage} alt="Service Preview" className="w-32 h-32 object-cover mt-2" />}
-          <input {...register("description")} placeholder="Description" className="w-full p-2 border" />
+          <input {...register("name", { required: true })} placeholder="Tên dịch vụ" className="w-full p-2 border" />
+          <input {...register("price", { required: true })} placeholder="Giá" className="w-full p-2 border" />
+          <input {...register("image")} placeholder="URL ảnh" className="w-full p-2 border" />
+          {editingService?.image && <img src={editingService.image} alt="Xem trước dịch vụ" className="w-32 h-32 object-cover mt-2" />}
+          <input {...register("effectimage")} placeholder="URL ảnh hiệu ứng" className="w-full p-2 border" />
+          {editingService?.effectimage && <img src={editingService.effectimage} alt="Xem trước dịch vụ" className="w-32 h-32 object-cover mt-2" />}
+          <input {...register("resultimage")} placeholder="URL ảnh kết quả" className="w-full p-2 border" />
+          {editingService?.resultimage && <img src={editingService.resultimage} alt="Xem trước dịch vụ" className="w-32 h-32 object-cover mt-2" />}
+          <input {...register("sensationimage")} placeholder="URL ảnh cảm giác" className="w-full p-2 border" />
+          {editingService?.sensationimage && <img src={editingService.sensationimage} alt="Xem trước dịch vụ" className="w-32 h-32 object-cover mt-2" />}
+          <input {...register("description")} placeholder="Mô tả" className="w-full p-2 border" />
           <ReactQuill
             value={watch("detaildescription") || ""}
             onChange={(value) => setValue("detaildescription", value)}
-            placeholder="Detailed Description"
+            placeholder="Mô tả chi tiết"
           />
-          <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">{editingService ? "Update" : "Create"} Service</button>
+          <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">{editingService ? "Cập nhật" : "Tạo"} Dịch vụ</button>
         </form>
 
         <div className="mt-6">
           <div className="flex justify-between items-center mb-4">
-            <h3 className="text-xl font-semibold">Service List</h3>
+            <h3 className="text-xl font-semibold">Danh sách Dịch vụ</h3>
             <div className="flex space-x-2">
-              <input type="text" placeholder="Search Services" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="p-2 border rounded w-64" />
+              <input type="text" placeholder="Tìm kiếm Dịch vụ" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="p-2 border rounded w-64" />
               <button onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")} className="bg-gray-500 text-white px-4 py-2 rounded">
-                {sortOrder === "asc" ? "Sort Z-A" : "Sort A-Z"}
+                {sortOrder === "asc" ? "Sắp xếp Z-A" : "Sắp xếp A-Z"}
               </button>
             </div>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {filteredServices.map((service) => (
               <div key={service._id} className="border p-4">
-                {service.image && <img src={service.image} alt="Service" className="w-10 h-10 object-cover mb-2" />}
+                {service.image && <img src={service.image} alt="Dịch vụ" className="w-10 h-10 object-cover mb-2" />}
                 <h4 className="text-lg font-bold">{service.name}</h4>
-                <p className="text-gray-700">Price: ${service.price}</p>
+                <p className="text-gray-700">Giá: {formatPrice(service.price)}</p>
                 <p>{service.description}</p>
                 <button onClick={() => handleEdit(service)} className="bg-yellow-500 text-white px-3 py-1 mr-2 rounded mt-4"><FaEdit /></button>
                 <button onClick={() => openDeleteConfirmation(service)} className="bg-red-500 text-white px-3 py-1 rounded mt-4"><FaTrash /></button>
@@ -161,11 +162,11 @@ const ServiceManagement = () => {
       </div>
 
       <Dialog open={openDeleteDialog} onClose={closeDeleteConfirmation}>
-        <DialogTitle>Confirm Deletion</DialogTitle>
-        <DialogContent>Are you sure you want to delete this service?</DialogContent>
+        <DialogTitle>Xác nhận xóa</DialogTitle>
+        <DialogContent>Bạn có chắc chắn muốn xóa dịch vụ này không?</DialogContent>
         <DialogActions>
-          <Button onClick={closeDeleteConfirmation} color="primary">Cancel</Button>
-          <Button onClick={handleDelete} color="secondary">Delete</Button>
+          <Button onClick={closeDeleteConfirmation} color="primary">Hủy</Button>
+          <Button onClick={handleDelete} color="secondary">Xóa</Button>
         </DialogActions>
       </Dialog>
     </div>

@@ -30,11 +30,11 @@ const QuestionCard = ({ question, onDelete, onEdit }) => {
           {question.questionText}
         </Typography>
         <Typography variant="body2" color="textSecondary" sx={{ mb: 1 }}>
-          Answer Options:
+          Các lựa chọn trả lời:
         </Typography>
         {question.answerOptions.map((option, index) => (
           <Typography key={index} variant="body2" color="textSecondary">
-            - {option.answerText} (Weight: {option.weight})
+            - {option.answerText} (Trọng số: {option.weight})
           </Typography>
         ))}
         <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
@@ -172,14 +172,14 @@ const QuestionManagement = () => {
       <Sidebar />
       <Container sx={{ ml: 3, p: "24px", maxWidth: "900px" }}>
         <Typography variant="h4" fontWeight="bold" gutterBottom>
-          Question Management
+          Quản lý Câu hỏi
         </Typography>
         <Box sx={{ display: "flex", alignItems: "center", mb: "20px" }}>
           <Button variant="contained" color="primary" onClick={() => setEditDialog({ open: true, question: null })}>
-            Add New Question
+            Thêm Câu hỏi mới
           </Button>
           <TextField
-            label="Search Questions"
+            label="Tìm kiếm Câu hỏi"
             variant="outlined"
             size="small"
             sx={{ ml: 2 }}
@@ -188,7 +188,7 @@ const QuestionManagement = () => {
             className="p-2 border rounded w-64 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <button onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")} className="bg-gray-500 text-white px-4 py-2 rounded">
-            {sortOrder === "asc" ? "Sort Z-A" : "Sort A-Z"}
+            {sortOrder === "asc" ? "Sắp xếp Z-A" : "Sắp xếp A-Z"}
           </button>
         </Box>
         {loading ? (
@@ -210,28 +210,28 @@ const QuestionManagement = () => {
         )}
       </Container>
       <Dialog open={editDialog.open} onClose={() => setEditDialog({ open: false, question: null })}>
-        <DialogTitle>{editDialog.question ? "Edit Question" : "Add Question"}</DialogTitle>
+        <DialogTitle>{editDialog.question ? "Sửa Câu hỏi" : "Thêm Câu hỏi"}</DialogTitle>
         <DialogContent>
           <TextField
             fullWidth
-            label="Question Text"
+            label="Nội dung Câu hỏi"
             value={newQuestion}
             onChange={(e) => setNewQuestion(e.target.value)}
             sx={{ mt: 2 }}
           />
           <Typography variant="subtitle1" sx={{ mt: 3 }}>
-            Answer Options
+            Các lựa chọn trả lời
           </Typography>
           {newAnswerOptions.map((option, index) => (
             <Box key={index} sx={{ display: "flex", gap: 2, mt: 2 }}>
               <TextField
-                label={`Option ${index + 1} Text`}
+                label={`Lựa chọn ${index + 1}`}
                 value={option.answerText}
                 onChange={(e) => handleOptionChange(index, "answerText", e.target.value)}
                 fullWidth
               />
               <TextField
-                label={`Weight`}
+                label={`Trọng số`}
                 type="number"
                 value={option.weight}
                 onChange={(e) => handleOptionChange(index, "weight", e.target.value)}
@@ -240,32 +240,32 @@ const QuestionManagement = () => {
             </Box>
           ))}
           <Button onClick={handleAddOption} sx={{ mt: 2 }} variant="outlined" color="primary">
-            Add Answer Option
+            Thêm Lựa chọn trả lời
           </Button>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setEditDialog({ open: false, question: null })} color="primary">
-            Cancel
+            Hủy
           </Button>
           <Button onClick={handleAdd} color="primary">
-            Save
+            Lưu
           </Button>
         </DialogActions>
       </Dialog>
 
       <Dialog open={deleteDialog.open} onClose={() => setDeleteDialog({ open: false, questionId: null })}>
-        <DialogTitle>Confirm Deletion</DialogTitle>
+        <DialogTitle>Xác nhận xóa</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Are you sure you want to delete this question? This action cannot be undone.
+            Bạn có chắc chắn muốn xóa câu hỏi này không? Hành động này không thể hoàn tác.
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setDeleteDialog({ open: false, questionId: null })} color="primary">
-            Cancel
+            Hủy
           </Button>
           <Button onClick={confirmDelete} color="primary">
-            Confirm
+            Xác nhận
           </Button>
         </DialogActions>
       </Dialog>

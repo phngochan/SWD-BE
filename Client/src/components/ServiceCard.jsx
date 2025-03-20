@@ -2,6 +2,8 @@ import React from "react";
 import { motion } from "framer-motion";
 
 const ServiceCard = ({ image, name, description, price, onChoose }) => {
+  const formattedPrice = new Intl.NumberFormat('vi-VN').format(price) + ' VND';
+
   return (
     <motion.div
       className="flex flex-col items-center justify-between w-[300px] h-[450px] relative bg-[#F5F5F5] p-6 rounded-lg shadow-lg border border-gray-200"
@@ -24,7 +26,7 @@ const ServiceCard = ({ image, name, description, price, onChoose }) => {
 
       {/* Price */}
       <span className="text-[16px] font-bold leading-[19px] text-[#2B6A7C] mt-2">
-        {price} VNĐ
+        {formattedPrice}
       </span>
 
       {/* Choose Button with Small Pulsing Dot */}

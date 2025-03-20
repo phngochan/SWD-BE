@@ -11,7 +11,7 @@ const ConsultantSidebar = () => {
     const fullName = localStorage.getItem("fullName") || sessionStorage.getItem("fullName");
 
     const menuItems = [
-        { name: "To Do", path: "/view-booked" },
+        { name: "Lịch làm việc", path: "/view-booked" },
         { name: "Staff", path: "/staff-management" },
     ];
 
@@ -86,7 +86,7 @@ const ConsultantSidebar = () => {
                     },
                 }}
             >
-                Change Password
+                Đổi mật khẩu
             </Button>
 
             {/* Logout Button */}
@@ -105,7 +105,7 @@ const ConsultantSidebar = () => {
                     },
                 }}
             >
-                Logout
+                Đăng xuất
             </Button>
         </Drawer>
     );

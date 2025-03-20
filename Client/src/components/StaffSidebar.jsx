@@ -19,8 +19,8 @@ const StaffSidebar = () => {
     localStorage.getItem("fullName") || sessionStorage.getItem("fullName");
 
   const menuItems = [
-    { name: "Booking Request", path: "/view-booking" },
-    { name: "View Orders", path: "/view-order" },
+    { name: "Yêu cầu đặt lịch", path: "/view-booking" },
+    { name: "Xem đơn hàng", path: "/view-order" },
   ];
 
   const handleLogout = () => {
@@ -103,7 +103,7 @@ const StaffSidebar = () => {
           },
         }}
       >
-        Change Password
+        Đổi mật khẩu
       </Button>
 
       <Button
@@ -122,7 +122,7 @@ const StaffSidebar = () => {
           },
         }}
       >
-        Logout
+        Đăng xuất
       </Button>
     </Drawer>
   );
