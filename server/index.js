@@ -15,6 +15,7 @@ const PORT = process.env.PORT || 5000;
 const allowedOrigins = [
   `http://localhost:${PORT}`,
   "http://localhost:5173",
+  "https://swd-be-ghwo.onrender.com",
   process.env.FRONT_END_URL, // Lấy từ biến môi trường nếu có
 ];
 
