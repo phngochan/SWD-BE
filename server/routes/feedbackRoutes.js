@@ -5,7 +5,7 @@ const {
     getAverageServiceRating, 
     getAverageConsultantRating  
 } = require('../controllers/feedbackController');
-const { authenticate } = require('../middlewares/AuthMiddleware'); // Require authentication
+const { authenticate } = require('../middlewares/authMiddleware'); // Require authentication
 
 const router = express.Router();
 

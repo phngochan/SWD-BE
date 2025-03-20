@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const appointmentController = require("../controllers/appointmentController");
-const { authenticate, authorize } = require('../middlewares/AuthMiddleware');
+const { authenticate, authorize } = require('../middlewares/authMiddleware');
 
 // Tạo đơn hàng (Chỉ người dùng đã đăng nhập mới có thể đặt hàng)
 router.post("/", authenticate, appointmentController.createAppointment);

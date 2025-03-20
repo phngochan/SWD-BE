@@ -7,6 +7,10 @@ const tags = [
     description: 'Calendar management',
   },
   {
+    name: 'Questions',
+    description: 'Question management',
+  },
+  {
     name: 'Auth',
     description: 'Authentication and Authorization',
   },

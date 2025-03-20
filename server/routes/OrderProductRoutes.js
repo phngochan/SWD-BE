@@ -7,7 +7,7 @@ const {
   cancelOrder,
   getOrderById,
 } = require("../controllers/OrderProductController");
-const { authenticate, authorize } = require("../middlewares/AuthMiddleware");
+const { authenticate, authorize } = require("../middlewares/authMiddleware");
 
 const router = express.Router();
 
