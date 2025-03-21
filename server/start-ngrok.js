@@ -4,6 +4,7 @@ const axios = require('axios');
 
 (async function () {
     try {
+        console.log('Starting ngrok...');
         const url = await ngrok.connect(5000); // Ensure this matches your server port
         console.log(`Ngrok tunnel started: ${url}`);
 
@@ -25,5 +26,8 @@ const axios = require('axios');
         console.log('✅ Webhook URL updated successfully!', response.data);
     } catch (error) {
         console.error('❌ Failed to update webhook:', error.response?.data || error.message);
+        if (error.code === 'ECONNREFUSED') {
+            console.error('Please ensure ngrok is running and accessible.');
+        }
     }
 })();
