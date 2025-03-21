@@ -64,26 +64,26 @@ export default function Skinconsultation() {
             : "Customer";
     };
 
-    const handleBookingNow = async (consultantId) => {
-        localStorage.setItem("consultantId", consultantId);
-        sessionStorage.setItem("consultantId", consultantId);
-        localStorage.setItem(
-            "serviceUrl",
-            `/services/${id}/chon-chuyen-vien/${consultantId}/lich-hen`
-        );
-        sessionStorage.setItem(
-            "serviceUrl",
-            `/services/${id}/chon-chuyen-vien/${consultantId}/lich-hen`
-        );
-        navigate(`/services/${id}/chon-chuyen-vien/${consultantId}/lich-hen`);
-    };
+    // const handleBookingNow = async (consultantId) => {
+    //     localStorage.setItem("consultantId", consultantId);
+    //     sessionStorage.setItem("consultantId", consultantId);
+    //     localStorage.setItem(
+    //         "serviceUrl",
+    //         `/services/${id}/chon-chuyen-vien/${consultantId}/lich-hen`
+    //     );
+    //     sessionStorage.setItem(
+    //         "serviceUrl",
+    //         `/services/${id}/chon-chuyen-vien/${consultantId}/lich-hen`
+    //     );
+    //     navigate(`/services/${id}/chon-chuyen-vien/${consultantId}/lich-hen`);
+    // };
 
     const handleViewMore = (index) => {
         setVisibleNoteIndex(visibleNoteIndex === index ? null : index);
     };
 
     return (
-        <div className="main-container w-full min-h-screen bg-[#F5F5F5] font-['Lato']">
+        <div className="main-container w-full min-h-screen bg-[#F5F5F5]">
             <Navbar cart={cart} setCart={setCart} /> {/* Pass setCart to Navbar */}
             {/* Services Hero Section */}
             <div className="h-[500px] w-full flex items-center justify-center text-white text-center"
