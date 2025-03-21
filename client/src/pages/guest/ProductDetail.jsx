@@ -8,20 +8,55 @@ export default function ProductDetail() {
     const [cart, setCart] = useState([]);
     const navigate = useNavigate();
 
+    // Hàm merge trùng sản phẩm
+    const mergeDuplicateItems = (items) => {
+        const mergedItemsMap = {};
+        items.forEach(item => {
+            const key = item.productID?._id || item.productID; // fallback nếu chỉ có ID
+            if (mergedItemsMap[key]) {
+                mergedItemsMap[key].quantity += item.quantity;
+            } else {
+                mergedItemsMap[key] = { ...item };
+            }
+        });
+        return Object.values(mergedItemsMap);
+    };
+
     useEffect(() => {
         const fetchOrderItems = async () => {
             try {
+                const token = localStorage.getItem("authToken");
                 const orderID = localStorage.getItem("orderID");
-                if (orderID) {
+
+                if (token) {
+                    const customerID = decodeToken(token).customerID;
+                    
+                    // Gọi API merge orders trước
+                    const mergeRes = await axios.post(`/api/orders/merge`, { customerID });
+
+                    const mergedOrderID = mergeRes.data.orderID;
+                    localStorage.setItem('orderID', mergedOrderID);
+
+                    // Fetch lại các order items sau khi merge
+                    const response = await axios.get(`/api/order-items/${mergedOrderID}`);
+                    let items = response.data;
+
+                    // Merge sản phẩm trùng lặp
+                    const mergedItems = mergeDuplicateItems(items);
+                    setCart(mergedItems);
+
+                } else if (orderID) {
                     const response = await axios.get(`/api/order-items/${orderID}`);
-                    console.log("API Response:", response.data);
-                    setCart(response.data);
+                    const mergedItems = mergeDuplicateItems(response.data);
+                    setCart(mergedItems);
                 } else {
                     const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
-                    setCart(storedCart);
+                    const mergedItems = mergeDuplicateItems(storedCart);
+                    setCart(mergedItems);
                 }
+
             } catch (error) {
-                console.error("Failed to fetch order items:", error);
+                console.error("Failed to fetch or merge order items:", error);
             }
         };
 
@@ -58,12 +93,12 @@ export default function ProductDetail() {
     };
 
     const handleCheckout = () => {
-        // Handle checkout logic here
         navigate("/products");
     };
 
     const totalQuantity = cart.reduce((total, product) => total + product.quantity, 0);
     const totalPrice = cart.reduce((total, product) => total + (product.productID?.price || 0) * product.quantity, 0);
+
 
     return (
         <div className="bg-[#F5F5F5] min-h-screen">

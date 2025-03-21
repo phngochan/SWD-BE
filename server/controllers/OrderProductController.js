@@ -151,3 +151,56 @@ exports.getCartByCustomerId = async (req, res) => {
   }
 };
 
+exports.mergeOrdersByCustomer = async (req, res) => {
+  try {
+    const { customerID } = req.body;
+
+    // Lấy tất cả các đơn hàng chưa thanh toán (hoặc status bạn muốn)
+    const orders = await Order.find({
+      customerID: customerID,
+      status: 'pending'
+    }).populate('orderItems.productID');
+
+    if (!orders || orders.length === 0) {
+      return res.status(404).json({ message: 'Không có đơn hàng nào để gộp.' });
+    }
+
+    // Gộp các orderItems (nếu trùng sản phẩm thì cộng dồn số lượng)
+    const mergedItemsMap = {};
+
+    orders.forEach(order => {
+      order.orderItems.forEach(item => {
+        const productID = item.productID._id.toString();
+        if (mergedItemsMap[productID]) {
+          mergedItemsMap[productID].quantity += item.quantity;
+        } else {
+          mergedItemsMap[productID] = {
+            productID: item.productID._id,
+            quantity: item.quantity
+          };
+        }
+      });
+    });
+
+    const mergedItems = Object.values(mergedItemsMap);
+
+    // Tạo đơn hàng mới đã gộp
+    const newOrder = await Order.create({
+      customerID: customerID,
+      orderItems: mergedItems,
+      status: 'pending', // hoặc trạng thái bạn muốn
+    });
+
+    // Cập nhật đơn hàng cũ về status "merged" (hoặc có thể xóa luôn)
+    await Order.updateMany(
+      { _id: { $in: orders.map(order => order._id) } },
+      { $set: { status: 'merged' } }
+    );
+
+    return res.status(201).json({ message: 'Gộp đơn hàng thành công', newOrder });
+  } catch (error) {
+    console.error('Error merging orders:', error);
+    res.status(500).json({ message: 'Lỗi khi gộp đơn hàng', error });
+  }
+};
+
