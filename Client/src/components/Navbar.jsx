@@ -46,6 +46,22 @@ const Navbar = ({ cart, setCart }) => {
         }
     }, [cart]);
 
+    useEffect(() => {
+        const fetchCart = async () => {
+            try {
+                const response = await axios.get("/api/orders/cart");
+                setCart(response.data.items);
+            } catch (error) {
+                console.error("Failed to fetch cart items:", error.response?.data || error.message);
+                setCart([]); // Clear cart if fetching fails
+            }
+        };
+
+        if (token) {
+            fetchCart();
+        }
+    }, [token]);
+
     const isLoginPage = ["/dang-nhap", "/dang-ky", "/customer-profile", "/forgot-password"].includes(location.pathname);
 
     const handleLogout = () => {
@@ -57,6 +73,7 @@ const Navbar = ({ cart, setCart }) => {
                 localStorage.removeItem("fullName");
                 localStorage.removeItem("userId");
                 localStorage.removeItem("orderID"); // Clear orderID on logout
+                localStorage.removeItem("cart"); // Clear cart on logout
                 sessionStorage.removeItem("authToken");
                 sessionStorage.removeItem("roleName");
                 sessionStorage.removeItem("fullName");

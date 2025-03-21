@@ -36,9 +36,23 @@ export default function Product() {
   }, []);
 
   useEffect(() => {
-    const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
-    setCart(storedCart);
-  }, []);
+    const fetchCart = async () => {
+      try {
+        const response = await axios.get("/api/orders/cart");
+        setCart(response.data.items);
+      } catch (error) {
+        console.error("Failed to fetch cart items:", error.response?.data || error.message);
+        setCart([]); // Clear cart if fetching fails
+      }
+    };
+
+    if (token) {
+      fetchCart();
+    } else {
+      const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
+      setCart(storedCart);
+    }
+  }, [token]);
 
   // Function to add product to cart
   const addToCart = async (product) => {
@@ -66,19 +80,31 @@ export default function Product() {
         orderID = orderResponse.data.order._id;
         localStorage.setItem("orderID", orderID);
       } else {
-        const orderResponse = await axios.get(`/api/orders/${orderID}`);
-        if (orderResponse.data.customerID !== userId) {
-          const newOrderResponse = await axios.post("/api/orders", {
-            items: [{ productID: selectedProduct._id, quantity }],
-          });
-          orderID = newOrderResponse.data.order._id;
-          localStorage.setItem("orderID", orderID);
-        } else {
-          await axios.post("/api/order-items", {
-            orderID,
-            productID: selectedProduct._id,
-            quantity,
-          });
+        try {
+          const orderResponse = await axios.get(`/api/orders/${orderID}`);
+          if (orderResponse.data.customerID !== userId) {
+            const newOrderResponse = await axios.post("/api/orders", {
+              items: [{ productID: selectedProduct._id, quantity }],
+            });
+            orderID = newOrderResponse.data.order._id;
+            localStorage.setItem("orderID", orderID);
+          } else {
+            await axios.post("/api/order-items", {
+              orderID,
+              productID: selectedProduct._id,
+              quantity,
+            });
+          }
+        } catch (error) {
+          if (error.response && error.response.status === 404) {
+            const newOrderResponse = await axios.post("/api/orders", {
+              items: [{ productID: selectedProduct._id, quantity }],
+            });
+            orderID = newOrderResponse.data.order._id;
+            localStorage.setItem("orderID", orderID);
+          } else {
+            throw error;
+          }
         }
       }
     } catch (error) {
@@ -96,7 +122,7 @@ export default function Product() {
 
   const handleCheckout = async () => {
     try {
-      const response = await axios.post("/api/orders", { items: cart });
+      const response = await axios.post("/api/orders/checkout", { items: cart });
       localStorage.removeItem("cart");
       setCart([]);
       navigate("/order-success", { state: { orderId: response.data.order._id } });
@@ -111,7 +137,12 @@ export default function Product() {
       setCart(response.data.items);
       navigate("/product-detail");
     } catch (error) {
-      console.error("Failed to fetch cart items:", error);
+      console.error("Failed to fetch cart items:", error.response?.data || error.message);
+      if (error.response && error.response.status === 500) {
+        alert("Internal server error. Please try again later.");
+      } else {
+        alert("Failed to fetch cart items. Please try again later.");
+      }
     }
   };
 
