@@ -175,10 +175,10 @@ const ViewBookingHistory = () => {
         setSelectedConsultant(null);
     };
 
-    const handleFeedbackClick = (bookingRequestId) => {
+    const handleFeedbackClick = (bookingId) => {
         setFeedbackData((prev) => ({
             ...prev,
-            bookingRequestId: bookingRequestId,
+            bookingId: bookingId,
         }));
         setShowFeedbackModal(true);
     };
