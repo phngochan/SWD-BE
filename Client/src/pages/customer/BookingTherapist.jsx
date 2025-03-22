@@ -8,10 +8,12 @@ export default function BookingTherapist() {
   const navigate = useNavigate();
   const { id } = useParams();
   const [visibleNoteIndex, setVisibleNoteIndex] = useState(null);
+  const [feedbacks, setFeedbacks] = useState([]);
   const [consultants, setConsultants] = useState([]);
 
   useEffect(() => {
     fetchConsultants();
+    fetchFeedbacks();
   }, []);
 
   const fetchConsultants = async () => {
@@ -28,6 +30,32 @@ export default function BookingTherapist() {
       console.error("Failed to fetch consultants:", err);
     }
   };
+
+  const fetchFeedbacks = async () => {
+    try {
+      const res = await axios.get("/api/feedbacks");
+      setFeedbacks(res.data);
+    } catch (err) {
+      console.error("Failed to fetch feedbacks:", err);
+    }
+  };
+
+  const getFeedbackForConsultant = (consultantId) => {
+    return feedbacks.filter(feedback => feedback.consultantId === consultantId);
+  };
+
+  const getAverageRating = (consultantId) => {
+    const feedbacksForConsultant = getFeedbackForConsultant(consultantId);
+    if (feedbacksForConsultant.length === 0) return null;
+    const totalRating = feedbacksForConsultant.reduce((sum, feedback) => sum + feedback.consultantRating, 0);
+    return (totalRating / feedbacksForConsultant.length).toFixed(1);
+  };
+  const getCustomerName = (bookingRequestId) => {
+    const feedback = feedbacks.find(feedback => feedback.bookingRequestId === bookingRequestId);
+    return feedback && feedback.bookingRequestId && feedback.bookingRequestId.customerId
+        ? feedback.bookingRequestId.customerId.name
+        : "Customer";
+};
 
   const handleBookingNow = async (consultantId) => {
     localStorage.setItem("consultantId", consultantId);
@@ -103,9 +131,28 @@ export default function BookingTherapist() {
 
                 {/* Additional Notes */}
                 {visibleNoteIndex === index && (
-                  <p className="text-gray-600 mt-2">
-                    No additional notes available.
-                  </p>
+                  <div className="text-gray-600 mt-2">
+                    {getFeedbackForConsultant(consultant._id).length === 0 ? (
+                      <div>
+                        <h3 className="text-xl font-semibold">Đánh giá của khách hàng</h3>
+                        <h3><strong>Điểm trung bình: </strong>Không có điểm đánh giá nào về chuyên viên này.</h3>
+                        <h3><strong>Đánh giá: </strong>Không có đánh giá nào về chuyên viên này.</h3>
+                      </div>
+                    ) : (
+                      <div className="mt-4">
+                        <h3 className="text-xl font-semibold">Đánh giá của khách hàng</h3>
+                        <p><strong>Điểm trung bình:</strong> {getAverageRating(consultant._id)}⭐</p>
+                        {getFeedbackForConsultant(consultant._id).slice(0, 3).map(feedback => (
+                          <div key={feedback._id} className="mt-2">
+                            <p><strong>{getCustomerName(feedback.bookingRequestId)}:</strong> {feedback.consultantComment}</p>
+                          </div>
+                        ))}
+                        {getFeedbackForConsultant(consultant._id).length > 3 && (
+                          <p className="mt-2 text-blue-500">View more comments...</p>
+                        )}
+                      </div>
+                    )}
+                  </div>
                 )}
 
                 {/* Buttons */}
