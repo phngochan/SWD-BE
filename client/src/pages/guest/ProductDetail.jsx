@@ -6,7 +6,6 @@ import Footer from "../../components/Footer";
 
 export default function ProductDetail() {
     const [cart, setCart] = useState([]);
-    const [selectedProducts, setSelectedProducts] = useState([]);
     const [showCheckoutModal, setShowCheckoutModal] = useState(false);
     const [paymentMethod, setPaymentMethod] = useState("cash"); // Default payment method
     const navigate = useNavigate();
@@ -59,14 +58,6 @@ export default function ProductDetail() {
         }
     };
 
-    const handleProductSelect = (productId) => {
-        setSelectedProducts((prevSelected) =>
-            prevSelected.includes(productId)
-                ? prevSelected.filter((id) => id !== productId)
-                : [...prevSelected, productId]
-        );
-    };
-
     const handleCheckout = () => {
         setShowCheckoutModal(true);
     };
@@ -80,15 +71,9 @@ export default function ProductDetail() {
         setShowCheckoutModal(false);
     };
 
-    const totalQuantity = selectedProducts.reduce((total, productId) => {
-        const product = cart.find((item) => item._id === productId);
-        return total + (product ? product.quantity : 0);
-    }, 0);
+    const totalQuantity = cart.reduce((total, product) => total + product.quantity, 0);
 
-    const totalPrice = selectedProducts.reduce((total, productId) => {
-        const product = cart.find((item) => item._id === productId);
-        return total + (product ? (product.productID?.price || 0) * product.quantity : 0);
-    }, 0);
+    const totalPrice = cart.reduce((total, product) => total + (product.productID?.price || 0) * product.quantity, 0);
 
     return (
         <div className="bg-[#F5F5F5] min-h-screen">
@@ -103,7 +88,6 @@ export default function ProductDetail() {
                         <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-md overflow-hidden">
                             <thead>
                                 <tr>
-                                    <th className="px-4 py-2 border-b text-center">Chọn</th>
                                     <th className="px-4 py-2 border-b text-center">Hình ảnh</th>
                                     <th className="px-4 py-2 border-b text-center">Tên sản phẩm</th>
                                     <th className="px-4 py-2 border-b">Mô tả</th>
@@ -116,13 +100,6 @@ export default function ProductDetail() {
                             <tbody>
                                 {cart.map((product, index) => (
                                     <tr key={index} className="hover:bg-gray-100 transition duration-300">
-                                        <td className="px-4 py-2 border-b text-center">
-                                            <input
-                                                type="checkbox"
-                                                checked={selectedProducts.includes(product._id)}
-                                                onChange={() => handleProductSelect(product._id)}
-                                            />
-                                        </td>
                                         <td className="px-4 py-2 border-b text-center">
                                             <img
                                                 src={product.productID?.imgURL || "/images/default-product.png"}
@@ -170,7 +147,7 @@ export default function ProductDetail() {
                             onClick={handleCheckout}
                             className="px-6 py-3 bg-[#FF5722] text-white rounded-full hover:bg-[#E64A19] transition duration-300"
                         >
-                            Mua ngay
+                            Thanh toán
                         </button>
                     </div>
                 )}
@@ -192,24 +169,21 @@ export default function ProductDetail() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {selectedProducts.map((productId) => {
-                                    const product = cart.find((item) => item._id === productId);
-                                    return (
-                                        <tr key={productId} className="hover:bg-gray-100 transition duration-300">
-                                            <td className="px-4 py-2 border-b text-center">
-                                                <img
-                                                    src={product.productID?.imgURL || "/images/default-product.png"}
-                                                    className="w-24 h-24 object-cover mx-auto"
-                                                />
-                                            </td>
-                                            <td className="px-4 py-2 border-b text-center">{product.productID?.productName}</td>
-                                            <td className="px-4 py-2 border-b text-center">{product.quantity}</td>
-                                            <td className="px-4 py-2 border-b text-lg font-bold text-[#2B6A7C] text-center">
-                                                {(product.productID?.price || 0).toLocaleString()} VND
-                                            </td>
-                                        </tr>
-                                    );
-                                })}
+                                {cart.map((product) => (
+                                    <tr key={product._id} className="hover:bg-gray-100 transition duration-300">
+                                        <td className="px-4 py-2 border-b text-center">
+                                            <img
+                                                src={product.productID?.imgURL || "/images/default-product.png"}
+                                                className="w-24 h-24 object-cover mx-auto"
+                                            />
+                                        </td>
+                                        <td className="px-4 py-2 border-b text-center">{product.productID?.productName}</td>
+                                        <td className="px-4 py-2 border-b text-center">{product.quantity}</td>
+                                        <td className="px-4 py-2 border-b text-lg font-bold text-[#2B6A7C] text-center">
+                                            {(product.productID?.price || 0).toLocaleString()} VND
+                                        </td>
+                                    </tr>
+                                ))}
                             </tbody>
                         </table>
                         <div className="text-center mt-4">
