@@ -62,13 +62,13 @@ export default function BookingTherapist() {
     sessionStorage.setItem("consultantId", consultantId);
     localStorage.setItem(
       "serviceUrl",
-      `/services/${id}/chon-chuyen-vien/${consultantId}/lich-hen`
+      `/dịch vụ/${id}/chon-chuyen-vien/${consultantId}/lich-hen`
     );
     sessionStorage.setItem(
       "serviceUrl",
-      `/services/${id}/chon-chuyen-vien/${consultantId}/lich-hen`
+      `/dịch vụ/${id}/chon-chuyen-vien/${consultantId}/lich-hen`
     );
-    navigate(`/services/${id}/chon-chuyen-vien/${consultantId}/lich-hen`);
+    navigate(`/dịch vụ/${id}/chon-chuyen-vien/${consultantId}/lich-hen`);
   };
 
   const handleViewMore = (index) => {
@@ -183,9 +183,9 @@ export default function BookingTherapist() {
               localStorage.setItem("consultantId", null);
               localStorage.setItem(
                 "serviceUrl",
-                `/services/${id}/chon-chuyen-vien/null/lich-hen`
+                `/dịch vụ/${id}/chon-chuyen-vien/null/lich-hen`
               );
-              navigate(`/services/${id}/chon-chuyen-vien/null/lich-hen`);
+              navigate(`/dịch vụ/${id}/chon-chuyen-vien/null/lich-hen`);
             }}
           >
             <span className="text-lg font-bold">

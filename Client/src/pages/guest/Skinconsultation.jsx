@@ -52,7 +52,6 @@ export default function Skinconsultation() {
 
     const getAverageRating = (consultantId) => {
         const feedbacksForConsultant = getFeedbackForConsultant(consultantId);
-        if (feedbacksForConsultant.length === 0) return null;
         const totalRating = feedbacksForConsultant.reduce((sum, feedback) => sum + feedback.consultantRating, 0);
         return (totalRating / feedbacksForConsultant.length).toFixed(1);
     };
@@ -64,26 +63,26 @@ export default function Skinconsultation() {
             : "Customer";
     };
 
-    // const handleBookingNow = async (consultantId) => {
-    //     localStorage.setItem("consultantId", consultantId);
-    //     sessionStorage.setItem("consultantId", consultantId);
-    //     localStorage.setItem(
-    //         "serviceUrl",
-    //         `/services/${id}/chon-chuyen-vien/${consultantId}/lich-hen`
-    //     );
-    //     sessionStorage.setItem(
-    //         "serviceUrl",
-    //         `/services/${id}/chon-chuyen-vien/${consultantId}/lich-hen`
-    //     );
-    //     navigate(`/services/${id}/chon-chuyen-vien/${consultantId}/lich-hen`);
-    // };
+    const handleBookingNow = async (consultantId) => {
+        localStorage.setItem("consultantId", consultantId);
+        sessionStorage.setItem("consultantId", consultantId);
+        localStorage.setItem(
+            "serviceUrl",
+            `/services/${id}/chon-chuyen-vien/${consultantId}/lich-hen`
+        );
+        sessionStorage.setItem(
+            "serviceUrl",
+            `/services/${id}/chon-chuyen-vien/${consultantId}/lich-hen`
+        );
+        navigate(`/services/${id}/chon-chuyen-vien/${consultantId}/lich-hen`);
+    };
 
     const handleViewMore = (index) => {
         setVisibleNoteIndex(visibleNoteIndex === index ? null : index);
     };
 
     return (
-        <div className="main-container w-full min-h-screen bg-[#F5F5F5]">
+        <div className="main-container w-full min-h-screen bg-[#F5F5F5] font-['Lato']">
             <Navbar cart={cart} setCart={setCart} /> {/* Pass setCart to Navbar */}
             {/* Services Hero Section */}
             <div className="h-[500px] w-full flex items-center justify-center text-white text-center"
@@ -131,26 +130,19 @@ export default function Skinconsultation() {
                                 {/* Additional Notes */}
                                 {visibleNoteIndex === index && (
                                     <div className="text-gray-600 mt-2">
-                                        {getFeedbackForConsultant(consultant._id).length === 0 ? (
-                                            <div>
-                                                <h3 className="text-xl font-semibold">Đánh giá của khách hàng</h3>
-                                                <h3><strong>Điểm trung bình: </strong>Không có điểm đánh giá nào về chuyên viên này.</h3>
-                                                <h3><strong>Đánh giá: </strong>Không có đánh giá nào về chuyên viên này.</h3>
-                                            </div>
-                                        ) : (
-                                            <div className="mt-4">
-                                                <h3 className="text-xl font-semibold">Đánh giá của khách hàng</h3>
-                                                <p><strong>Điểm trung bình:</strong> {getAverageRating(consultant._id)}⭐</p>
-                                                {getFeedbackForConsultant(consultant._id).slice(0, 3).map(feedback => (
-                                                    <div key={feedback._id} className="mt-2">
-                                                        <p><strong>{getCustomerName(feedback.bookingRequestId)}:</strong> {feedback.consultantComment}</p>
-                                                    </div>
-                                                ))}
-                                                {getFeedbackForConsultant(consultant._id).length > 3 && (
-                                                    <p className="mt-2 text-blue-500">View more comments...</p>
-                                                )}
-                                            </div>
-                                        )}
+                                        <p>No additional notes available.</p>
+                                        <div className="mt-4">
+                                            <h3 className="text-xl font-semibold">Customer Feedback</h3>
+                                            <p><strong>Average Rating:</strong> {getAverageRating(consultant._id)}⭐</p>
+                                            {getFeedbackForConsultant(consultant._id).slice(0, 3).map(feedback => (
+                                                <div key={feedback._id} className="mt-2">
+                                                    <p><strong>{getCustomerName(feedback.bookingRequestId)}:</strong> {feedback.consultantComment}</p>
+                                                </div>
+                                            ))}
+                                            {getFeedbackForConsultant(consultant._id).length > 3 && (
+                                                <p className="mt-2 text-blue-500">View more comments...</p>
+                                            )}
+                                        </div>
                                     </div>
                                 )}
 

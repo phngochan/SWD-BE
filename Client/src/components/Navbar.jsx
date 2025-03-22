@@ -108,7 +108,7 @@ const Navbar = ({ cart, setCart }) => {
             <nav
                 className={`absolute top-[80px] left-0 w-full bg-[#E5F5F1] flex flex-col items-center pacifico-regular gap-4 p-6 shadow-lg rounded-md transition-transform duration-300 md:static md:w-auto md:p-0 md:flex-row md:shadow-none md:gap-20 ${isMobileMenuOpen ? "flex" : "hidden md:flex"}`}
             >
-                {["About", "Services", "Products", "SkincareConsultation", "Blog", "Quiz"].map((item) => (
+                {["Chúng tôi", "Dịch vụ", "Sản phẩm", "Chuyên viên tư vấn", "Blog", "Kiểm tra kiểu da"].map((item) => (
                     <NavLink
                         key={item}
                         to={`/${item.toLowerCase()}`}

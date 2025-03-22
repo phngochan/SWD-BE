@@ -76,11 +76,11 @@ function AppRoute() {
           <Route path="/ve-chung-toi" element={<About />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:id" element={<BlogDetail />} />
-          <Route path="/services" element={<Services />} />
-          <Route path="/services/:id" element={<ServiceDetails />} />
-          <Route path="/skincareconsultation" element={<SkincareConsultation />} />
-          <Route path="/products" element={<Product />} />
-          <Route path="/quiz" element={<Quiz />} />
+          <Route path="/dịch vụ" element={<Services />} />
+          <Route path="/dịch vụ/:id" element={<ServiceDetails />} />
+          <Route path="/chuyên viên tư vấn" element={<SkincareConsultation />} />
+          <Route path="/sản phẩm" element={<Product />} />
+          <Route path="/kiểm tra kiểu da" element={<Quiz />} />
           <Route path="/product-detail" element={<ProductDetail />} />
         </Route>
 
@@ -89,8 +89,8 @@ function AppRoute() {
           {/* <Route path="/booking" element={<BookingPageCustomer />} /> */}
           <Route path="/lich-hen" element={<MyCalendar />} />
           <Route path="/chon-chuyen-vien" element={<BookingTherapist />} />
-          <Route path="/services/:id/chon-chuyen-vien" element={<BookingTherapist />} />
-          <Route path="/services/:id/chon-chuyen-vien/:idConsultant/lich-hen" element={<MyCalendar />} />
+          <Route path="/dịch vụ/:id/chon-chuyen-vien" element={<BookingTherapist />} />
+          <Route path="/dịch vụ/:id/chon-chuyen-vien/:idConsultant/lich-hen" element={<MyCalendar />} />
           <Route path="/thong-tin-ca-nhan" element={<CustomerProfile />} />
           <Route path="/lich-su-dat-lich" element={<ViewBookingHistory />} />
         </Route>

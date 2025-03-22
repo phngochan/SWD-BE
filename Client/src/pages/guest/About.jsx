@@ -27,7 +27,7 @@ export default function About() {
                     backgroundAttachment: "fixed"  // Cố định ảnh khi cuộn trang
                 }}
             >
-                <h1 className="text-6xl font-semibold bg-opacity-50 px-6 py-4 rounded-lg">Our Story</h1>
+                <h1 className="text-6xl font-semibold bg-opacity-50 px-6 py-4 rounded-lg">Câu chuyện của chúng tôi</h1>
             </div>
 
             {/* Body Section */}
@@ -78,7 +78,7 @@ export default function About() {
                         <ul className="mt-2 space-y-1">
                             <li><a href="#" className="text-[#646464] hover:text-[#000000]">Contact Us</a></li>
                             <li><a href="#" className="text-[#646464] hover:text-[#000000]">FAQ</a></li>
-                            <li><a href="#" className="text-[#646464] hover:text-[#000000]">Shipping & Returns</a></li>
+                            {/* <li><a href="#" className="text-[#646464] hover:text-[#000000]">Shipping & Returns</a></li> */}
                         </ul>
                     </div>
                     <div>

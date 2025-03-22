@@ -64,7 +64,7 @@ export default function ServiceDetails() {
         sessionStorage.setItem("serviceId", id);
         localStorage.setItem("serviceUrl", `/services/${id}/chon-chuyen-vien`);
         sessionStorage.setItem("serviceUrl", `/services/${id}/chon-chuyen-vien`);
-        navigate(`/services/${id}/chon-chuyen-vien`);
+        navigate(`/dịch vụ/${id}/chon-chuyen-vien`);
         console.log("Navigating to:", `/services/${id}/chon-chuyen-vien`);
     };
 

@@ -49,20 +49,22 @@ const Quiz = () => {
   };
 
   const handleSubmitQuiz = async () => {
-    const token = localStorage.getItem("authToken");
+    // const token = localStorage.getItem("authToken");
 
-    if (!token) {
-      setShowLoginModal(true);
-      return;
-    }
+    // if (!token) {
+    //   setShowLoginModal(true);
+    //   return;
+    // }
 
     console.log("Submitting answers:", answers); // Debug: Kiểm tra xem answers có dữ liệu không
 
     try {
       const response = await axios.post(
         "/api/quiz-results/save",
-        { answers },
-        { headers: { Authorization: `Bearer ${token}` } }
+        { answers }
+
+        // { answers },
+        // { headers: { Authorization: `Bearer ${token}` } }
       );
 
       console.log("Response from server:", response.data); // Debug: Kiểm tra phản hồi từ server
@@ -193,7 +195,7 @@ const Quiz = () => {
       )}
 
       {/* Custom Login Modal */}
-      {showLoginModal && (
+      {/* {showLoginModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
           <div className="bg-white p-6 rounded-xl shadow-lg max-w-sm w-full text-center">
             <h3 className="text-xl font-bold text-gray-800 mb-4">
@@ -216,7 +218,7 @@ const Quiz = () => {
             </div>
           </div>
         </div>
-      )}
+      )} */}
       {/* Booking Now Button */}
       <div className="fixed bottom-4 right-4">
         {/* Ping effect */}
