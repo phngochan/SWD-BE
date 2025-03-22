@@ -9,7 +9,7 @@ const {
   getCartByCustomerId, // Import the new function
   mergeOrdersByCustomer,
 
-} = require("../controllers/OrderProductController");
+} = require("../controllers/orderProductController");
 const { authenticate, authorize } = require("../middlewares/authMiddleware");
 
 const router = express.Router();
@@ -21,6 +21,6 @@ router.get("/my-orders", authenticate, authorize(["Customer"]), getCustomerOrder
 router.put("/:id/cancel", authenticate, authorize(["Customer"]), cancelOrder);
 router.get("/:id", authenticate, getOrderById);
 router.get("/cart", authenticate, authorize(["Customer"]), getCartByCustomerId); // Add the new route
-router.post('/orders/merge', orderController.mergeOrdersByCustomer);
+router.post('/orders/merge', mergeOrdersByCustomer);
 
 module.exports = router;
