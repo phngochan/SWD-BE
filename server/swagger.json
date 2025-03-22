@@ -114,16 +114,16 @@
         "properties": {
           "title": {
             "type": "string",
-            "description": "The title of the calendar event"
+            "description": "The title of the calendar"
           },
           "date": {
             "type": "string",
             "format": "date",
-            "description": "The date of the calendar event"
+            "description": "The date of the calendar"
           },
           "time": {
             "type": "string",
-            "description": "The time of the calendar event"
+            "description": "The time of the calendar"
           }
         },
         "required": [
@@ -135,10 +135,6 @@
       "Question": {
         "type": "object",
         "properties": {
-          "_id": {
-            "type": "string",
-            "description": "The auto-generated id of the question"
-          },
           "questionText": {
             "type": "string",
             "description": "The text of the question"
