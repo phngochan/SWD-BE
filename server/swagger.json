@@ -1,0 +1,468 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Spa system",
+    "version": "1.0.0",
+    "description": "Skincare service system"
+  },
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "Authentication management"
+    },
+    {
+      "name": "Questions",
+      "description": "Question management"
+    },
+    {
+      "name": "Calendars",
+      "description": "Calendar management"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "Question": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "The auto-generated id of the question"
+          },
+          "questionText": {
+            "type": "string",
+            "description": "The text of the question"
+          },
+          "answerOptions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "answerText": {
+                  "type": "string",
+                  "description": "The text of the answer option"
+                },
+                "weight": {
+                  "type": "number",
+                  "description": "The weight of the answer option"
+                }
+              },
+              "required": [
+                "answerText",
+                "weight"
+              ]
+            },
+            "description": "The answer options for the question"
+          }
+        },
+        "required": [
+          "questionText",
+          "answerOptions"
+        ]
+      },
+      "User": {
+        "properties": {
+          "firstName": {
+            "type": "string",
+            "description": "The first name of the user"
+          },
+          "lastName": {
+            "type": "string",
+            "description": "The last name of the user"
+          },
+          "email": {
+            "type": "string",
+            "description": "The email of the user"
+          },
+          "password": {
+            "type": "string",
+            "description": "The password of the user"
+          },
+          "roleName": {
+            "type": "string",
+            "enum": ["Customer", "Staff", "Manager", "Consultant"],
+            "description": "The role of the user"
+          },
+          "roleId": {
+            "type": "string",
+            "description": "The role ID of the user"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "description": "The phone number of the user"
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The date when the user was created"
+          },
+          "updatedDate": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The date when the user was last updated"
+          },
+          "verified": {
+            "type": "boolean",
+            "description": "Whether the user is verified"
+          },
+          "verificationToken": {
+            "type": "string",
+            "description": "The verification token for the user"
+          },
+          "verificationTokenCreatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The date when the verification token was created"
+          },
+          "resetPasswordToken": {
+            "type": "string",
+            "description": "The reset password token for the user"
+          },
+          "resetPasswordExpires": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The date when the reset password token expires"
+          }
+        },
+        "required": [
+          "firstName",
+          "lastName",
+          "email",
+          "password",
+          "roleName"
+        ]
+      }
+    }
+  },
+  "paths": {
+    "/auth/register": {
+      "post": {
+        "summary": "Register a new user",
+        "tags": ["Auth"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User registered successfully"
+          },
+          "400": {
+            "description": "Email or phone number already in use"
+          },
+          "500": {
+            "description": "An error occurred during registration"
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "summary": "Login a user",
+        "tags": ["Auth"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "email",
+                  "password"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User logged in successfully"
+          },
+          "400": {
+            "description": "Invalid email or password"
+          },
+          "403": {
+            "description": "Please verify your email before logging in"
+          },
+          "500": {
+            "description": "Error logging in"
+          }
+        }
+      }
+    },
+    "/auth/verify": {
+      "get": {
+        "summary": "Verify email",
+        "tags": ["Auth"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Email verified successfully"
+          },
+          "400": {
+            "description": "No token provided or invalid token"
+          },
+          "500": {
+            "description": "Verification failed"
+          }
+        }
+      }
+    },
+    "/auth/forgot-password": {
+      "post": {
+        "summary": "Request password reset",
+        "tags": ["Auth"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "email"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password reset link sent to your email"
+          },
+          "404": {
+            "description": "Email has not been registered"
+          },
+          "500": {
+            "description": "Error requesting password reset"
+          }
+        }
+      }
+    },
+    "/auth/reset-password": {
+      "post": {
+        "summary": "Reset password",
+        "tags": ["Auth"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "newPassword": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "newPassword"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password reset successful"
+          },
+          "400": {
+            "description": "Invalid or expired token"
+          },
+          "500": {
+            "description": "Error resetting password"
+          }
+        }
+      }
+    },
+    "/auth/resend-verification-email": {
+      "post": {
+        "summary": "Resend verification email",
+        "tags": ["Auth"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "email"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Verification email resent successfully"
+          },
+          "404": {
+            "description": "Email not found"
+          },
+          "500": {
+            "description": "Error resending verification email"
+          }
+        }
+      }
+    },
+    "/questions": {
+      "get": {
+        "summary": "Get all questions",
+        "tags": ["Questions"],
+        "responses": {
+          "200": {
+            "description": "List of all questions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Question"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Add a new question",
+        "tags": ["Questions"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Question"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Question has been added successfully!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Question"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/questions/{id}": {
+      "put": {
+        "summary": "Update a question",
+        "tags": ["Questions"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The question ID"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Question"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Question has been updated successfully!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Question"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Question is not found"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a question",
+        "tags": ["Questions"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The question ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Question has been deleted successfully!"
+          },
+          "404": {
+            "description": "Question is not found"
+          }
+        }
+      }
+    }
+  }
+}

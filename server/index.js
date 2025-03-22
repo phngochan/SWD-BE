@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
-const swagger = require('./swagger');
+const setupSwagger = require('./swagger');
 
 dotenv.config();
 
@@ -14,8 +14,8 @@ const PORT = process.env.PORT || 5000;
 // ✅ Cấu hình CORS chuẩn
 const allowedOrigins = [
   `http://localhost:${PORT}`,
+  `${process.env.URL_BE_GLOBAL}`,
   "http://localhost:5173",
-  "https://swd-be-ghwo.onrender.com",
   process.env.FRONT_END_URL, // Lấy từ biến môi trường nếu có
 ];
 
@@ -45,7 +45,7 @@ const routes = require("./routes");
 app.use("/api", routes);
 
 // Swagger
-swagger(app, PORT);
+setupSwagger(app, PORT);
 
 // MongoDB Connection
 // ✅ Kết nối MongoDB
