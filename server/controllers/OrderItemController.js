@@ -95,6 +95,11 @@ exports.deleteOrderItem = async (req, res) => {
     }
 
     await orderItem.deleteOne();
+
+    // Remove the reference to the deleted product from the order
+    order.orderItems.pull(orderItem._id);
+    await order.save();
+
     res.status(200).json({ message: "Đã xóa sản phẩm khỏi đơn hàng" });
   } catch (error) {
     res.status(500).json({ error: "Xóa sản phẩm thất bại" });

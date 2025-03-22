@@ -6,57 +6,23 @@ import Footer from "../../components/Footer";
 
 export default function ProductDetail() {
     const [cart, setCart] = useState([]);
+    const [showCheckoutModal, setShowCheckoutModal] = useState(false);
+    const [paymentMethod, setPaymentMethod] = useState("cash"); // Default payment method
     const navigate = useNavigate();
-
-    // Hàm merge trùng sản phẩm
-    const mergeDuplicateItems = (items) => {
-        const mergedItemsMap = {};
-        items.forEach(item => {
-            const key = item.productID?._id || item.productID; // fallback nếu chỉ có ID
-            if (mergedItemsMap[key]) {
-                mergedItemsMap[key].quantity += item.quantity;
-            } else {
-                mergedItemsMap[key] = { ...item };
-            }
-        });
-        return Object.values(mergedItemsMap);
-    };
 
     useEffect(() => {
         const fetchOrderItems = async () => {
             try {
-                const token = localStorage.getItem("authToken");
                 const orderID = localStorage.getItem("orderID");
-
-                if (token) {
-                    const customerID = decodeToken(token).customerID;
-                    
-                    // Gọi API merge orders trước
-                    const mergeRes = await axios.post(`/api/orders/merge`, { customerID });
-
-                    const mergedOrderID = mergeRes.data.orderID;
-                    localStorage.setItem('orderID', mergedOrderID);
-
-                    // Fetch lại các order items sau khi merge
-                    const response = await axios.get(`/api/order-items/${mergedOrderID}`);
-                    let items = response.data;
-
-                    // Merge sản phẩm trùng lặp
-                    const mergedItems = mergeDuplicateItems(items);
-                    setCart(mergedItems);
-
-                } else if (orderID) {
+                if (orderID) {
                     const response = await axios.get(`/api/order-items/${orderID}`);
-                    const mergedItems = mergeDuplicateItems(response.data);
-                    setCart(mergedItems);
+                    setCart(response.data);
                 } else {
                     const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
-                    const mergedItems = mergeDuplicateItems(storedCart);
-                    setCart(mergedItems);
+                    setCart(storedCart);
                 }
-
             } catch (error) {
-                console.error("Failed to fetch or merge order items:", error);
+                console.error("Failed to fetch order items:", error);
             }
         };
 
@@ -93,12 +59,21 @@ export default function ProductDetail() {
     };
 
     const handleCheckout = () => {
-        navigate("/products");
+        setShowCheckoutModal(true);
+    };
+
+    const handleConfirmCheckout = () => {
+        // Handle checkout logic here
+        navigate("/checkout"); // Redirect to a placeholder checkout page
+    };
+
+    const handleCancelCheckout = () => {
+        setShowCheckoutModal(false);
     };
 
     const totalQuantity = cart.reduce((total, product) => total + product.quantity, 0);
-    const totalPrice = cart.reduce((total, product) => total + (product.productID?.price || 0) * product.quantity, 0);
 
+    const totalPrice = cart.reduce((total, product) => total + (product.productID?.price || 0) * product.quantity, 0);
 
     return (
         <div className="bg-[#F5F5F5] min-h-screen">
@@ -179,6 +154,82 @@ export default function ProductDetail() {
             </div>
 
             <Footer />
+
+            {showCheckoutModal && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+                    <div className="bg-white p-6 rounded-xl shadow-lg max-w-lg w-full text-center">
+                        <h3 className="text-xl font-bold text-gray-800 mb-4">Xác nhận thanh toán</h3>
+                        <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-md overflow-hidden">
+                            <thead>
+                                <tr>
+                                    <th className="px-4 py-2 border-b text-center">Hình ảnh</th>
+                                    <th className="px-4 py-2 border-b text-center">Tên sản phẩm</th>
+                                    <th className="px-4 py-2 border-b text-center">Số lượng</th>
+                                    <th className="px-4 py-2 border-b text-center">Giá</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {cart.map((product) => (
+                                    <tr key={product._id} className="hover:bg-gray-100 transition duration-300">
+                                        <td className="px-4 py-2 border-b text-center">
+                                            <img
+                                                src={product.productID?.imgURL || "/images/default-product.png"}
+                                                className="w-24 h-24 object-cover mx-auto"
+                                            />
+                                        </td>
+                                        <td className="px-4 py-2 border-b text-center">{product.productID?.productName}</td>
+                                        <td className="px-4 py-2 border-b text-center">{product.quantity}</td>
+                                        <td className="px-4 py-2 border-b text-lg font-bold text-[#2B6A7C] text-center">
+                                            {(product.productID?.price || 0).toLocaleString()} VND
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                        <div className="text-center mt-4">
+                            <p className="text-lg font-bold">Tổng số tiền: {totalPrice.toLocaleString()} VND</p>
+                        </div>
+                        <div className="flex justify-center gap-4 mt-4">
+                            <label className="flex items-center">
+                                <input
+                                    type="radio"
+                                    name="paymentMethod"
+                                    value="cash"
+                                    checked={paymentMethod === "cash"}
+                                    onChange={(e) => setPaymentMethod(e.target.value)}
+                                    className="mr-2"
+                                />
+                                Tiền mặt
+                            </label>
+                            <label className="flex items-center">
+                                <input
+                                    type="radio"
+                                    name="paymentMethod"
+                                    value="bank"
+                                    checked={paymentMethod === "bank"}
+                                    onChange={(e) => setPaymentMethod(e.target.value)}
+                                    className="mr-2"
+                                />
+                                Chuyển khoản
+                            </label>
+                        </div>
+                        <div className="flex justify-center gap-4 mt-4">
+                            <button
+                                className="py-2 px-6 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 transition"
+                                onClick={handleCancelCheckout}
+                            >
+                                Hủy
+                            </button>
+                            <button
+                                className="py-2 px-6 bg-[#FF5722] text-white rounded-lg hover:bg-[#E64A19] transition"
+                                onClick={handleConfirmCheckout}
+                            >
+                                Chọn
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

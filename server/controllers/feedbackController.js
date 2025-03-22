@@ -1,13 +1,14 @@
 const Feedback = require('../models/Feedback');
+const BookingRequest = require('../models/BookingRequest'); // Add this line
 
 exports.createFeedback = async (req, res) => {
   try {
-    const { consultantRating, consultantComment, serviceRating, serviceComment, bookingRequestId } = req.body;
+    const { consultantRating, consultantComment, serviceRating, serviceComment, bookingId } = req.body;
 
     console.log("Request Body:", req.body);
 
     // Kiểm tra booking request có tồn tại và hoàn thành chưa
-    const bookingRequest = await BookingRequest.findById(bookingRequestId)
+    const bookingRequest = await BookingRequest.findById(bookingId)
       .populate({ path: "serviceID", select: "_id" })  // Chỉnh đúng serviceID
       .populate({ path: "consultantID", select: "_id" });
 
@@ -28,7 +29,7 @@ exports.createFeedback = async (req, res) => {
     }
 
     const feedback = new Feedback({
-      bookingRequestId,
+      bookingRequestId: bookingId,
       serviceId,
       consultantId,
       serviceRating: serviceRating || null,
@@ -58,7 +59,9 @@ exports.getFeedbackByBooking = async (req, res) => {
 
 exports.getAllFeedback = async (req, res) => {
   try {
-    const feedbacks = await Feedback.find().populate("bookingRequestId", "customerId serviceId consultantId");
+    const { serviceId } = req.query;
+    const filter = serviceId ? { serviceId } : {};
+    const feedbacks = await Feedback.find(filter).populate("bookingRequestId", "customerId serviceId consultantId");
     res.status(200).json(feedbacks);
   } catch (error) {
     res.status(500).json({ error: error.message });

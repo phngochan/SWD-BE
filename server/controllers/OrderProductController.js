@@ -9,15 +9,20 @@ exports.createOrder = async (req, res) => {
       return res.status(400).json({ error: "Order must contain at least one item" });
     }
 
-    // Tạo đơn hàng chính
-    const newOrder = new OrderProduct({ customerID: req.user.id, status: "Pending" });
-    const savedOrder = await newOrder.save();
+    // Kiểm tra xem có đơn hàng nào đang ở trạng thái Pending không
+    let order = await OrderProduct.findOne({ customerID: req.user.id, status: "Pending" });
+
+    if (!order) {
+      // Nếu không có, tạo đơn hàng mới
+      order = new OrderProduct({ customerID: req.user.id, status: "Pending" });
+      await order.save();
+    }
 
     // Tạo các order item
     const orderItems = await Promise.all(
       items.map(async (item) => {
         const orderItem = new OrderItem({
-          orderID: savedOrder._id,
+          orderID: order._id,
           productID: item.productID,
           quantity: item.quantity
         });
@@ -25,7 +30,11 @@ exports.createOrder = async (req, res) => {
       })
     );
 
-    res.status(201).json({ order: savedOrder, items: orderItems });
+    // Cập nhật orderItems trong OrderProduct
+    order.orderItems.push(...orderItems.map(item => item._id));
+    await order.save();
+
+    res.status(201).json({ order, items: orderItems });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to create order" });
@@ -151,56 +160,29 @@ exports.getCartByCustomerId = async (req, res) => {
   }
 };
 
-exports.mergeOrdersByCustomer = async (req, res) => {
+exports.checkoutOrder = async (req, res) => {
   try {
-    const { customerID } = req.body;
+    const customerID = req.user.id;
+    const order = await OrderProduct.findOne({ customerID, status: "Pending" });
 
-    // Lấy tất cả các đơn hàng chưa thanh toán (hoặc status bạn muốn)
-    const orders = await Order.find({
-      customerID: customerID,
-      status: 'pending'
-    }).populate('orderItems.productID');
-
-    if (!orders || orders.length === 0) {
-      return res.status(404).json({ message: 'Không có đơn hàng nào để gộp.' });
+    if (!order) {
+      return res.status(404).json({ message: "Cart not found" });
     }
 
-    // Gộp các orderItems (nếu trùng sản phẩm thì cộng dồn số lượng)
-    const mergedItemsMap = {};
+    // Validate the cart and remove references to deleted products
+    const validItems = await OrderItem.find({ orderID: order._id }).populate("productID");
+    const validItemIds = validItems.map(item => item._id.toString());
 
-    orders.forEach(order => {
-      order.orderItems.forEach(item => {
-        const productID = item.productID._id.toString();
-        if (mergedItemsMap[productID]) {
-          mergedItemsMap[productID].quantity += item.quantity;
-        } else {
-          mergedItemsMap[productID] = {
-            productID: item.productID._id,
-            quantity: item.quantity
-          };
-        }
-      });
-    });
+    order.orderItems = order.orderItems.filter(itemId => validItemIds.includes(itemId.toString()));
+    await order.save();
 
-    const mergedItems = Object.values(mergedItemsMap);
+    order.status = "Confirmed";
+    await order.save();
 
-    // Tạo đơn hàng mới đã gộp
-    const newOrder = await Order.create({
-      customerID: customerID,
-      orderItems: mergedItems,
-      status: 'pending', // hoặc trạng thái bạn muốn
-    });
-
-    // Cập nhật đơn hàng cũ về status "merged" (hoặc có thể xóa luôn)
-    await Order.updateMany(
-      { _id: { $in: orders.map(order => order._id) } },
-      { $set: { status: 'merged' } }
-    );
-
-    return res.status(201).json({ message: 'Gộp đơn hàng thành công', newOrder });
+    res.status(200).json({ message: "Order confirmed successfully", order });
   } catch (error) {
-    console.error('Error merging orders:', error);
-    res.status(500).json({ message: 'Lỗi khi gộp đơn hàng', error });
+    console.error("Checkout failed:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 };
 

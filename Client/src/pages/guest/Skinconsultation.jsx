@@ -11,6 +11,7 @@ export default function Skinconsultation() {
     const [visibleNoteIndex, setVisibleNoteIndex] = useState(null);
     const [consultants, setConsultants] = useState([]);
     const [cart, setCart] = useState([]);
+    const [feedbacks, setFeedbacks] = useState([]);
     const cartData = JSON.parse(localStorage.getItem("cart")) || [];
     useEffect(() => {
         setCart(cartData);
@@ -18,6 +19,7 @@ export default function Skinconsultation() {
 
     useEffect(() => {
         fetchConsultants();
+        fetchFeedbacks();
     }, []);
 
     const fetchConsultants = async () => {
@@ -35,26 +37,53 @@ export default function Skinconsultation() {
         }
     };
 
-    const handleBookingNow = async (consultantId) => {
-        localStorage.setItem("consultantId", consultantId);
-        sessionStorage.setItem("consultantId", consultantId);
-        localStorage.setItem(
-            "serviceUrl",
-            `/services/${id}/chon-chuyen-vien/${consultantId}/lich-hen`
-        );
-        sessionStorage.setItem(
-            "serviceUrl",
-            `/services/${id}/chon-chuyen-vien/${consultantId}/lich-hen`
-        );
-        navigate(`/services/${id}/chon-chuyen-vien/${consultantId}/lich-hen`);
+    const fetchFeedbacks = async () => {
+        try {
+            const res = await axios.get("/api/feedbacks");
+            setFeedbacks(res.data);
+        } catch (err) {
+            console.error("Failed to fetch feedbacks:", err);
+        }
     };
+
+    const getFeedbackForConsultant = (consultantId) => {
+        return feedbacks.filter(feedback => feedback.consultantId === consultantId);
+    };
+
+    const getAverageRating = (consultantId) => {
+        const feedbacksForConsultant = getFeedbackForConsultant(consultantId);
+        if (feedbacksForConsultant.length === 0) return null;
+        const totalRating = feedbacksForConsultant.reduce((sum, feedback) => sum + feedback.consultantRating, 0);
+        return (totalRating / feedbacksForConsultant.length).toFixed(1);
+    };
+
+    const getCustomerName = (bookingRequestId) => {
+        const feedback = feedbacks.find(feedback => feedback.bookingRequestId === bookingRequestId);
+        return feedback && feedback.bookingRequestId && feedback.bookingRequestId.customerId
+            ? feedback.bookingRequestId.customerId.name
+            : "Customer";
+    };
+
+    // const handleBookingNow = async (consultantId) => {
+    //     localStorage.setItem("consultantId", consultantId);
+    //     sessionStorage.setItem("consultantId", consultantId);
+    //     localStorage.setItem(
+    //         "serviceUrl",
+    //         `/services/${id}/chon-chuyen-vien/${consultantId}/lich-hen`
+    //     );
+    //     sessionStorage.setItem(
+    //         "serviceUrl",
+    //         `/services/${id}/chon-chuyen-vien/${consultantId}/lich-hen`
+    //     );
+    //     navigate(`/services/${id}/chon-chuyen-vien/${consultantId}/lich-hen`);
+    // };
 
     const handleViewMore = (index) => {
         setVisibleNoteIndex(visibleNoteIndex === index ? null : index);
     };
 
     return (
-        <div className="main-container w-full min-h-screen bg-[#F5F5F5] font-['Lato']">
+        <div className="main-container w-full min-h-screen bg-[#F5F5F5]">
             <Navbar cart={cart} setCart={setCart} /> {/* Pass setCart to Navbar */}
             {/* Services Hero Section */}
             <div className="h-[500px] w-full flex items-center justify-center text-white text-center"
@@ -101,9 +130,28 @@ export default function Skinconsultation() {
 
                                 {/* Additional Notes */}
                                 {visibleNoteIndex === index && (
-                                    <p className="text-gray-600 mt-2">
-                                        No additional notes available.
-                                    </p>
+                                    <div className="text-gray-600 mt-2">
+                                        {getFeedbackForConsultant(consultant._id).length === 0 ? (
+                                            <div>
+                                                <h3 className="text-xl font-semibold">Đánh giá của khách hàng</h3>
+                                                <h3><strong>Điểm trung bình: </strong>Không có điểm đánh giá nào về chuyên viên này.</h3>
+                                                <h3><strong>Đánh giá: </strong>Không có đánh giá nào về chuyên viên này.</h3>
+                                            </div>
+                                        ) : (
+                                            <div className="mt-4">
+                                                <h3 className="text-xl font-semibold">Đánh giá của khách hàng</h3>
+                                                <p><strong>Điểm trung bình:</strong> {getAverageRating(consultant._id)}⭐</p>
+                                                {getFeedbackForConsultant(consultant._id).slice(0, 3).map(feedback => (
+                                                    <div key={feedback._id} className="mt-2">
+                                                        <p><strong>{getCustomerName(feedback.bookingRequestId)}:</strong> {feedback.consultantComment}</p>
+                                                    </div>
+                                                ))}
+                                                {getFeedbackForConsultant(consultant._id).length > 3 && (
+                                                    <p className="mt-2 text-blue-500">View more comments...</p>
+                                                )}
+                                            </div>
+                                        )}
+                                    </div>
                                 )}
 
                                 {/* Buttons */}

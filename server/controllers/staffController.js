@@ -56,7 +56,7 @@ exports.deleteStaff = async (req, res) => {
 // Create new staff member (Manager only)
 exports.createStaff = async (req, res) => {
     try {
-        const { firstName, lastName, email, phoneNumber, password} = req.body;
+        const { firstName, lastName, email, phoneNumber, password } = req.body;
 
         // Check if email already exists
         const existingStaff = await User.findOne({ email });
@@ -72,9 +72,9 @@ exports.createStaff = async (req, res) => {
             lastName,
             email,
             phoneNumber,
-            password : hashedPassword, // Ensure you hash the password before saving it
-            roleName : "Staff",
-            verified : false,
+            password: hashedPassword, // Ensure you hash the password before saving it
+            roleName: "Staff",
+            verified: false,
         });
 
         // Save the new staff member
@@ -90,16 +90,16 @@ exports.resetPassword = async (req, res) => {
     try {
         const staff = await User.findOne({ _id: req.params.id, roleName: "Staff" }).select('-password');
         if (!staff) return res.status(404).json({ message: "Staff member not found" });
-    
+
         const defaultPassword = "default123";
         const hashedPassword = await bcrypt.hash(defaultPassword, 10);
-    
+
         consultant.password = hashedPassword;
         await consultant.save();
-    
+
         res.json({ message: "Password reset successfully" });
-      } catch (error) {
+    } catch (error) {
         res.status(500).json({ message: "Server error" });
-      }
+    }
 };
 
