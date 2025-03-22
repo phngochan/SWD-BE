@@ -13,7 +13,8 @@ const {
   completeBooking,
   cancelBooking,
   getBookingById,
-  updateBookingStatus
+  updateBookingStatus,
+  getPendingBookingsForConsultant
 } = require('../controllers/bookingRequestController');
 const { authenticate, authorize } = require("../middlewares/authMiddleware");
 
@@ -32,9 +33,7 @@ router.put("/:id/complete", authenticate, authorize(["Staff"]), completeBooking)
 router.put("/:id/cancel", authenticate, authorize(["Customer", "Staff"]), cancelBooking);
 router.get("/:id", authenticate, getBookingById);
 router.post('/update-status', authenticate, authorize(['Staff, Customer']), updateBookingStatus);
-router.put('/:bookingId/assign', authenticate, authorize(['Staff']), assignConsultant)
-
-
-
+router.put('/:bookingId/assign', authenticate, authorize(['Staff']), assignConsultant);
+router.get('/:consultantId/pending-bookings', authenticate, authorize(['Customer']), getPendingBookingsForConsultant)
 
 module.exports = router;

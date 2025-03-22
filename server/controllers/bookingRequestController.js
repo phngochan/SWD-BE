@@ -3,19 +3,43 @@ const Consultant = require("../models/Consultant");
 const mongoose = require('mongoose');
 
 exports.createBookingRequest = async (req, res) => {
-  const { serviceID, customerID, date, time, consultantID } = req.body;
-
-  if (!serviceID || !customerID || !date || !time) {
-    return res.status(400).json({ error: "Missing required fields" });
-  }
-
   try {
+    const { serviceID, customerID, date, time, consultantID } = req.body;
+
+    // Validate required fields
+    if (!serviceID || !customerID || !date || !time) {
+      return res.status(400).json({ error: "Missing required fields" });
+    }
+
+    // Convert date to ISO format (YYYY-MM-DD) to avoid time zone issues
+    const bookingDate = new Date(date);
+    if (isNaN(bookingDate.getTime())) {
+      return res.status(400).json({ error: "Invalid date format" });
+    }
+
+    console.log("Checking for existing bookings:", { date: bookingDate, time, consultantID });
+
+    // Check if the consultant is already booked at the same date and time
+    if (consultantID) {
+      const existingBooking = await BookingRequest.findOne({
+        date: bookingDate.toISOString().split("T")[0], // Ensure consistent date format
+        time,
+        consultantID
+      });
+
+      if (existingBooking) {
+        console.log("Conflict found:", existingBooking);
+        return res.status(400).json({ message: "This consultant is already booked at the selected date and time." });
+      }
+    }
+
+    // Create new booking request
     const newBooking = new BookingRequest({
       serviceID,
       customerID,
-      date,
+      date: bookingDate.toISOString().split("T")[0], // Ensures consistent date format
       time,
-      consultantID,
+      consultantID: consultantID || null,
       status: req.body.status || "Pending",
       isConsultantAssignedByCustomer: req.body.isConsultantAssignedByCustomer || false,
     });
@@ -23,11 +47,16 @@ exports.createBookingRequest = async (req, res) => {
     const bookingRequest = await newBooking.save();
     res.status(201).json(bookingRequest);
   } catch (error) {
-    console.error(error);
+    console.error("Error creating booking request:", error);
+
+    // Handle duplicate key error from MongoDB
+    if (error.code === 11000) {
+      return res.status(400).json({ error: "This consultant is already booked at the selected date and time." });
+    }
+
     res.status(500).json({ error: "Failed to create booking request" });
   }
 };
-
 
 exports.getAllBookingRequests = async (req, res) => {
   try {
@@ -108,8 +137,8 @@ exports.getBookingsByConsultantAndDate = async (req, res) => {
 
     const bookings = await BookingRequest.find({
       consultantID,
-      date: new Date(date).toISOString().split("T")[0] // Chỉ lấy ngày, bỏ giờ phút giây
-    });
+      date: new Date(date).toISOString().split("T")[0] // Ensure date is in ISO format
+    }).select("time");
 
     res.json(bookings);
   } catch (error) {
@@ -396,5 +425,25 @@ exports.assignConsultant = async (req, res) => {
     res.json(updatedBooking);
   } catch (error) {
     res.status(500).json({ message: "Error assigning consultant", error });
+  }
+};
+
+exports.getPendingBookingsForConsultant = async (req, res) => {
+  try {
+    const { consultantId } = req.params; // Extract consultant ID from URL params
+
+    if (!consultantId) {
+      return res.status(400).json({ error: "Consultant ID is required" });
+    }
+
+    const pendingBookings = await BookingRequest.find({
+      consultantID: consultantId,
+      status: "Pending",
+    }); // Populate related data if needed
+
+    res.json(pendingBookings);
+  } catch (error) {
+    console.error("Error fetching pending bookings:", error);
+    res.status(500).json({ error: "Failed to fetch pending bookings" });
   }
 };

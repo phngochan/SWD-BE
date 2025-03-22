@@ -94,7 +94,6 @@ export default function ProductDetail() {
                                     <th className="px-4 py-2 border-b text-center">Giá</th>
                                     <th className="px-4 py-2 border-b text-center">Tình trạng</th>
                                     <th className="px-4 py-2 border-b text-center">Số lượng</th>
-                                    <th className="px-4 py-2 border-b text-center">Hành động</th>
                                 </tr>
                             </thead>
                             <tbody>
