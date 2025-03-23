@@ -11,7 +11,8 @@ const CustomerSidebar = () => {
 
   const menuItems = [
     { name: "Chi tiết tài khoản", path: "/thong-tin-ca-nhan" },
-    { name: "Lịch sử đặt", path: "/lich-su-dat-lich" },
+    { name: "Lịch sử đặt lịch", path: "/lich-su-dat-lich" },
+    { name: "Lịch sử đặt hàng", path: "/lich-su-dat-hang" },
   ];
 
   const handleLogout = () => {
@@ -24,7 +25,7 @@ const CustomerSidebar = () => {
         navigate("/login");
       })
       .catch(error => {
-        console.error("Logout failed:", error.response?.data?.message || error.message);
+        console.error("Đăng xuất thất bại:", error.response?.data?.message || error.message);
       })
       .finally(() => setShowModal(false));
   };

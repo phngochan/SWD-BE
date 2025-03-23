@@ -35,6 +35,7 @@ import Product from "../pages/guest/Product.jsx";
 import ViewBookingHistory from "../pages/customer/ViewBookingHistory.jsx";
 import Quiz from "../pages/customer/Quiz.jsx";
 import ProductDetail from "../pages/guest/ProductDetail.jsx";
+import BookingProductsHistory from "../pages/customer/BookingProductsHistory.jsx";
 
 
 
@@ -93,6 +94,7 @@ function AppRoute() {
           <Route path="/dịch vụ/:id/chon-chuyen-vien/:idConsultant/lich-hen" element={<MyCalendar />} />
           <Route path="/thong-tin-ca-nhan" element={<CustomerProfile />} />
           <Route path="/lich-su-dat-lich" element={<ViewBookingHistory />} />
+          <Route path="/lich-su-dat-hang" element={<BookingProductsHistory />} />
         </Route>
 
         {/* Manager Pages */}

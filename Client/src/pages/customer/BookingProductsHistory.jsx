@@ -33,7 +33,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 
-const ViewBookingHistory = () => {
+const BookingProductsHistory = () => {
     const [bookings, setBookings] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -229,11 +229,11 @@ const ViewBookingHistory = () => {
                     variant="h4"
                     className="mb-4 text-[#2B6A7C] text-center"
                 >
-                    Lịch sử đặt lịch
+                    Lịch sử đặt hàng
                 </Typography>
                 <div className="flex justify-between mb-4">
                     <TextField
-                        label="Tìm kiếm theo dịch vụ hoặc chuyên viên"
+                        label="Tìm kiếm theo sản phẩm"
                         variant="outlined"
                         size="small"
                         value={searchQuery}
@@ -284,11 +284,11 @@ const ViewBookingHistory = () => {
                                 color: "gray", // Default label color
                             },
                             "& .MuiInputLabel-root.Mui-focused": {
-                                color: "#2B6A7C", // Label color when focused
+                                color: "#2B6A7C", // Label color when  focused
                             },
                         }}
                     >
-                        <InputLabel>Trạng thái</InputLabel>
+                        <InputLabel variant="outlined" size="small" className="w-1/2">Trạng thái</InputLabel>
                         <Select
                             value={statusFilter}
                             onChange={(e) => setStatusFilter(e.target.value)}
@@ -297,14 +297,8 @@ const ViewBookingHistory = () => {
                             <MenuItem value="Pending" sx={{ color: "#e0f131" }}>
                                 Chờ xác nhận
                             </MenuItem>
-                            <MenuItem value="Confirmed" sx={{ color: "#3139f1" }}>
-                                Đã xác nhận
-                            </MenuItem>
                             <MenuItem value="Completed" sx={{ color: "#31f131" }}>
                                 Đã hoàn thành
-                            </MenuItem>
-                            <MenuItem value="Cancelled" sx={{ color: "#E27585" }}>
-                                Đã hủy
                             </MenuItem>
                         </Select>
                     </FormControl>
@@ -327,13 +321,9 @@ const ViewBookingHistory = () => {
                             <Table>
                                 <TableHead className="bg-[#A7DFEC] text-white">
                                     <TableRow>
-                                        <TableCell align="center" style={{ fontWeight: 'bold', fontSize: '1.1rem', color:'#444444' }}>Dịch vụ</TableCell>
-                                        <TableCell align="center" style={{ fontWeight: 'bold', fontSize: '1.1rem', color:'#444444' }}>Ngày</TableCell>
-                                        <TableCell align="center" style={{ fontWeight: 'bold', fontSize: '1.1rem', color:'#444444' }}>Giờ</TableCell>
-                                        <TableCell align="center" style={{ fontWeight: 'bold', fontSize: '1.1rem', color:'#444444' }}>Chuyên viên</TableCell>
-                                        <TableCell align="center" style={{ fontWeight: 'bold', fontSize: '1.1rem', color:'#444444' }}>Trạng thái</TableCell>
-                                        <TableCell align="center" style={{ fontWeight: 'bold', fontSize: '1.1rem', color:'#444444' }}>Hủy đặt</TableCell>
-                                        <TableCell align="center" style={{ fontWeight: 'bold', fontSize: '1.1rem', color:'#444444' }}>Đánh giá</TableCell>
+                                        <TableCell align="center" style={{ width: '33%', fontWeight: 'bold', fontSize: '1.1rem', color:'#444444' }}>Sản phẩm</TableCell>
+                                        <TableCell align="center" style={{ width: '33%', fontWeight: 'bold', fontSize: '1.1rem', color:'#444444'  }}>Ngày</TableCell>
+                                        <TableCell align="center" style={{ width: '33%', fontWeight: 'bold', fontSize: '1.1rem', color:'#444444'  }}>Trạng thái</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -342,76 +332,25 @@ const ViewBookingHistory = () => {
                                             key={booking._id}
                                             className="transition duration-300 hover:bg-gray-100"
                                         >
-                                            <TableCell align="center">
+                                            <TableCell align="center" style={{ width: '33%' }}>
                                                 {booking.serviceID?.name || "N/A"}
                                             </TableCell>
-                                            <TableCell align="center">
+                                            <TableCell align="center" style={{ width: '33%' }}>
                                                 {new Date(booking.date).toLocaleDateString()}
                                             </TableCell>
-                                            <TableCell align="center">{booking.time}</TableCell>
-                                            <TableCell align="center">
-                                                <Tooltip title="View Consultant Details">
-                                                    <span
-                                                        className="cursor-pointer text-[#2B6A7C] hover:underline"
-                                                        onClick={() =>
-                                                            handleConsultantClick(booking.consultantID?._id)
-                                                        }
-                                                    >
-                                                        {booking.consultantID?.firstName
-                                                            ? `${booking.consultantID.firstName} ${booking.consultantID.lastName || ""
-                                                            }`
-                                                            : "Chưa chọn chuyên viên"}
-                                                    </span>
-                                                </Tooltip>
-                                            </TableCell>
-                                            <TableCell align="center">
+                                            <TableCell align="center" style={{ width: '33%' }}>
                                                 <span
                                                     className={`p-1 rounded ${booking.status === "Pending"
-                                                        ? "bg-yellow-200 text-yellow-800"
+                                                        ? "bg-yellow-200"
                                                         : booking.status === "Confirmed"
-                                                            ? "bg-blue-200 text-blue-800"
+                                                            ? "bg-blue-200"
                                                             : booking.status === "Completed"
-                                                                ? "bg-green-200 text-green-800"
-                                                                : "bg-red-200 text-red-800"
+                                                                ? "bg-green-200"
+                                                                : "bg-red-200"
                                                         }`}
                                                 >
                                                     {booking.status}
                                                 </span>
-                                            </TableCell>
-                                            <TableCell align="center">
-                                                <Button
-                                                    variant="contained"
-                                                    color="error"
-                                                    size="small"
-                                                    onClick={() => {
-                                                        setSelectedBookingId(booking._id);
-                                                        setShowModal(true);
-                                                    }}
-                                                    sx={{
-                                                        backgroundColor: '#f44336',
-                                                        '&:hover': {
-                                                            backgroundColor: '#d32f2f',
-                                                        },
-                                                    }}
-                                                >
-                                                    <FaTrash />
-                                                </Button>
-                                            </TableCell>
-                                            <TableCell align="center">
-                                                <Button
-                                                    variant="contained"
-                                                    color="primary"
-                                                    size="small"
-                                                    onClick={() => handleFeedbackClick(booking._id)}
-                                                    sx={{
-                                                        backgroundColor: '#1976d2',
-                                                        '&:hover': {
-                                                            backgroundColor: '#1565c0',
-                                                        },
-                                                    }}
-                                                >
-                                                    <FaComment />
-                                                </Button>
                                             </TableCell>
                                         </TableRow>
                                     ))}
@@ -490,12 +429,6 @@ const ViewBookingHistory = () => {
                                 color="primary"
                                 className="rounded-full px-6 shadow-md"
                                 onClick={closeConsultantModal}
-                                sx={{
-                                    backgroundColor: '#1976d2',
-                                    '&:hover': {
-                                        backgroundColor: '#1565c0',
-                                    },
-                                }}
                             >
                                 Close
                             </Button>
@@ -512,7 +445,6 @@ const ViewBookingHistory = () => {
                         right: 20,
                         backgroundColor: "#2B6A7C",
                         "&:hover": { backgroundColor: "#A7DFEC" },
-                        boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.1)',
                     }}
                 >
                     <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#a2B6A7C92a4e] opacity-75"></span>
@@ -580,28 +512,6 @@ const ViewBookingHistory = () => {
                                         }))
                                     }
                                     className="mt-2"
-                                    sx={{
-                                        '& .MuiOutlinedInput-root': {
-                                            '& fieldset': {
-                                                borderColor: 'gray',
-                                            },
-                                            '&:hover fieldset': {
-                                                borderColor: '#2B6A7C',
-                                            },
-                                            '&.Mui-focused fieldset': {
-                                                borderColor: '#2B6A7C',
-                                            },
-                                        },
-                                        '& .MuiInputBase-input': {
-                                            color: '#000000',
-                                        },
-                                        '& .MuiInputLabel-root': {
-                                            color: 'gray',
-                                        },
-                                        '& .MuiInputLabel-root.Mui-focused': {
-                                            color: '#2B6A7C',
-                                        },
-                                    }}
                                 />
                             </div>
 
@@ -629,28 +539,6 @@ const ViewBookingHistory = () => {
                                         }))
                                     }
                                     className="mt-2"
-                                    sx={{
-                                        '& .MuiOutlinedInput-root': {
-                                            '& fieldset': {
-                                                borderColor: 'gray',
-                                            },
-                                            '&:hover fieldset': {
-                                                borderColor: '#2B6A7C',
-                                            },
-                                            '&.Mui-focused fieldset': {
-                                                borderColor: '#2B6A7C',
-                                            },
-                                        },
-                                        '& .MuiInputBase-input': {
-                                            color: '#000000',
-                                        },
-                                        '& .MuiInputLabel-root': {
-                                            color: 'gray',
-                                        },
-                                        '& .MuiInputLabel-root.Mui-focused': {
-                                            color: '#2B6A7C',
-                                        },
-                                    }}
                                 />
                             </div>
 
@@ -658,12 +546,7 @@ const ViewBookingHistory = () => {
                                 <Button onClick={() => setShowFeedbackModal(false)}>
                                     Hủy
                                 </Button>
-                                <Button variant="contained" onClick={handleSubmitFeedback} sx={{
-                                    backgroundColor: '#1976d2',
-                                    '&:hover': {
-                                        backgroundColor: '#1565c0',
-                                    },
-                                }}>
+                                <Button variant="contained" onClick={handleSubmitFeedback}>
                                     Gửi đánh giá
                                 </Button>
                             </div>
@@ -675,4 +558,4 @@ const ViewBookingHistory = () => {
     );
 };
 
-export default ViewBookingHistory;
+export default BookingProductsHistory;
