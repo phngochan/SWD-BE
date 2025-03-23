@@ -1,5 +1,6 @@
 const OrderProduct = require("../models/OrderProduct");
 const OrderItem = require("../models/OrderItem");
+const mongoose = require("mongoose");
 
 // Tạo đơn hàng sản phẩm
 exports.createOrder = async (req, res) => {
@@ -60,30 +61,52 @@ exports.getAllOrders = async (req, res) => {
 
 
 // 🔹 Cập nhật trạng thái đơn hàng
+
 exports.updateOrderStatus = async (req, res) => {
   try {
     const { status } = req.body;
+    const { id } = req.params;
+
+    console.log("Received request to update order status", { id, status });
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      console.warn("Invalid ID format", id);
+      return res.status(400).json({ message: "Invalid order ID format" });
+    }
 
     const validTransitions = {
-      "Pending": ["Confirmed", "Cancelled"],
-      "Confirmed": ["Cancelled"]
+      "Pending": ["Confirmed", "Cancelled", "Completed"],
+      "Confirmed": ["Cancelled", "Completed"],
+      "Cancelled": [],
+      "Completed": []
     };
-
-    const order = await OrderProduct.findById(req.params.id);
-    if (!order) return res.status(404).json({ message: "Order not found" });
+    
+    const order = await OrderProduct.findById(id);
+    if (!order) {
+      console.warn("Order not found with ID", id);
+      return res.status(404).json({ message: "Order not found" });
+    }
 
     if (!validTransitions[order.status] || !validTransitions[order.status].includes(status)) {
+      console.warn(`Invalid status transition from '${order.status}' to '${status}'`);
       return res.status(400).json({ message: `Invalid status transition from '${order.status}' to '${status}'` });
     }
 
     order.status = status;
     await order.save();
+
+    console.log("Order status updated successfully", order);
+
     res.status(200).json({ message: "Order status updated successfully", order });
   } catch (error) {
-    console.error("Error updating order status:", error);
+    console.error("Error updating order status:", error.message);
+    console.error(error.stack);
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
+
+
 
 
 // 🔹 Lấy danh sách đơn hàng của khách hàng

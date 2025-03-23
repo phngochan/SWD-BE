@@ -15,7 +15,7 @@ const router = express.Router();
 
 router.post("/", authenticate, authorize(["Customer"]), createOrder);
 router.get("/", authenticate, authorize(["Staff"]), getAllOrders);
-router.put("/:id/status", authenticate, authorize(["Staff"]), updateOrderStatus);
+router.put("/:id/status", updateOrderStatus);
 router.get("/my-orders", authenticate, authorize(["Customer"]), getCustomerOrders);
 router.put("/:id/cancel", authenticate, authorize(["Customer"]), cancelOrder);
 router.get("/cart", authenticate, authorize(["Customer"]), getCartByCustomerId); // Ensure this route is defined before routes with :id
