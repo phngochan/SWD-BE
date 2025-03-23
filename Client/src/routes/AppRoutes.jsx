@@ -35,6 +35,7 @@ import Product from "../pages/guest/Product.jsx";
 import ViewBookingHistory from "../pages/customer/ViewBookingHistory.jsx";
 import Quiz from "../pages/customer/Quiz.jsx";
 import ProductDetail from "../pages/guest/ProductDetail.jsx";
+import Errorpage from "../pages/guest/Errorpage.jsx";
 import BookingProductsHistory from "../pages/customer/BookingProductsHistory.jsx";
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -149,7 +150,7 @@ function AppRoute() {
 
 
             {/* 404 Fallback */}
-            <Route path="*" element={<Navigate to={defaultPage} replace />} />
+            <Route path="*" element={<Errorpage />} />
           </Routes>
 
         </motion.div>
