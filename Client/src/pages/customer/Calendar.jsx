@@ -113,6 +113,12 @@ const MyCalendar = () => {
         updateAvailableTimes();
     }, [selectedDate]);
 
+    const [cart, setCart] = useState([]);
+    const cartData = JSON.parse(localStorage.getItem("cart")) || [];
+    useEffect(() => {
+        setCart(cartData);
+    }, []);
+
     const handleConfirmBooking = () => {
         setShowConfirmModal(true); // Chỉ hiển thị popup, không gửi API
     };
@@ -242,7 +248,7 @@ const MyCalendar = () => {
 
     return (
         <div className="bg-[#F8F4F2] min-h-screen flex flex-col">
-            <Navbar />
+            <Navbar cart={cart} setCart={setCart} /> {/* Pass setCart to Navbar */}
             <div className="flex-1 flex flex-col items-center justify-center p-4">
                 <div className="absolute inset-0 bg-cover bg-center opacity-20 z-0" style={{ backgroundImage: "url('/images/skincare3.png')" }}></div>
                 <h1 className="text-center text-4xl font-semibold my-4 mb-8">
