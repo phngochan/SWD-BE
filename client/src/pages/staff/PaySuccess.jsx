@@ -95,7 +95,7 @@ export const PaySuccess = () => {
                 </div>
 
                 <div className="flex justify-between mt-6">
-                    <Link to={"/"} className="text-pink-700 flex items-center transition-colors hover:text-pink-900">
+                    <Link to={"/view-booking"} className="text-pink-700 flex items-center transition-colors hover:text-pink-900">
                         <ArrowBackIcon className="mr-1" /> Back
                     </Link>
                 </div>
