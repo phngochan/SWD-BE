@@ -1,14 +1,17 @@
 const express = require("express");
 const { getAllQuestions, addQuestion, updateQuestion, deleteQuestion} = require("../controllers/questionController");
+const { authenticate, authorize } = require("../middlewares/authMiddleware");
 
 const router = express.Router();
 
-router.get("/", getAllQuestions);
+//Public route: Get all questions
+router.get("/",  authenticate, getAllQuestions);
 
-router.post("/", addQuestion);
+//Protected routes: Only Manager can create, update, and delete questions
+router.post("/",  authenticate, authorize(["Manager"]), addQuestion);
 
-router.put("/:id", updateQuestion);
+router.put("/:id",  authenticate, authorize(["Manager"]), updateQuestion);
 
-router.delete("/:id", deleteQuestion);
+router.delete("/:id",  authenticate, authorize(["Manager"]), deleteQuestion);
 
 module.exports = router;

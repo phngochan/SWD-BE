@@ -21,6 +21,10 @@
     {
       "name": "Services",
       "description": "Service management"
+    },
+    {
+      "name": "Appointments",
+      "description": "Appointment management"
     }
   ],
   "components": {
@@ -112,6 +116,10 @@
       "Calendar": {
         "type": "object",
         "properties": {
+          "_id": {
+            "type": "string",
+            "description": "The auto-generated id of the calendar event"
+          },
           "title": {
             "type": "string",
             "description": "The title of the calendar"
@@ -135,6 +143,10 @@
       "Question": {
         "type": "object",
         "properties": {
+          "_id": {
+            "type": "string",
+            "description": "The auto-generated id of the calendar event"
+          },
           "questionText": {
             "type": "string",
             "description": "The text of the question"
@@ -169,6 +181,10 @@
       "Service": {
         "type": "object",
         "properties": {
+          "_id": {
+            "type": "string",
+            "description": "The auto-generated id of the calendar event"
+          },
           "price": {
             "type": "number",
             "description": "The price of the service",
@@ -221,6 +237,80 @@
         "required": [
           "price",
           "name"
+        ]
+      },
+      "Appointment": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "The auto-generated id of the appointment"
+          },
+          "memberId": {
+            "type": "string",
+            "description": "The ID of the member"
+          },
+          "serviceId": {
+            "type": "string",
+            "description": "The ID of the service"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "Pending",
+              "Paid",
+              "Canceled"
+            ],
+            "description": "The status of the appointment"
+          },
+          "amount": {
+            "type": "number",
+            "description": "The amount for the appointment",
+            "minimum": 0
+          },
+          "appointmentCode": {
+            "type": "string",
+            "description": "The unique code for the appointment"
+          },
+          "description": {
+            "type": "string",
+            "description": "The description of the appointment"
+          },
+          "buyerName": {
+            "type": "string",
+            "description": "The name of the buyer"
+          },
+          "buyerEmail": {
+            "type": "string",
+            "description": "The email of the buyer"
+          },
+          "buyerPhone": {
+            "type": "string",
+            "description": "The phone number of the buyer"
+          },
+          "transactionDateTime": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The date and time of the transaction"
+          },
+          "currency": {
+            "type": "string",
+            "description": "The currency used for the payment"
+          },
+          "paymentMethod": {
+            "type": "string",
+            "description": "The payment method used"
+          }
+        },
+        "required": [
+          "memberId",
+          "serviceId",
+          "amount",
+          "appointmentCode",
+          "description",
+          "buyerName",
+          "buyerEmail",
+          "buyerPhone"
         ]
       }
     }
@@ -709,6 +799,11 @@
         "tags": [
           "Questions"
         ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "responses": {
           "200": {
             "description": "List of all questions",
@@ -729,6 +824,11 @@
         "summary": "Add a new question",
         "tags": [
           "Questions"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
         ],
         "requestBody": {
           "required": true,
@@ -759,6 +859,11 @@
         "summary": "Update a question",
         "tags": [
           "Questions"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
         ],
         "parameters": [
           {
@@ -802,6 +907,11 @@
         "tags": [
           "Questions"
         ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "in": "path",
@@ -819,6 +929,159 @@
           },
           "404": {
             "description": "Question is not found"
+          }
+        }
+      }
+    },
+    "/appointments": {
+      "get": {
+        "summary": "Get all appointments",
+        "tags": [
+          "Appointments"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of all appointments",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Appointment"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "An error occurred while fetching the appointments"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new appointment",
+        "tags": [
+          "Appointments"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Appointment"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Appointment created successfully"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "An error occurred while creating the appointment"
+          }
+        }
+      }
+    },
+    "/appointments/{id}": {
+      "get": {
+        "summary": "Get a specific appointment by ID",
+        "tags": [
+          "Appointments"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the appointment"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Appointment details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Appointment"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Appointment not found"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "An error occurred while fetching the appointment"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete an appointment",
+        "tags": [
+          "Appointments"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the appointment"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Appointment deleted successfully"
+          },
+          "404": {
+            "description": "Appointment not found"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "An error occurred while deleting the appointment"
           }
         }
       }
