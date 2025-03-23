@@ -49,22 +49,20 @@ const Quiz = () => {
   };
 
   const handleSubmitQuiz = async () => {
-    // const token = localStorage.getItem("authToken");
+    const token = localStorage.getItem("authToken");
 
-    // if (!token) {
-    //   setShowLoginModal(true);
-    //   return;
-    // }
+    if (!token) {
+      setShowLoginModal(true);
+      return;
+    }
 
     console.log("Submitting answers:", answers); // Debug: Kiểm tra xem answers có dữ liệu không
 
     try {
       const response = await axios.post(
         "/api/quiz-results/save",
-        { answers }
-
-        // { answers },
-        // { headers: { Authorization: `Bearer ${token}` } }
+        { answers },
+        { headers: { Authorization: `Bearer ${token}` } }
       );
 
       console.log("Response from server:", response.data); // Debug: Kiểm tra phản hồi từ server

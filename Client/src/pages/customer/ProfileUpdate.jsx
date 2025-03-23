@@ -174,14 +174,22 @@ const CustomerProfile = () => {
                                                 sx={{
                                                     backgroundColor: "#A7DFEC",
                                                     color: "white",
+                                                    borderRadius: "50%", // Make the icon circular
+                                                    fontSize: 40, // Reduce icon size
+                                                    padding: 1, // Add padding to make the icon smaller than the circle
                                                     "&:hover": { backgroundColor: "#2B6A7C" },
                                                 }}
                                             />
                                         ) : (
                                             <EditIcon
+                                                className="radius"
+                                                color="primary"
                                                 sx={{
                                                     backgroundColor: "#A7DFEC",
                                                     color: "white",
+                                                    borderRadius: "50%", // Make the icon circular
+                                                    fontSize: 40, // Reduce icon size
+                                                    padding: 1, // Add padding to make the icon smaller than the circle
                                                     "&:hover": { backgroundColor: "#2B6A7C" },
                                                 }}
                                             />
