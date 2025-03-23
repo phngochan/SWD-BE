@@ -16,6 +16,12 @@ export default function BookingTherapist() {
     fetchFeedbacks();
   }, []);
 
+  const [cart, setCart] = useState([]);
+  const cartData = JSON.parse(localStorage.getItem("cart")) || [];
+  useEffect(() => {
+    setCart(cartData);
+  }, []);
+
   const fetchConsultants = async () => {
     try {
       const res = await axios.get("/api/consultants");
@@ -53,9 +59,9 @@ export default function BookingTherapist() {
   const getCustomerName = (bookingRequestId) => {
     const feedback = feedbacks.find(feedback => feedback.bookingRequestId === bookingRequestId);
     return feedback && feedback.bookingRequestId && feedback.bookingRequestId.customerId
-        ? feedback.bookingRequestId.customerId.name
-        : "Customer";
-};
+      ? feedback.bookingRequestId.customerId.name
+      : "Customer";
+  };
 
   const handleBookingNow = async (consultantId) => {
     localStorage.setItem("consultantId", consultantId);
@@ -76,8 +82,9 @@ export default function BookingTherapist() {
   };
 
   return (
-    <div className="main-container w-full min-h-screen bg-[#F5F5F5] font-['Lato']">
-      <Navbar />
+    <div className="main-container w-full min-h-screen bg-[#F5F5F5]">
+      <Navbar cart={cart} setCart={setCart} /> {/* Pass setCart to Navbar */}
+      
       {/* Services Hero Section */}
       <div className="h-[500px] w-full flex items-center justify-center text-white text-center"
         style={{
