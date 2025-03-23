@@ -8,7 +8,7 @@ const {
   getOrderById,
   getCartByCustomerId,
   checkoutOrder // Import the new function
-} = require("../controllers/OrderProductController");
+} = require("../controllers/orderProductController");
 const { authenticate, authorize } = require("../middlewares/authMiddleware");
 
 const router = express.Router();
