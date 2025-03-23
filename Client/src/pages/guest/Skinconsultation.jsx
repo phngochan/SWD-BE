@@ -82,7 +82,7 @@ export default function Skinconsultation() {
     };
 
     return (
-        <div className="main-container w-full min-h-screen bg-[#F5F5F5] font-['Lato']">
+        <div className="main-container w-full min-h-screen bg-[#F5F5F5]">
             <Navbar cart={cart} setCart={setCart} /> {/* Pass setCart to Navbar */}
             {/* Services Hero Section */}
             <div className="h-[500px] w-full flex items-center justify-center text-white text-center"

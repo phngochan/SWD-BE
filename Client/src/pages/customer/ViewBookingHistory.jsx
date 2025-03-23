@@ -229,11 +229,11 @@ const ViewBookingHistory = () => {
                     variant="h4"
                     className="mb-4 text-[#2B6A7C] text-center"
                 >
-                    Booking History
+                    Lịch sử đặt lịch
                 </Typography>
                 <div className="flex justify-between mb-4">
                     <TextField
-                        label="Search by Service or Consultant"
+                        label="Tìm kiếm theo dịch vụ hoặc chuyên viên"
                         variant="outlined"
                         size="small"
                         value={searchQuery}
@@ -319,7 +319,7 @@ const ViewBookingHistory = () => {
                     </Typography>
                 ) : filteredBookings.length === 0 ? (
                     <Typography className="text-center">
-                        No booking history found.
+                        Không tìm thấy kết quả phù hợp.
                     </Typography>
                 ) : (
                     <>
@@ -327,13 +327,13 @@ const ViewBookingHistory = () => {
                             <Table>
                                 <TableHead className="bg-[#A7DFEC] text-white">
                                     <TableRow>
-                                        <TableCell align="center">Service</TableCell>
-                                        <TableCell align="center">Date</TableCell>
-                                        <TableCell align="center">Time</TableCell>
-                                        <TableCell align="center">Consultant</TableCell>
-                                        <TableCell align="center">Status</TableCell>
-                                        <TableCell align="center">Action</TableCell>
-                                        <TableCell align="center">Feedback</TableCell>
+                                        <TableCell align="center">Dịch vụ</TableCell>
+                                        <TableCell align="center">Ngày</TableCell>
+                                        <TableCell align="center">Giờ</TableCell>
+                                        <TableCell align="center">Chuyên viên</TableCell>
+                                        <TableCell align="center">Trạng thái</TableCell>
+                                        <TableCell align="center">Hủy đặt</TableCell>
+                                        <TableCell align="center">Đánh giá</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -505,24 +505,23 @@ const ViewBookingHistory = () => {
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
                     <div className="bg-white p-6 rounded-xl shadow-lg max-w-sm w-full text-center">
                         <h3 className="text-xl font-bold text-gray-800 mb-4">
-                            Cancel Confirmation
+                            Hủy Đặt Lịch
                         </h3>
                         <p className="text-gray-600">
-                            Are you sure you want to cancel this booking ? This action cannot
-                            be undone.
+                            Bạn có chắc chắn muốn hủy đặt lịch này không? Hành động này không thể hoàn tác.
                         </p>
                         <div className="flex justify-center gap-4 mt-4">
                             <button
                                 className="py-2 px-6 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 transition"
                                 onClick={() => setShowModal(false)}
                             >
-                                Cancel
+                                Không hủy.
                             </button>
                             <button
                                 className="py-2 px-6 bg-[#f1baba] text-white rounded-lg hover:bg-[#e78999] transition"
                                 onClick={() => handleCancelBooking(selectedBookingId)}
                             >
-                                Yes
+                                Có hủy.
                             </button>
                         </div>
                     </div>
@@ -536,10 +535,10 @@ const ViewBookingHistory = () => {
                 >
                     <div className="fixed inset-0 flex items-center justify-center">
                         <div className="bg-white p-6 rounded-xl shadow-lg max-w-md w-full">
-                            <h3 className="text-xl font-bold mb-4">Leave Feedback</h3>
+                            <h3 className="text-xl font-bold mb-4">Hãy để lại ý kiến cho chúng tôi</h3>
 
                             <div className="mb-4">
-                                <Typography component="legend">Consultant Rating</Typography>
+                                <Typography component="legend">Đánh giá chuyên gia</Typography>
                                 <Rating
                                     value={feedbackData.consultantRating}
                                     onChange={(_, value) =>
@@ -553,7 +552,7 @@ const ViewBookingHistory = () => {
                                     fullWidth
                                     multiline
                                     rows={2}
-                                    label="Consultant Comment"
+                                    label="Đánh giá chuyên gia"
                                     value={feedbackData.consultantComment}
                                     onChange={(e) =>
                                         setFeedbackData((prev) => ({
@@ -566,7 +565,7 @@ const ViewBookingHistory = () => {
                             </div>
 
                             <div className="mb-4">
-                                <Typography component="legend">Service Rating</Typography>
+                                <Typography component="legend">Đánh giá dịch vụ</Typography>
                                 <Rating
                                     value={feedbackData.serviceRating}
                                     onChange={(_, value) =>
@@ -580,7 +579,7 @@ const ViewBookingHistory = () => {
                                     fullWidth
                                     multiline
                                     rows={2}
-                                    label="Service Comment"
+                                    label="Đánh giá dịch vụ"
                                     value={feedbackData.serviceComment}
                                     onChange={(e) =>
                                         setFeedbackData((prev) => ({
@@ -594,10 +593,10 @@ const ViewBookingHistory = () => {
 
                             <div className="flex justify-end gap-2">
                                 <Button onClick={() => setShowFeedbackModal(false)}>
-                                    Cancel
+                                    Hủy
                                 </Button>
                                 <Button variant="contained" onClick={handleSubmitFeedback}>
-                                    Submit Feedback
+                                    Gửi đánh giá
                                 </Button>
                             </div>
                         </div>
