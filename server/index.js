@@ -14,7 +14,7 @@ const PORT = process.env.PORT || 5000;
 // ✅ Cấu hình CORS chuẩn
 const allowedOrigins = [
   `http://localhost:${PORT}`,
-  `${process.env.URL_BE_GLOBAL}`,
+  `${process.env.API_BASE_URL}`,
   "http://localhost:5173",
   process.env.FRONT_END_URL, // Lấy từ biến môi trường nếu có
 ];
