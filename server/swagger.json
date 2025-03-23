@@ -112,6 +112,10 @@
       "Calendar": {
         "type": "object",
         "properties": {
+          "_id": {
+            "type": "string",
+            "description": "The auto-generated id of the calendar event"
+          },
           "title": {
             "type": "string",
             "description": "The title of the calendar"
@@ -135,6 +139,10 @@
       "Question": {
         "type": "object",
         "properties": {
+          "_id": {
+            "type": "string",
+            "description": "The auto-generated id of the calendar event"
+          },
           "questionText": {
             "type": "string",
             "description": "The text of the question"
@@ -169,6 +177,10 @@
       "Service": {
         "type": "object",
         "properties": {
+          "_id": {
+            "type": "string",
+            "description": "The auto-generated id of the calendar event"
+          },
           "price": {
             "type": "number",
             "description": "The price of the service",
