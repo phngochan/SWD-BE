@@ -31,8 +31,8 @@ const MyCalendar = () => {
     }, [id]);
 
     const times = [
-        "08:00 AM", "09:00 AM", "10:00 AM", "11:00 AM", "12:00 PM",
-        "01:00 PM", "02:00 PM", "03:00 PM", "04:00 PM", "05:00 PM"
+        "08:00", "09:00", "10:00", "11:00", "12:00",
+        "13:00", "14:00", "15:00", "16:00", "17:00"
     ];
 
     useEffect(() => {
@@ -94,8 +94,8 @@ const MyCalendar = () => {
             let filteredTimes;
             if (selectedDay.toDateString() === now.toDateString()) {
                 filteredTimes = times.filter(time => {
-                    const [hour, minute] = time.split(/[: ]/);
-                    const timeInMinutes = (parseInt(hour) % 12 + (time.includes("PM") ? 12 : 0)) * 60 + parseInt(minute);
+                    const [hour, minute] = time.split(":");
+                    const timeInMinutes = parseInt(hour) * 60 + parseInt(minute);
                     return timeInMinutes > currentTime;
                 });
             } else {
@@ -174,8 +174,8 @@ const MyCalendar = () => {
         const now = new Date();
         const selectedDay = new Date(selectedDate);
         const currentTime = now.getHours() * 60 + now.getMinutes();
-        const [hour, minute] = time.split(/[: ]/);
-        const timeInMinutes = (parseInt(hour) % 12 + (time.includes("PM") ? 12 : 0)) * 60 + parseInt(minute);
+        const [hour, minute] = time.split(":");
+        const timeInMinutes = parseInt(hour) * 60 + parseInt(minute);
 
         // Disable past slots for today
         if (selectedDay.toDateString() === now.toDateString() && timeInMinutes <= currentTime) {
