@@ -53,7 +53,7 @@ export const PayFailed = () => {
 
 
                 <div className="flex justify-between mt-6 ">
-                    <Link to={"/"} className="text-pink-700 flex transition-colors hover:text-pink-900">
+                    <Link to={"/view-booking"} className="text-pink-700 flex transition-colors hover:text-pink-900">
                         Back Home
                     </Link>
                 </div>
