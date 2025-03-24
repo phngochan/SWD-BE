@@ -14,17 +14,20 @@ export default function ProductDetail() {
 
     useEffect(() => {
         const fetchOrderItems = async () => {
-            try {
-                const orderID = localStorage.getItem("orderID");
-                if (orderID) {
+            const orderID = localStorage.getItem("orderID");
+            if (orderID) {
+                try {
                     const response = await axios.get(`/api/order-items/${orderID}`);
                     setCart(response.data);
-                } else {
+                } catch (err) {
+                    console.error("Failed to fetch order items:", err);
+                    // Nếu lỗi -> fallback về localStorage cart
                     const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
                     setCart(storedCart);
                 }
-            } catch (error) {
-                console.error("Failed to fetch order items:", error);
+            } else {
+                const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
+                setCart(storedCart);
             }
         };
 
@@ -105,13 +108,27 @@ export default function ProductDetail() {
                 setIsProcessing(false);
             }
         } else if (paymentMethod === "bank") {
-            setIsProcessing(false);
-            navigate("/checkout");
+            try {
+                const response = await axios.post(`/api/payments/order/${orderID}`);
+                const { checkoutUrl } = response.data.data;
+
+                if (checkoutUrl) {
+                    window.location.href = checkoutUrl;
+                } else {
+                    alert("Failed to create payment link. Please try again.");
+                }
+            } catch (error) {
+                console.error("Error creating payment link:", error);
+                alert("Failed to create payment link. Please try again.");
+            } finally {
+                setIsProcessing(false);
+            }
         }
     };
 
     const handleCancelCheckout = () => {
         setShowCheckoutModal(false);
+        navigate("/product-detail");
     };
 
     const totalQuantity = cart.reduce((total, product) => total + product.quantity, 0);

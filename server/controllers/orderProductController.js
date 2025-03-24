@@ -80,7 +80,7 @@ exports.updateOrderStatus = async (req, res) => {
       "Cancelled": [],
       "Completed": []
     };
-    
+
     const order = await OrderProduct.findById(id);
     if (!order) {
       console.warn("Order not found with ID", id);
