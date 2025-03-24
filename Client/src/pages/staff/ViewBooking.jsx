@@ -182,7 +182,7 @@ const ViewBooking = () => {
       <StaffSidebar />
       <div className="p-4 w-full">
         <ToastContainer />
-        <h1 className="text-2xl font-bold mb-4">View Bookings</h1>
+        <h1 className="text-2xl font-bold mb-4">Xem lịch đặt</h1>
         {loading && <p>Loading...</p>}
         {error && <p className="text-red-500">{error}</p>}
         <table className="min-w-full bg-white border border-gray-200">
@@ -239,7 +239,7 @@ const ViewBooking = () => {
                           : "bg-red-200"
                       }`}
                   >
-                    {booking.status}
+                    {booking.status === "Pending" ? "Chờ xác nhận" : booking.status === "Confirmed" ? "Đã xác nhận" : booking.status === "Completed" ? "Đã hoàn thành" : booking.status === "Cancelled" ? "Đã hủy" : booking.status}
                   </span>
                 </td>
                 <td className="border p-2 text-center">
@@ -250,10 +250,10 @@ const ViewBooking = () => {
                     }
                     className="border p-1"
                   >
-                    <option value="Pending">Pending</option>
-                    <option value="Confirmed">Confirmed</option>
-                    <option value="Completed">Completed</option>
-                    <option value="Cancelled">Cancelled</option>
+                    <option value="Pending" className="bg-yellow-200">Chờ xác nhận</option>
+                    <option value="Confirmed" className="bg-blue-200">Xác nhận</option>
+                    <option value="Completed" className="bg-green-200">Hoàn thành</option>
+                    <option value="Cancelled" className="bg-red-200">Hủy</option>
                   </select>
                 </td>
                 <td className="border p-2 text-center">

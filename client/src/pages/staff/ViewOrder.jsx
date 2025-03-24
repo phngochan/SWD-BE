@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "../../utils/axiosInstance";
 import StaffSidebar from "../../components/StaffSidebar";
+import { Pagination } from "@mui/material"; // Import Pagination component
+
+
+const ITEMS_PER_PAGE = 10; // Number of orders per page
 
 const ViewOrder = () => {
+    const [currentPage, setCurrentPage] = useState(1);
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -35,24 +40,33 @@ const ViewOrder = () => {
         }
     };
 
+    const sortedOrders = orders.sort((a, b) => {
+        if (a.status === "Pending" && b.status !== "Pending") return -1;
+        if (a.status !== "Pending" && b.status === "Pending") return 1;
+        return new Date(b.createdAt) - new Date(a.createdAt); // Sort by creation date, newest first
+    });
+
+    const totalPages = Math.ceil(sortedOrders.length / ITEMS_PER_PAGE); // Calculate total pages
+    const currentOrders = sortedOrders.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE); // Get orders for current page
+
     return (
         <div className="flex">
             <StaffSidebar />
             <div className="p-4 w-full">
-                <h1 className="text-2xl font-bold mb-4">View Orders</h1>
+                <h1 className="text-2xl font-bold mb-4">Xem đơn hàng</h1>
                 {loading && <p>Loading...</p>}
                 {error && <p className="text-red-500">{error}</p>}
 
                 <table className="min-w-full bg-white border border-gray-200">
                     <thead>
                         <tr className="bg-gray-200">
-                            <th className="border p-2 text-center">Customer</th>
-                            <th className="border p-2 text-center">Product</th>
-                            <th className="border p-2 text-center">Quantity</th>
-                            <th className="border p-2 text-center">Total Price</th>
-                            <th className="border p-2 text-center">Payment</th>
-                            <th className="border p-2 text-center">Status</th>
-                            <th className="border p-2 text-center">Actions</th>
+                            <th className="border p-2 text-center">Khách hàng</th>
+                            <th className="border p-2 text-center">Sản phẩm</th>
+                            <th className="border p-2 text-center">Số lượng</th>
+                            <th className="border p-2 text-center">Tổng tiền</th>
+                            <th className="border p-2 text-center">Thanh toán</th>
+                            <th className="border p-2 text-center">Trạng thái</th>
+                            <th className="border p-2 text-center">Hành động</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -71,10 +85,10 @@ const ViewOrder = () => {
                                 </td>
                                 <td className="border p-2 text-center">
                                     <span className={`p-1 rounded ${order.status === "Pending" ? "bg-yellow-200" :
-                                        order.status === "Confirmed" ? "bg-blue-200" :
+                                        order.status === "Completed" ? "bg-green-200" :
                                             order.status === "Cancelled" ? "bg-purple-200" : "bg-red-200"
                                         }`}>
-                                        {order.status}
+                                        {order.status === "Pending" ? "Chờ xác nhận" : order.status === "Completed" ? "Đã xác nhận" : order.status === "Cancelled" ? "Đã hủy" : order.status}
                                     </span>
                                 </td>
                                 <td className="border p-2 text-center">
@@ -83,15 +97,24 @@ const ViewOrder = () => {
                                         onChange={(e) => handleStatusUpdate(order._id, e.target.value)}
                                         className="border p-1"
                                     >
-                                        <option value="Pending">Pending</option>
-                                        <option value="Confirmed">Confirmed</option>
-                                        <option value="Cancelled">Cancelled</option>
+                                        <option value="Pending" className="bg-yellow-200">Chờ xác nhận</option>
+                                        <option value="Completed" className="bg-green-200">Đã hoàn thành</option>
+                                        <option value="Cancelled" className="bg-red-200">Hủy</option>
                                     </select>
                                 </td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
+
+                <div className="flex justify-center mt-4">
+                    <Pagination
+                        count={totalPages}
+                        page={currentPage}
+                        onChange={(event, value) => setCurrentPage(value)}
+                        color="primary"
+                    />
+                </div>
 
             </div>
         </div>

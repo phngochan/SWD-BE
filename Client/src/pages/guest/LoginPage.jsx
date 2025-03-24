@@ -95,7 +95,7 @@ export default function LoginPage() {
       <div className="flex items-center justify-center h-[calc(100%-121px)] relative">
         <div className="absolute h-screen inset-0 bg-[url(/images/login.png)] bg-cover bg-center bg-no-repeat opacity-50 z-0" />
         <div className="relative z-10 w-full max-w-[400px] bg-white bg-opacity-90 rounded-xl shadow-lg p-6 md:p-8">
-          <h2 className="text-center text-2xl font-bold text-[#3b9fbb] uppercase mb-6 md:mb-8">
+          <h2 className="text-center text-2xl font-bold text-[#166277] uppercase mb-6 md:mb-8">
             Đăng nhập
           </h2>
           {error && <div className="text-center text-red-500 mb-4">{error}</div>}

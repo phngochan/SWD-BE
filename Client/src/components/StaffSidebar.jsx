@@ -46,7 +46,7 @@ const StaffSidebar = () => {
         flexShrink: 0,
         "& .MuiDrawer-paper": {
           width: 240,
-          backgroundColor: "#1e3a8a",
+          backgroundColor: "#58a2b6",
           color: "white",
           padding: "10px",
         },
@@ -63,11 +63,11 @@ const StaffSidebar = () => {
 
       <Typography variant="h6">
         <div className="text-center">
-          Welcome Staff <br /> {fullName}
+          Chào mừng nhân viên<br /> {fullName}
         </div>
       </Typography>
 
-      <Divider sx={{ backgroundColor: "#4f6fb7" }} />
+      <Divider sx={{ backgroundColor: "#3b9fbb" }} />
 
       {/* Danh sách menu */}
       <List>
@@ -84,7 +84,7 @@ const StaffSidebar = () => {
         ))}
       </List>
 
-      <Divider sx={{ backgroundColor: "#4f6fb7", marginY: 1 }} />
+      <Divider sx={{ backgroundColor: "#58a2b6", marginY: 1 }} />
 
       {/* Change Password Button */}
       <Button
@@ -95,11 +95,11 @@ const StaffSidebar = () => {
           left: "50%",
           transform: "translateX(-50%)",
           width: "80%",
-          backgroundColor: "#FFC107",
+          backgroundColor: "#d6e9ee",
           color: "black",
           fontWeight: "bold",
           "&:hover": {
-            backgroundColor: "#FFA000",
+            backgroundColor: "#8aabb4",
           },
         }}
       >
@@ -114,11 +114,11 @@ const StaffSidebar = () => {
           left: "50%",
           transform: "translateX(-50%)",
           width: "80%",
-          backgroundColor: "#FF5722",
+          backgroundColor: "#b36b41",
           color: "white",
           fontWeight: "bold",
           "&:hover": {
-            backgroundColor: "#E64A19",
+            backgroundColor: "#703d1f",
           },
         }}
       >
