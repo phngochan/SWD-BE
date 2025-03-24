@@ -1,35 +1,40 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { Drawer, List, ListItemButton, ListItemText, Toolbar, Typography, Divider, Button } from "@mui/material";
-// import axios from "axios";
+import axios from "../utils/axiosInstance";
 
-axios.defaults.withCredentials = true; // ✅ Ensure cookies/session data are sent with requests
+axios.defaults.withCredentials = true;
 
 const ConsultantSidebar = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const fullName = localStorage.getItem("fullName") || sessionStorage.getItem("fullName");
+    const userId = localStorage.getItem("userId") || sessionStorage.getItem("userId");
+    const [averageRating, setAverageRating] = useState("N/A");
 
-    const menuItems = [
-        { name: "Lịch làm việc", path: "/view-booked" },
-        { name: "Staff", path: "/staff-management" },
-    ];
+    useEffect(() => {
+        axios.get(`/api/feedbacks/consultant-rating/${userId}`)
+            .then(response => {
+                setAverageRating(response.data[0].averageRating?.toFixed(1) || "N/A");
+                console.log("Average rating:", response.data);
+            })
+            .catch(error => {
+                console.error("Error fetching average rating:", error);
+            });
+    }, []);
 
     const handleLogout = () => {
-        if (!window.confirm("Are you sure you want to log out?")) return;
+        if (!window.confirm("Bạn có chắc chắn muốn đăng xuất không?")) return;
         axios.post("/api/auth/logout")
             .then(() => {
-                // ✅ Clear auth data from storage
                 localStorage.removeItem("authToken");
                 localStorage.removeItem("roleName");
                 sessionStorage.removeItem("authToken");
                 sessionStorage.removeItem("roleName");
-
-                // ✅ Redirect user to login page
-                navigate("/login");
+                navigate("/dang-nhap");
             })
             .catch(error => {
-                console.error("Logout failed:", error.response?.data?.message || error.message);
+                console.error("Đăng xuất thất bại:", error.response?.data?.message || error.message);
             });
     };
 
@@ -41,36 +46,37 @@ const ConsultantSidebar = () => {
                 flexShrink: 0,
                 "& .MuiDrawer-paper": {
                     width: 240,
-                    backgroundColor: "#1a202c",
+                    backgroundColor: "#1e3a8a",
                     color: "white",
                     padding: "10px",
                 },
             }}
         >
-            {/* Sidebar Title */}
             <Toolbar>
-                <div className="w-[150px] h-[150px] bg-cover bg-center bg-no-repeat rounded-t-lg" style={{ backgroundImage: `url(https://cdn2.iconfinder.com/data/icons/shopping-colorline/64/admin-512.png)` }} />
+                <div
+                    className="w-[120px] h-[120px] mx-auto bg-cover bg-center bg-no-repeat rounded-full"
+                    style={{ backgroundImage: `url(https://cdn-icons-png.flaticon.com/512/3135/3135715.png)`, }}
+                />
             </Toolbar>
             <Typography variant="h6">
                 <div className="text-center">
-                    Welcome Admin <br />{fullName}
+                    Chào mừng chuyên viên <br />
+                    {fullName}
+                </div>
+                <div className="text-center text-sm text-gray-300">
+                    ⭐ Đánh giá trung bình: {averageRating}
                 </div>
             </Typography>
-            <Divider sx={{ backgroundColor: "gray" }} />
+            <Divider sx={{ backgroundColor: "#4f6fb7" }} />
 
-            {/* Menu List */}
             <List>
-                {menuItems.map((item) => (
-                    <NavLink key={item.name} to={item.path} style={{ textDecoration: "none", color: "inherit" }}>
-                        <ListItemButton selected={location.pathname === item.path}>
-                            <ListItemText primary={item.name} />
-                        </ListItemButton>
-                    </NavLink>
-                ))}
+                <NavLink to="/view-booked" style={{ textDecoration: "none", color: "inherit" }}>
+                    <ListItemButton selected={location.pathname === "/view-booked"}>
+                        <ListItemText primary="Lịch làm việc" />
+                    </ListItemButton>
+                </NavLink>
             </List>
 
-
-            {/* Change Password Button */}
             <Button
                 onClick={() => navigate("/change-password")}
                 sx={{
@@ -79,17 +85,17 @@ const ConsultantSidebar = () => {
                     left: "50%",
                     transform: "translateX(-50%)",
                     width: "80%",
-                    backgroundColor: "#1976d2",
-                    color: "white",
+                    backgroundColor: "#FFC107",
+                    color: "black",
+                    fontWeight: "bold",
                     "&:hover": {
-                        backgroundColor: "#1565c0",
+                        backgroundColor: "#FFA000",
                     },
                 }}
             >
                 Đổi mật khẩu
             </Button>
 
-            {/* Logout Button */}
             <Button
                 onClick={handleLogout}
                 sx={{
@@ -98,10 +104,11 @@ const ConsultantSidebar = () => {
                     left: "50%",
                     transform: "translateX(-50%)",
                     width: "80%",
-                    backgroundColor: "#f44336",
+                    backgroundColor: "#FF5722",
                     color: "white",
+                    fontWeight: "bold",
                     "&:hover": {
-                        backgroundColor: "#d32f2f",
+                        backgroundColor: "#E64A19",
                     },
                 }}
             >

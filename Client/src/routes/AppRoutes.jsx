@@ -38,6 +38,7 @@ import ProductDetail from "../pages/guest/ProductDetail.jsx";
 import Errorpage from "../pages/guest/Errorpage.jsx";
 import BookingProductsHistory from "../pages/customer/BookingProductsHistory.jsx";
 import { AnimatePresence, motion } from "framer-motion";
+import ViewBooked from "../pages/consultant/ViewBooked.jsx";
 
 
 axios.defaults.baseURL = import.meta.env.VITE_API_URL;
@@ -145,7 +146,7 @@ function AppRoute() {
 
 
             <Route element={<ProtectedRoute allowedRoles={["Consultant"]} />}>
-              {/* <Route path="/view-booked" element={<ViewBooked />} /> */}
+              <Route path="/view-booked" element={<ViewBooked />} />
             </Route>
 
 

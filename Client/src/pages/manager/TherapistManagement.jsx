@@ -94,22 +94,22 @@ export default function TherapistManagement() {
     <div className="flex h-screen bg-gray-100">
       <Sidebar />
       <div className="flex-1 p-8 bg-white shadow-lg rounded-lg">
-        <h2 className="text-3xl font-bold text-gray-800 mb-6">Consultant Management</h2>
+        <h2 className="text-3xl font-bold text-gray-800 mb-6">Chuyên viên</h2>
         <button className="bg-blue-500  text-white px-6 py-3 rounded-full mb-6 hover:bg-blue-600 transition-all duration-300" onClick={() => setModalData({})}>
-          Add Consultant
+          Thêm chuyên viên
         </button>
         <div className="overflow-x-auto bg-white shadow-lg rounded-lg">
           <table className="w-full table-auto">
             <thead className="bg-gray-200">
               <tr>
-                <th className="p-3 text-left text-sm font-medium text-gray-700">First Name</th>
-                <th className="p-3 text-left text-sm font-medium text-gray-700">Last Name</th>
+                <th className="p-3 text-left text-sm font-medium text-gray-700">Họ </th>
+                <th className="p-3 text-left text-sm font-medium text-gray-700">Tên</th>
                 <th className="p-3 text-left text-sm font-medium text-gray-700">Email</th>
-                <th className="p-3 text-left text-sm font-medium text-gray-700">Phone</th>
-                <th className="p-3 text-left text-sm font-medium text-gray-700">Note</th>
-                <th className="p-3 text-left text-sm font-medium text-gray-700">Image</th>
-                <th className="p-3 text-left text-sm font-medium text-gray-700">Verified</th>
-                <th className="p-3 text-left text-sm font-medium text-gray-700">Actions</th>
+                <th className="p-3 text-left text-sm font-medium text-gray-700">Số điện thoại</th>
+                <th className="p-3 text-left text-sm font-medium text-gray-700">Ghi chú</th>
+                <th className="p-3 text-left text-sm font-medium text-gray-700">Ảnh</th>
+                <th className="p-3 text-left text-sm font-medium text-gray-700">Xác minh</th>
+                <th className="p-3 text-left text-sm font-medium text-gray-700"></th>
               </tr>
             </thead>
             <tbody>
