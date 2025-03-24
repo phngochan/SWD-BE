@@ -1,14 +1,16 @@
 const Feedback = require('../models/Feedback');
-const BookingRequest = require('../models/BookingRequest'); // Add this line
+const BookingRequest = require('../models/BookingRequest')
+const mongoose = require("mongoose");
+
 
 exports.createFeedback = async (req, res) => {
   try {
-    const { consultantRating, consultantComment, serviceRating, serviceComment, bookingId } = req.body;
+    const { consultantRating, consultantComment, serviceRating, serviceComment, bookingRequestId } = req.body;
 
     console.log("Request Body:", req.body);
 
     // Kiểm tra booking request có tồn tại và hoàn thành chưa
-    const bookingRequest = await BookingRequest.findById(bookingId)
+    const bookingRequest = await BookingRequest.findById(bookingRequestId)
       .populate({ path: "serviceID", select: "_id" })  // Chỉnh đúng serviceID
       .populate({ path: "consultantID", select: "_id" });
 
@@ -29,7 +31,7 @@ exports.createFeedback = async (req, res) => {
     }
 
     const feedback = new Feedback({
-      bookingRequestId: bookingId,
+      bookingRequestId,
       serviceId,
       consultantId,
       serviceRating: serviceRating || null,
@@ -59,9 +61,7 @@ exports.getFeedbackByBooking = async (req, res) => {
 
 exports.getAllFeedback = async (req, res) => {
   try {
-    const { serviceId } = req.query;
-    const filter = serviceId ? { serviceId } : {};
-    const feedbacks = await Feedback.find(filter).populate("bookingRequestId", "customerId serviceId consultantId");
+    const feedbacks = await Feedback.find().populate("bookingRequestId", "customerId serviceId consultantId");
     res.status(200).json(feedbacks);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -70,9 +70,12 @@ exports.getAllFeedback = async (req, res) => {
 
 exports.getAverageServiceRating = async (req, res) => {
   try {
+    const serviceId = req.params.serviceId;
+    const objectId = new mongoose.Types.ObjectId(serviceId);
+
     const result = await Feedback.aggregate([
       {
-        $match: { serviceId: { $exists: true, $ne: null }, serviceRating: { $exists: true } }
+        $match: { serviceId: objectId, serviceRating: { $exists: true } }
       },
       {
         $group: {
@@ -110,4 +113,42 @@ exports.getAverageConsultantRating = async (req, res) => {
   }
 };
 
+exports.getAverageConsultantRatingById = async (req, res) => {
+  try {
+    const consultantId = req.params.id;
+    console.log("Consultant ID:", consultantId);
 
+    const objectId = new mongoose.Types.ObjectId(consultantId);
+    const result = await Feedback.aggregate([
+      {
+        $match: { consultantId: objectId, consultantRating: { $exists: true } }
+      },
+      {
+        $group: {
+          _id: "$consultantId",
+          averageRating: { $avg: "$consultantRating" },
+          totalReviews: { $sum: 1 }
+        }
+      }
+    ]);
+
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
+exports.getFeedbackByService = async (req, res) => {
+  try {
+    const feedback = await Feedback.find({ serviceId: req.params.serviceId })
+      .populate({
+        path: "bookingRequestId",
+        populate: { path: "customerID", select: "firstName lastName" } // Lấy thông tin khách hàng
+      });
+
+    res.status(200).json(feedback);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};

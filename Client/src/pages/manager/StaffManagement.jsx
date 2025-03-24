@@ -91,23 +91,23 @@ export default function StaffManagement() {
     <div className="flex h-screen">
       <Sidebar />
       <div className="flex-1 p-6 bg-gray-100">
-        <h2 className="text-3xl font-bold mb-6 text-gray-800">Staff Management</h2>
+        <h2 className="text-3xl font-bold mb-6 text-gray-800">Quản lí</h2>
         <button
           className="bg-blue-500 text-white px-6 py-2 rounded-full shadow-lg hover:bg-blue-600 transition-all duration-300"
           onClick={() => setModalData({})}
         >
-          Add Staff
+          Thêm quản lí
         </button>
         <div className="overflow-x-auto mt-6 bg-white shadow-md rounded-lg">
           <table className="min-w-full table-auto border-collapse">
             <thead>
               <tr className="bg-gray-200">
-                <th className="border-b p-3 text-left">First Name</th>
-                <th className="border-b p-3 text-left">Last Name</th>
+                <th className="border-b p-3 text-left">Họ</th>
+                <th className="border-b p-3 text-left">Tên</th>
                 <th className="border-b p-3 text-left">Email</th>
-                <th className="border-b p-3 text-left">Phone</th>
-                <th className="border-b p-3 text-left">Verified</th>
-                <th className="border-b p-3 text-left">Actions</th>
+                <th className="border-b p-3 text-left">Số điện thoại</th>
+                <th className="border-b p-3 text-left">Xác minh</th>
+                <th className="border-b p-3 text-left"></th>
               </tr>
             </thead>
             <tbody>

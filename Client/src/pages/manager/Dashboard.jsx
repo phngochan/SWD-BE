@@ -32,7 +32,7 @@ const Dashboard = () => {
       <Sidebar />
       <Box component="main" sx={{ flexGrow: 1, p: 3, backgroundColor: "#f4f4f4" }}>
         <Typography variant="h4" gutterBottom>
-          Dashboard Overview
+          Thống kê
         </Typography>
         <Card sx={{ maxWidth: 1000 }}>
           <CardContent>

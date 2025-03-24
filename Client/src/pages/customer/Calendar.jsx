@@ -151,7 +151,7 @@ const MyCalendar = () => {
 
                 setTimeout(() => {
                     console.log("🚀 Redirecting to /about now!");
-                    window.location.href = "/ve-chung-toi"; // Chuyển trang sau khi booking thành công
+                    window.location.href = "/chúng tôi"; // Chuyển trang sau khi booking thành công
                 }, 2000);
             } else {
                 console.log("❌ Booking request did not return expected status:", response);
