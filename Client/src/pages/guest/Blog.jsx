@@ -75,7 +75,7 @@ export default function Blog() {
 
                     {/* Animated Button */}
                     <motion.button
-                        onClick={() => navigate("/services")}
+                        onClick={() => navigate("/dịch vụ")} // Navigate to services page
                         className="relative px-6 py-3 text-white rounded-full shadow-lg pacifico-regular focus:outline-none focus:ring-4 focus:ring-green-300"
                         style={{
                             background: "linear-gradient(135deg, #6B8E23, #32CD32)",
@@ -92,7 +92,7 @@ export default function Blog() {
                         whileHover={{ scale: 1.1, rotate: 5, boxShadow: "0 8px 25px rgba(0, 0, 0, 0.3)" }}
                         whileTap={{ scale: 0.95 }}
                     >
-                        Book Now
+                        Đặt lịch ngay
                     </motion.button>
                 </div>
             </div>

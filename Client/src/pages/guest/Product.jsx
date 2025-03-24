@@ -176,7 +176,10 @@ export default function Product() {
 
       {/* Product List */}
       <div className="max-w-5xl mx-auto px-6 py-16 text-[#2B6A7C]">
-        <h2 className="text-3xl font-bold text-center mb-8">Danh sách sản phẩm</h2>
+        <div className="flex-shrink-0 text-[40px] mb-10 font-semibold leading-[48px] tracking-[-0.8px] text-center px-[80px] text-[#2B6A7C] pacifico-regular">
+          <span className="text-[50px]">C</span>
+          họn Dịch Vụ Của Bạn
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {products.map((product) => (
             <div

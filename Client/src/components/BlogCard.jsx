@@ -11,7 +11,7 @@ function BlogCard({ image, title, description, onReadMore }) {
           onClick={onReadMore}
           className="mt-4 text-[#2B6A7C] hover:text-[#A7DFEC] self-end"
         >
-          Read More
+          Đọc thêm
         </button>
       </div>
     </div>

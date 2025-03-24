@@ -10,7 +10,7 @@ export default function ProductDetail() {
     const [paymentMethod, setPaymentMethod] = useState("cash"); // Default payment method
     const [showPopup, setShowPopup] = useState(false);
     const navigate = useNavigate();
-    const [isProcessing, setIsProcessing] = useState(false); 
+    const [isProcessing, setIsProcessing] = useState(false);
 
     useEffect(() => {
         const fetchOrderItems = async () => {
@@ -64,51 +64,51 @@ export default function ProductDetail() {
         setShowCheckoutModal(true);
     };
 
-const handleConfirmCheckout = async () => {
-    const orderID = localStorage.getItem("orderID");
+    const handleConfirmCheckout = async () => {
+        const orderID = localStorage.getItem("orderID");
 
-    if (!orderID) {
-        alert("Không tìm thấy đơn hàng. Vui lòng thử lại.");
-        return;
-    }
-
-    setIsProcessing(true); // disable nút khi đang xử lý
-
-    if (paymentMethod === "cash") {
-        try {
-            const response = await axios.put(`/api/orders/${orderID}/status`, {
-                status: "Completed",
-            });
-
-            if (response.status === 200) {
-                setShowPopup(true);
-
-                // Xóa orderID và cart sau khi thanh toán thành công
-                localStorage.removeItem("orderID");
-                localStorage.removeItem("cart");
-                setCart([]);
-
-                setTimeout(() => {
-                    setShowPopup(false);
-                    navigate("/product");
-                }, 3000);
-
-                setShowCheckoutModal(false);
-            } else {
-                alert("Cập nhật không thành công. Vui lòng thử lại.");
-            }
-        } catch (err) {
-            const errorMsg = err.response?.data?.message || "Có lỗi khi cập nhật trạng thái đơn hàng! Vui lòng thử lại.";
-            console.error("Lỗi khi cập nhật trạng thái:", err);
-            alert(errorMsg);
-        } finally {
-            setIsProcessing(false);
+        if (!orderID) {
+            alert("Không tìm thấy đơn hàng. Vui lòng thử lại.");
+            return;
         }
-    } else if (paymentMethod === "bank") {
-        setIsProcessing(false);
-        navigate("/checkout");
-    }
-};
+
+        setIsProcessing(true); // disable nút khi đang xử lý
+
+        if (paymentMethod === "cash") {
+            try {
+                const response = await axios.put(`/api/orders/${orderID}/status`, {
+                    status: "Completed",
+                });
+
+                if (response.status === 200) {
+                    setShowPopup(true);
+
+                    // Xóa orderID và cart sau khi thanh toán thành công
+                    localStorage.removeItem("orderID");
+                    localStorage.removeItem("cart");
+                    setCart([]);
+
+                    setTimeout(() => {
+                        setShowPopup(false);
+                        navigate("/sản phẩm");
+                    }, 3000);
+
+                    setShowCheckoutModal(false);
+                } else {
+                    alert("Cập nhật không thành công. Vui lòng thử lại.");
+                }
+            } catch (err) {
+                const errorMsg = err.response?.data?.message || "Có lỗi khi cập nhật trạng thái đơn hàng! Vui lòng thử lại.";
+                console.error("Lỗi khi cập nhật trạng thái:", err);
+                alert(errorMsg);
+            } finally {
+                setIsProcessing(false);
+            }
+        } else if (paymentMethod === "bank") {
+            setIsProcessing(false);
+            navigate("/checkout");
+        }
+    };
 
     const handleCancelCheckout = () => {
         setShowCheckoutModal(false);
