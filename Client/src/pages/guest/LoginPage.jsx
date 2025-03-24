@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar";
-import { EyeIcon } from "lucide-react";
-import { EyeOffIcon } from "lucide-react";
+import { EyeIcon, EyeOffIcon } from "lucide-react";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -80,7 +79,7 @@ export default function LoginPage() {
       if (roleName === "Manager") redirectUrl = "/dashboard";
       else if (roleName === "Staff") redirectUrl = "/view-booking";
       else if (roleName === "Consultant") redirectUrl = "/view-booked";
-      else if (roleName === "Customer") redirectUrl = "/about";
+      else if (roleName === "Customer") redirectUrl = "/chúng tôi";
 
       navigate(redirectUrl);
     } catch (err) {
@@ -115,7 +114,7 @@ export default function LoginPage() {
             <div className="relative w-full">
               <input
                 type={showPassword ? "text" : "password"}
-                placeholder="Password"
+                placeholder="Mật khẩu"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required

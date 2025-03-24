@@ -57,14 +57,14 @@ function AppRoute() {
 
   // Define default pages for each role
   const roleRoutes = {
-    Guest: "/ve-chung-toi",
-    Customer: "/ve-chung-toi",
+    Guest: "/chúng tôi",
+    Customer: "/chúng tôi",
     Manager: "/dashboard",
     Staff: "/view-booking",
   };
 
   // Default page based on role
-  const defaultPage = roleRoutes[userRole] || "/ve-chung-toi";
+  const defaultPage = roleRoutes[userRole] || "/chúng tôi";
 
 
 
@@ -94,7 +94,7 @@ function AppRoute() {
 
             {/* Guest & Customer Shared Pages */}
             <Route element={<ProtectedRoute allowedRoles={["Guest", "Customer"]} />}>
-              <Route path="/ve-chung-toi" element={<About />} />
+              <Route path="/chúng tôi" element={<About />} />
               <Route path="/blog" element={<Blog />} />
               <Route path="/blog/:id" element={<BlogDetail />} />
               <Route path="/dịch vụ" element={<Services />} />
