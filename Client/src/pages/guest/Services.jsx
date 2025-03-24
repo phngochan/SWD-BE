@@ -5,8 +5,6 @@ import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import ServiceCard from "../../components/ServiceCard";
 
-
-
 export default function ServiceGuest() {
     const [services, setServices] = useState([]);
     const navigate = useNavigate();
@@ -16,7 +14,6 @@ export default function ServiceGuest() {
     useEffect(() => {
         setCart(cartData);
     }, []);
-
 
     // Fetch data from the server
     useEffect(() => {
@@ -92,6 +89,7 @@ export default function ServiceGuest() {
                             description={service.description}
                             price={service.price}
                             onChoose={() => handleChoose(service._id)}
+                            className="w-[300px] h-[400px] flex flex-col justify-between" // Add fixed width and height, and flex properties
                         />
                     ))}
                 </div>
