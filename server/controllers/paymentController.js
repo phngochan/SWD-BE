@@ -41,10 +41,10 @@ const createEmbeddedPaymentLink = async (req, res) => {
 
         const transactionDateTime = new Date();
 
-        // Generate a unique appointment code
+        // Generate a unique appointment code within a safe range
         let appointmentCode;
-        while (1 > 0) {
-            appointmentCode = Number(Date.now().toString().slice(-8) + Math.floor(Math.random() * 100).toString().padStart(2, '0'));
+        while (true) {
+            appointmentCode = Math.floor(Math.random() * 9000000000) + 1000000000; // 10-digit number
             const existingAppointment = await Appointment.findOne({ appointmentCode });
             if (!existingAppointment) break; // Ensure unique appointment code
         }
@@ -56,7 +56,7 @@ const createEmbeddedPaymentLink = async (req, res) => {
             status: "Pending",
             amount: service.price,
             appointmentCode,
-            description: "Service Payment",
+            description: "Service Payment".substring(0, 25), // Ensure description is within 25 characters
             buyerName: user.firstName + " " + user.lastName,
             buyerEmail: user.email,
             buyerPhone: user.phoneNumber,
@@ -66,8 +66,8 @@ const createEmbeddedPaymentLink = async (req, res) => {
 
         // Payment link parameters
         const amount = service.price;
-        const description = "Service Payment";
-        const items = [{ name: service.name, quantity: 1, price: service.price }];
+        const description = "Thanh toán dịch vụ".substring(0, 25); // Ensure description is within 25 characters
+        const items = [{ name: String(service.name), quantity: 1, price: service.price }]; // Ensure item name is a string
         const returnUrl = process.env.RETURN_URL || "http://localhost:5173/pay-success"; // URL for success page
         const cancelUrl = process.env.CANCEL_URL || "http://localhost:5173/pay-failed"; // URL for failure page
 
@@ -182,12 +182,13 @@ const createOrderPaymentLink = async (req, res) => {
         let items = [];
         orderItems.forEach(item => {
             totalAmount += item.productID.price * item.quantity;
-            items.push({ name: item.productID.name, quantity: item.quantity, price: item.productID.price });
+            items.push({ name: String(item.productID.productName), quantity: item.quantity, price: item.productID.price }); // Ensure item name is a string
         });
 
-        const orderCode = `ORDER_${orderId}`;
+        // Generate a unique order code within a safe range
+        const orderCode = Math.floor(Math.random() * 9000000000) + 1000000000; // 10-digit number
 
-        const description = "Payment for ordered products";
+        const description = "Thanh toán sản phẩm".substring(0, 25); // Ensure description is within 25 characters
         const returnUrl = process.env.RETURN_URL || "http://localhost:5173/pay-success";
         const cancelUrl = process.env.CANCEL_URL || "http://localhost:5173/pay-failed";
 
@@ -238,21 +239,25 @@ const receiveOrderPayment = async (req, res) => {
         let data = req.body;
 
         if (data.data && data.data.orderCode) {
-            const orderCode = data.data.orderCode.replace("ORDER_", "");
-            const order = await OrderProduct.findById(orderCode);
+            const orderCode = data.data.orderCode;
+
+            const order = await OrderProduct.findOne({ tempOrderCode: orderCode });
 
             if (!order) {
-                return res.status(404).json({ error: 1, message: "Order not found" });
+                return res.status(404).json({ message: "Order not found" });
             }
 
             if (data.success) {
-                order.status = "Confirmed";
+                order.status = "Completed";
+                // Clear the cart after successful payment
+                order.orderItems = [];
+                await order.save();
+                // Send a success response
+                return res.status(200).json({ error: 0, message: "Order payment updated successfully", order });
             } else {
-                order.status = "Cancelled";
+                // Keep the order status as "Pending" if payment is cancelled
+                return res.status(200).json({ error: 0, message: "Payment cancelled, order status remains pending", order });
             }
-
-            await order.save();
-            return res.status(200).json({ error: 0, message: "Order payment updated successfully", order });
         }
 
         return res.status(400).json({ error: 1, message: "Invalid payment data" });
@@ -263,11 +268,11 @@ const receiveOrderPayment = async (req, res) => {
     }
 };
 
-module.exports = { 
-    createEmbeddedPaymentLink, 
-    receivePayment, 
-    createOrderPaymentLink, 
-    receiveOrderPayment 
+module.exports = {
+    createEmbeddedPaymentLink,
+    receivePayment,
+    createOrderPaymentLink,
+    receiveOrderPayment
 };
 
 
