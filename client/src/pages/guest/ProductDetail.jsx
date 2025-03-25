@@ -97,7 +97,7 @@ export default function ProductDetail() {
         if (paymentMethod === "cash") {
             try {
                 const response = await axios.put(`/api/orders/${orderID}/status`, {
-                    status: "Completed",
+                    status: "Confirmed",
                 });
 
                 if (response.status === 200) {
