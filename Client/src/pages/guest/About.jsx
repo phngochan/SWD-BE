@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa";
 import Navbar from "../../components/Navbar";
 import { useState, useEffect } from "react";
+import Footer from "../../components/Footer";
 
 export default function About() {
 
@@ -55,44 +56,7 @@ export default function About() {
             </div>
 
             {/* Footer */}
-            <footer className="bg-[#E5F5F1] text-[#646464] py-10">
-                <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-6 px-6">
-                    <div>
-                        <h3 className="text-lg font-bold">Let's Stay Social</h3>
-                        <div className="flex space-x-4 mt-2">
-                            <a href="#" className="hover:text-[#000000]"><FaFacebook size={24} /></a>
-                            <a href="#" className="hover:text-[#000000]"><FaInstagram size={24} /></a>
-                            <a href="#" className="hover:text-[#000000]"><FaTwitter size={24} /></a>
-                        </div>
-                    </div>
-                    <div>
-                        <h3 className="text-[#646464] text-lg font-bold">About</h3>
-                        <ul className="mt-2 space-y-1">
-                            <li><a href="#" className="text-[#646464] hover:text-[#000000]">Our Story</a></li>
-                            <li><a href="#" className="text-[#646464] hover:text-[#000000]">Mission</a></li>
-                            <li><a href="#" className="text-[#646464] hover:text-[#000000]">Sustainability</a></li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h3 className="text-[#646464] text-lg font-bold">Support</h3>
-                        <ul className="mt-2 space-y-1">
-                            <li><a href="#" className="text-[#646464] hover:text-[#000000]">Contact Us</a></li>
-                            <li><a href="#" className="text-[#646464] hover:text-[#000000]">FAQ</a></li>
-                            {/* <li><a href="#" className="text-[#646464] hover:text-[#000000]">Shipping & Returns</a></li> */}
-                        </ul>
-                    </div>
-                    <div>
-                        <h3 className="text-[#646464] text-lg font-bold">Legal</h3>
-                        <ul className="mt-2 space-y-1">
-                            <li><a href="#" className="text-[#646464] hover:text-white">Privacy Policy</a></li>
-                            <li><a href="#" className="text-[#646464] hover:text-white">Terms of Service</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div className="text-center mt-8 text-gray-500 text-sm">
-                    &copy; 2025 SWD. All rights reserved.
-                </div>
-            </footer>
+            <Footer />
         </div>
     );
 }
