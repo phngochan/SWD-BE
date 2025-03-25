@@ -21,7 +21,7 @@ export default function ProductDetail() {
                     setCart(response.data);
                 } catch (err) {
                     console.error("Failed to fetch order items:", err);
-                    // Nếu lỗi -> fallback về localStorage cart
+                    // If error -> fallback to localStorage cart
                     const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
                     setCart(storedCart);
                 }
@@ -44,6 +44,8 @@ export default function ProductDetail() {
             await axios.put(`/api/order-items/${updatedCart[index]._id}`, {
                 quantity: newQuantity,
             });
+            // Update total price in the OrderProduct document
+            await updateTotalPrice();
         } catch (error) {
             console.error("Failed to update item quantity:", error);
         }
@@ -58,8 +60,23 @@ export default function ProductDetail() {
 
         try {
             await axios.delete(`/api/order-items/${itemId}`);
+            // Update total price in the OrderProduct document
+            await updateTotalPrice();
         } catch (error) {
             console.error("Failed to delete item:", error);
+        }
+    };
+
+    const updateTotalPrice = async () => {
+        const orderID = localStorage.getItem("orderID");
+        if (!orderID) return;
+
+        const totalPrice = cart.reduce((total, product) => total + (product.productID?.price || 0) * product.quantity, 0);
+
+        try {
+            await axios.put(`/api/orders/${orderID}/total-price`, { totalPrice });
+        } catch (error) {
+            console.error("Failed to update total price:", error);
         }
     };
 
@@ -69,20 +86,20 @@ export default function ProductDetail() {
 
     const handleConfirmCheckout = async () => {
         const orderID = localStorage.getItem("orderID");
-    
+
         if (!orderID) {
             alert("Không tìm thấy đơn hàng. Vui lòng thử lại.");
             return;
         }
-    
-        setIsProcessing(true); // disable nút khi đang xử lý
-    
+
+        setIsProcessing(true); // disable button while processing
+
         if (paymentMethod === "cash") {
             try {
                 const response = await axios.put(`/api/orders/${orderID}/status`, {
-                    status: "Completed",
+                    status: "Confirmed",
                 });
-    
+
                 if (response.status === 200) {
                     handleSuccessPayment();
                 } else {
@@ -99,13 +116,13 @@ export default function ProductDetail() {
             try {
                 const response = await axios.post(`/api/payments/order/${orderID}`);
                 const { checkoutUrl } = response.data.data;
-    
+
                 if (checkoutUrl) {
                     window.location.href = checkoutUrl;
-                    
-                    // Cập nhật trạng thái đơn hàng thành "Completed"
+
+                    // Update order status to "Completed"
                     await axios.put(`/api/orders/${orderID}/status`, { status: "Completed" });
-    
+
                     handleSuccessPayment();
                 } else {
                     alert("Không thể tạo liên kết thanh toán. Vui lòng thử lại.");
@@ -118,24 +135,24 @@ export default function ProductDetail() {
             }
         }
     };
-    
-    // Hàm xử lý sau khi thanh toán thành công
+
+    // Handle successful payment
     const handleSuccessPayment = () => {
         setShowPopup(true);
-    
-        // Xóa orderID và cart sau khi thanh toán thành công
+
+        // Clear orderID and cart after successful payment
         localStorage.removeItem("orderID");
         localStorage.removeItem("cart");
         setCart([]);
-    
+
         setTimeout(() => {
             setShowPopup(false);
             navigate("/sản phẩm");
         }, 3000);
-    
+
         setShowCheckoutModal(false);
     };
-    
+
 
     const handleCancelCheckout = () => {
         setShowCheckoutModal(false);

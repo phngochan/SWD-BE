@@ -180,21 +180,41 @@ const createOrderPaymentLink = async (req, res) => {
 
         let totalAmount = 0;
         let items = [];
-        orderItems.forEach(item => {
-            totalAmount += item.productID.price * item.quantity;
-            items.push({ name: String(item.productID.productName), quantity: item.quantity, price: item.productID.price }); // Ensure item name is a string
+
+        // Populate orderItems to get product information before calculating
+        await order.populate({
+            path: 'orderItems',
+            populate: {
+                path: 'productID',
+                model: 'Product'
+            }
         });
+
+        order.orderItems.forEach(item => {
+            if (item.productID && item.productID.price) { // Check if productID has data
+                totalAmount += item.productID.price * item.quantity;
+                items.push({
+                    name: String(item.productID.productName),
+                    quantity: item.quantity,
+                    price: item.productID.price
+                });
+            }
+        });
+
+        // Update the total price in the OrderProduct document
+        order.totalPrice = totalAmount;
+        await order.save();
 
         // Generate a unique order code within a safe range
         const orderCode = Math.floor(Math.random() * 9000000000) + 1000000000; // 10-digit number
 
         const description = "Thanh toán sản phẩm".substring(0, 25); // Ensure description is within 25 characters
-        const returnUrl = process.env.RETURN_URL || "http://localhost:5173/pay-success";
-        const cancelUrl = process.env.CANCEL_URL || "http://localhost:5173/pay-failed";
+        const returnUrl = process.env.RETURN_URL || "http://localhost:5173/pay-success-order";
+        const cancelUrl = process.env.CANCEL_URL || "http://localhost:5173/pay-failed-order";
 
         try {
             const paymentLinkRes = await PayOS.createPaymentLink({
-                orderCode,
+                orderCode: orderCode,
                 amount: totalAmount,
                 description,
                 items,

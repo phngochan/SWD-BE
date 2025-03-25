@@ -46,7 +46,7 @@ const ConsultantSidebar = () => {
                 flexShrink: 0,
                 "& .MuiDrawer-paper": {
                     width: 240,
-                    backgroundColor: "#58a2b6",
+                    backgroundColor: "#1e3a8a",
                     color: "white",
                     padding: "10px",
                 },
@@ -67,12 +67,12 @@ const ConsultantSidebar = () => {
                     ⭐ Đánh giá trung bình: {averageRating}
                 </div>
             </Typography>
-            <Divider className="bg-[#166277]" sx={{ backgroundColor: "#4f6fb7" }} />
+            <Divider sx={{ backgroundColor: "#4f6fb7" }} />
 
             <List>
                 <NavLink to="/view-booked" style={{ textDecoration: "none", color: "inherit" }}>
                     <ListItemButton selected={location.pathname === "/view-booked"}>
-                        <ListItemText  primary="Lịch làm việc" />
+                        <ListItemText primary="Lịch làm việc" />
                     </ListItemButton>
                 </NavLink>
             </List>
@@ -85,11 +85,11 @@ const ConsultantSidebar = () => {
                     left: "50%",
                     transform: "translateX(-50%)",
                     width: "80%",
-                    backgroundColor: "#d6e9ee",
+                    backgroundColor: "#FFC107",
                     color: "black",
                     fontWeight: "bold",
                     "&:hover": {
-                        backgroundColor: "#8aabb4",
+                        backgroundColor: "#FFA000",
                     },
                 }}
             >
@@ -104,11 +104,11 @@ const ConsultantSidebar = () => {
                     left: "50%",
                     transform: "translateX(-50%)",
                     width: "80%",
-                    backgroundColor: "#b36b41",
+                    backgroundColor: "#FF5722",
                     color: "white",
                     fontWeight: "bold",
                     "&:hover": {
-                        backgroundColor: "#703d1f",
+                        backgroundColor: "#E64A19",
                     },
                 }}
             >
