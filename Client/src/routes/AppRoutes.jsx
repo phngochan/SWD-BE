@@ -39,6 +39,8 @@ import Errorpage from "../pages/guest/Errorpage.jsx";
 import BookingProductsHistory from "../pages/customer/BookingProductsHistory.jsx";
 import { AnimatePresence, motion } from "framer-motion";
 import ViewBooked from "../pages/consultant/ViewBooked.jsx";
+import { PaySuccessOrder } from "../pages/customer/PaySuccessOrder.jsx";
+import { PayFailedOrder } from "../pages/customer/PayFailedOrder.jsx";
 
 
 axios.defaults.baseURL = import.meta.env.VITE_API_URL;
@@ -116,6 +118,8 @@ function AppRoute() {
               <Route path="/thong-tin-ca-nhan" element={<CustomerProfile />} />
               <Route path="/lich-su-dat-lich" element={<ViewBookingHistory />} />
               <Route path="/lich-su-dat-hang" element={<BookingProductsHistory />} />
+              <Route path="/pay-success-order" element={<PaySuccessOrder />} />
+              <Route path="/pay-failed-order" element={<PayFailedOrder />} />
             </Route>
 
             {/* Manager Pages */}
