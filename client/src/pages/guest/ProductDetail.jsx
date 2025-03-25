@@ -69,34 +69,22 @@ export default function ProductDetail() {
 
     const handleConfirmCheckout = async () => {
         const orderID = localStorage.getItem("orderID");
-
+    
         if (!orderID) {
             alert("Không tìm thấy đơn hàng. Vui lòng thử lại.");
             return;
         }
-
+    
         setIsProcessing(true); // disable nút khi đang xử lý
-
+    
         if (paymentMethod === "cash") {
             try {
                 const response = await axios.put(`/api/orders/${orderID}/status`, {
                     status: "Completed",
                 });
-
+    
                 if (response.status === 200) {
-                    setShowPopup(true);
-
-                    // Xóa orderID và cart sau khi thanh toán thành công
-                    localStorage.removeItem("orderID");
-                    localStorage.removeItem("cart");
-                    setCart([]);
-
-                    setTimeout(() => {
-                        setShowPopup(false);
-                        navigate("/sản phẩm");
-                    }, 3000);
-
-                    setShowCheckoutModal(false);
+                    handleSuccessPayment();
                 } else {
                     alert("Cập nhật không thành công. Vui lòng thử lại.");
                 }
@@ -111,20 +99,43 @@ export default function ProductDetail() {
             try {
                 const response = await axios.post(`/api/payments/order/${orderID}`);
                 const { checkoutUrl } = response.data.data;
-
+    
                 if (checkoutUrl) {
                     window.location.href = checkoutUrl;
+                    
+                    // Cập nhật trạng thái đơn hàng thành "Completed"
+                    await axios.put(`/api/orders/${orderID}/status`, { status: "Completed" });
+    
+                    handleSuccessPayment();
                 } else {
-                    alert("Failed to create payment link. Please try again.");
+                    alert("Không thể tạo liên kết thanh toán. Vui lòng thử lại.");
                 }
             } catch (error) {
-                console.error("Error creating payment link:", error);
-                alert("Failed to create payment link. Please try again.");
+                console.error("Lỗi khi tạo liên kết thanh toán:", error);
+                alert("Không thể tạo liên kết thanh toán. Vui lòng thử lại.");
             } finally {
                 setIsProcessing(false);
             }
         }
     };
+    
+    // Hàm xử lý sau khi thanh toán thành công
+    const handleSuccessPayment = () => {
+        setShowPopup(true);
+    
+        // Xóa orderID và cart sau khi thanh toán thành công
+        localStorage.removeItem("orderID");
+        localStorage.removeItem("cart");
+        setCart([]);
+    
+        setTimeout(() => {
+            setShowPopup(false);
+            navigate("/sản phẩm");
+        }, 3000);
+    
+        setShowCheckoutModal(false);
+    };
+    
 
     const handleCancelCheckout = () => {
         setShowCheckoutModal(false);
