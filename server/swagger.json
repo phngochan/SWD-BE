@@ -25,6 +25,18 @@
     {
       "name": "Appointments",
       "description": "Appointment management"
+    },
+    {
+      "name": "Blogs",
+      "description": "Blog management"
+    },
+    {
+      "name": "BookingRequests",
+      "description": "Booking request management"
+    },
+    {
+      "name": "Consultants",
+      "description": "Consultant management"
     }
   ],
   "components": {
@@ -311,6 +323,150 @@
           "buyerName",
           "buyerEmail",
           "buyerPhone"
+        ]
+      },
+      "Blog": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "The auto-generated id of the blog post"
+          },
+          "title": {
+            "type": "string",
+            "description": "The title of the blog post"
+          },
+          "image": {
+            "type": "string",
+            "description": "The URL of the blog post image"
+          },
+          "description": {
+            "type": "string",
+            "description": "The description of the blog post"
+          },
+          "content": {
+            "type": "string",
+            "description": "The content of the blog post"
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The date when the blog post was created"
+          },
+          "availability": {
+            "type": "boolean",
+            "description": "The availability status of the blog post"
+          }
+        },
+        "required": [
+          "title",
+          "content"
+        ]
+      },
+      "BookingRequest": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "The auto-generated id of the booking request"
+          },
+          "serviceID": {
+            "type": "string",
+            "description": "The ID of the service"
+          },
+          "customerID": {
+            "type": "string",
+            "description": "The ID of the customer"
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "description": "The date of the booking request"
+          },
+          "time": {
+            "type": "string",
+            "description": "The time of the booking request"
+          },
+          "consultantID": {
+            "type": "string",
+            "description": "The ID of the consultant"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "Pending",
+              "Confirmed",
+              "Completed",
+              "Cancelled"
+            ],
+            "description": "The status of the booking request"
+          },
+          "isConsultantAssignedByCustomer": {
+            "type": "boolean",
+            "description": "Whether the consultant was assigned by the customer"
+          }
+        },
+        "required": [
+          "serviceID",
+          "customerID",
+          "date",
+          "time",
+          "status"
+        ]
+      },
+      "Consultant": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "The auto-generated id of the consultant"
+          },
+          "user": {
+            "type": "string",
+            "description": "The ID of the user associated with the consultant"
+          },
+          "ratings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "user": {
+                  "type": "string",
+                  "description": "The ID of the user who gave the rating"
+                },
+                "rating": {
+                  "type": "number",
+                  "description": "The rating given by the user",
+                  "minimum": 1,
+                  "maximum": 5
+                },
+                "comment": {
+                  "type": "string",
+                  "description": "The comment given by the user"
+                },
+                "createdAt": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "The date when the rating was created"
+                }
+              }
+            }
+          },
+          "note": {
+            "type": "string",
+            "description": "The note for the consultant"
+          },
+          "image": {
+            "type": "string",
+            "description": "The image URL of the consultant"
+          },
+          "averageRating": {
+            "type": "number",
+            "description": "The average rating of the consultant"
+          }
+        },
+        "required": [
+          "user"
         ]
       }
     }
@@ -1082,6 +1238,1061 @@
           },
           "500": {
             "description": "An error occurred while deleting the appointment"
+          }
+        }
+      }
+    },
+    "/blogs": {
+      "get": {
+        "summary": "Get all blog posts",
+        "tags": [
+          "Blogs"
+        ],
+        "responses": {
+          "200": {
+            "description": "List of all blog posts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Blog"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error. Please try again."
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new blog post",
+        "tags": [
+          "Blogs"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Blog"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Blog post created successfully"
+          },
+          "500": {
+            "description": "Server error. Please try again."
+          }
+        }
+      }
+    },
+    "/blogs/{postId}": {
+      "get": {
+        "summary": "Get a single blog post by ID",
+        "tags": [
+          "Blogs"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "postId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the blog post"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Blog post details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Blog"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Blog post not found"
+          },
+          "500": {
+            "description": "Server error. Please try again."
+          }
+        }
+      },
+      "put": {
+        "summary": "Update a blog post",
+        "tags": [
+          "Blogs"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "postId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the blog post"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Blog"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Blog post updated successfully"
+          },
+          "404": {
+            "description": "Blog post not found"
+          },
+          "500": {
+            "description": "Server error. Please try again."
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a blog post",
+        "tags": [
+          "Blogs"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "postId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the blog post"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Blog post deleted successfully"
+          },
+          "404": {
+            "description": "Blog post not found"
+          },
+          "500": {
+            "description": "Server error. Please try again."
+          }
+        }
+      }
+    },
+    "/booking-requests": {
+      "post": {
+        "summary": "Create a new booking request",
+        "tags": [
+          "BookingRequests"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BookingRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Booking request created successfully"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "500": {
+            "description": "An error occurred while creating the booking request"
+          }
+        }
+      },
+      "get": {
+        "summary": "Get all booking requests",
+        "tags": [
+          "BookingRequests"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of all booking requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BookingRequest"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An error occurred while fetching the booking requests"
+          }
+        }
+      }
+    },
+    "/booking-requests/{id}": {
+      "get": {
+        "summary": "Get a booking request by ID",
+        "tags": [
+          "BookingRequests"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the booking request"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Booking request details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookingRequest"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Booking request not found"
+          },
+          "500": {
+            "description": "An error occurred while fetching the booking request"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update a booking request",
+        "tags": [
+          "BookingRequests"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the booking request"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BookingRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Booking request updated successfully"
+          },
+          "404": {
+            "description": "Booking request not found"
+          },
+          "500": {
+            "description": "An error occurred while updating the booking request"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a booking request",
+        "tags": [
+          "BookingRequests"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the booking request"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Booking request deleted successfully"
+          },
+          "404": {
+            "description": "Booking request not found"
+          },
+          "500": {
+            "description": "An error occurred while deleting the booking request"
+          }
+        }
+      }
+    },
+    "/booking-requests/{id}/status": {
+      "put": {
+        "summary": "Update the status of a booking request",
+        "tags": [
+          "BookingRequests"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the booking request"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "Pending",
+                      "Confirmed",
+                      "Completed",
+                      "Cancelled"
+                    ],
+                    "description": "The new status of the booking request"
+                  }
+                },
+                "required": [
+                  "status"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Booking request status updated successfully"
+          },
+          "400": {
+            "description": "Invalid status transition"
+          },
+          "404": {
+            "description": "Booking request not found"
+          },
+          "500": {
+            "description": "An error occurred while updating the booking request status"
+          }
+        }
+      }
+    },
+    "/booking-requests/booked-times": {
+      "get": {
+        "summary": "Get booked times for a consultant on a specific date",
+        "tags": [
+          "BookingRequests"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "consultantID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the consultant"
+          },
+          {
+            "in": "query",
+            "name": "date",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "The date to check for booked times"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of booked times",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing required parameters"
+          },
+          "500": {
+            "description": "An error occurred while fetching the booked times"
+          }
+        }
+      }
+    },
+    "/booking-requests/my-bookings": {
+      "get": {
+        "summary": "Get bookings for the authenticated consultant",
+        "tags": [
+          "BookingRequests"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of bookings for the authenticated consultant",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BookingRequest"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "An error occurred while fetching the bookings"
+          }
+        }
+      }
+    },
+    "/booking-requests/history-bookings": {
+      "get": {
+        "summary": "Get booking history for the authenticated customer",
+        "tags": [
+          "BookingRequests"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of booking history for the authenticated customer",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BookingRequest"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "An error occurred while fetching the booking history"
+          }
+        }
+      }
+    },
+    "/booking-requests/{id}/cancel": {
+      "put": {
+        "summary": "Cancel a booking request",
+        "tags": [
+          "BookingRequests"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the booking request"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Booking request canceled successfully"
+          },
+          "404": {
+            "description": "Booking request not found"
+          },
+          "500": {
+            "description": "An error occurred while canceling the booking request"
+          }
+        }
+      }
+    },
+    "/booking-requests/{id}/confirm": {
+      "put": {
+        "summary": "Confirm a booking request",
+        "tags": [
+          "BookingRequests"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the booking request"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Booking request confirmed successfully"
+          },
+          "404": {
+            "description": "Booking request not found"
+          },
+          "500": {
+            "description": "An error occurred while confirming the booking request"
+          }
+        }
+      }
+    },
+    "/booking-requests/{id}/complete": {
+      "put": {
+        "summary": "Complete a booking request",
+        "tags": [
+          "BookingRequests"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the booking request"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Booking request completed successfully"
+          },
+          "404": {
+            "description": "Booking request not found"
+          },
+          "500": {
+            "description": "An error occurred while completing the booking request"
+          }
+        }
+      }
+    },
+    "/booking-requests/{id}/assign": {
+      "put": {
+        "summary": "Assign a consultant to a booking request",
+        "tags": [
+          "BookingRequests"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the booking request"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "consultantID": {
+                    "type": "string",
+                    "description": "The ID of the consultant to assign"
+                  }
+                },
+                "required": [
+                  "consultantID"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Consultant assigned successfully"
+          },
+          "404": {
+            "description": "Booking request not found"
+          },
+          "500": {
+            "description": "An error occurred while assigning the consultant"
+          }
+        }
+      }
+    },
+    "/booking-requests/{consultantId}/pending-bookings": {
+      "get": {
+        "summary": "Get pending bookings for a consultant",
+        "tags": [
+          "BookingRequests"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "consultantId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the consultant"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of pending bookings for the consultant",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BookingRequest"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Consultant not found"
+          },
+          "500": {
+            "description": "An error occurred while fetching the pending bookings"
+          }
+        }
+      }
+    },
+    "/consultants": {
+      "get": {
+        "summary": "Get all consultants",
+        "tags": [
+          "Consultants"
+        ],
+        "responses": {
+          "200": {
+            "description": "List of all consultants",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Consultant"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error. Please try again."
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new consultant",
+        "tags": [
+          "Consultants"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Consultant"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Consultant created successfully"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "500": {
+            "description": "An error occurred while creating the consultant"
+          }
+        }
+      }
+    },
+    "/consultants/{id}": {
+      "get": {
+        "summary": "Get a consultant by ID",
+        "tags": [
+          "Consultants"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the consultant"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Consultant details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Consultant"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Consultant not found"
+          },
+          "500": {
+            "description": "Server error. Please try again."
+          }
+        }
+      },
+      "put": {
+        "summary": "Update a consultant",
+        "tags": [
+          "Consultants"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the consultant"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Consultant"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Consultant updated successfully"
+          },
+          "404": {
+            "description": "Consultant not found"
+          },
+          "500": {
+            "description": "Server error. Please try again."
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a consultant",
+        "tags": [
+          "Consultants"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the consultant"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Consultant deleted successfully"
+          },
+          "404": {
+            "description": "Consultant not found"
+          },
+          "500": {
+            "description": "Server error. Please try again."
+          }
+        }
+      }
+    },
+    "/consultants/{id}/rate": {
+      "post": {
+        "summary": "Add a rating to a consultant",
+        "tags": [
+          "Consultants"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the consultant"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "rating": {
+                    "type": "number",
+                    "description": "The rating given by the user",
+                    "minimum": 1,
+                    "maximum": 5
+                  },
+                  "comment": {
+                    "type": "string",
+                    "description": "The comment given by the user"
+                  }
+                },
+                "required": [
+                  "rating"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Rating added/updated successfully"
+          },
+          "404": {
+            "description": "Consultant not found"
+          },
+          "500": {
+            "description": "Server error. Please try again."
+          }
+        }
+      }
+    },
+    "/consultants/{id}/reset-password": {
+      "post": {
+        "summary": "Reset password for a consultant",
+        "tags": [
+          "Consultants"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the consultant"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Password reset successfully"
+          },
+          "404": {
+            "description": "Consultant not found"
+          },
+          "500": {
+            "description": "Server error. Please try again."
+          }
+        }
+      }
+    },
+    "/consultants/available/{bookingID}": {
+      "get": {
+        "summary": "Get available consultants for a booking",
+        "tags": [
+          "Consultants"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "bookingID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the booking"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of available consultants",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Consultant"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Booking not found"
+          },
+          "500": {
+            "description": "Server error. Please try again."
           }
         }
       }
