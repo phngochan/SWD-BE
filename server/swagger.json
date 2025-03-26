@@ -2593,7 +2593,7 @@
         }
       }
     },
-    "/feedback": {
+    "/feedbacks": {
       "post": {
         "summary": "Create feedback for a booking request",
         "tags": [
@@ -2637,7 +2637,7 @@
         }
       }
     },
-    "/feedback/{bookingRequestId}": {
+    "/feedbacks/{bookingRequestId}": {
       "get": {
         "summary": "Get feedback by booking request ID",
         "tags": [
@@ -2682,7 +2682,7 @@
         }
       }
     },
-    "/feedback/service-rating/{serviceId}": {
+    "/feedbacks/service-rating/{serviceId}": {
       "get": {
         "summary": "Get average service rating by service ID",
         "tags": [
@@ -2729,7 +2729,7 @@
         }
       }
     },
-    "/feedback/consultant-rating/{id}": {
+    "/feedbacks/consultant-rating/{id}": {
       "get": {
         "summary": "Get average consultant rating by consultant ID",
         "tags": [
@@ -2776,7 +2776,7 @@
         }
       }
     },
-    "/feedback/service/{serviceId}": {
+    "/feedbacks/service/{serviceId}": {
       "get": {
         "summary": "Get feedback for a specific service",
         "tags": [
@@ -2816,7 +2816,7 @@
         }
       }
     },
-    "/feedback/consultant-rating": {
+    "/feedbacks/consultant-rating": {
       "get": {
         "summary": "Get average ratings for all consultants",
         "tags": [
