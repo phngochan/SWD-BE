@@ -2597,7 +2597,7 @@
       "post": {
         "summary": "Create feedback for a booking request",
         "tags": [
-          "Feedback"
+          "Feedbacks"
         ],
         "security": [
           {
@@ -2641,7 +2641,7 @@
       "get": {
         "summary": "Get feedback by booking request ID",
         "tags": [
-          "Feedback"
+          "Feedbacks"
         ],
         "security": [
           {
@@ -2686,7 +2686,7 @@
       "get": {
         "summary": "Get average service rating by service ID",
         "tags": [
-          "Feedback"
+          "Feedbacks"
         ],
         "parameters": [
           {
@@ -2733,7 +2733,7 @@
       "get": {
         "summary": "Get average consultant rating by consultant ID",
         "tags": [
-          "Feedback"
+          "Feedbacks"
         ],
         "parameters": [
           {
@@ -2780,7 +2780,7 @@
       "get": {
         "summary": "Get feedback for a specific service",
         "tags": [
-          "Feedback"
+          "Feedbacks"
         ],
         "parameters": [
           {
@@ -2820,7 +2820,7 @@
       "get": {
         "summary": "Get average ratings for all consultants",
         "tags": [
-          "Feedback"
+          "Feedbacks"
         ],
         "responses": {
           "200": {

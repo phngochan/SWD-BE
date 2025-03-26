@@ -1,5 +1,4 @@
 const QuizResult = require("../models/QuizResult");
-const Question = require("../models/Question");
 
 // Function to determine skin type based on answer weights
 const determineSkinType = (answers) => {
