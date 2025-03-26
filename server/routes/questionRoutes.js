@@ -5,7 +5,7 @@ const { authenticate, authorize } = require("../middlewares/authMiddleware");
 const router = express.Router();
 
 //Public route: Get all questions
-router.get("/",  authenticate, getAllQuestions);
+router.get("/", getAllQuestions); // Removed authenticate middleware
 
 //Protected routes: Only Manager can create, update, and delete questions
 router.post("/",  authenticate, authorize(["Manager"]), addQuestion);

@@ -50,17 +50,9 @@ export default function BookingTherapist() {
     return feedbacks.filter(feedback => feedback.consultantId === consultantId);
   };
 
-  const getAverageRating = (consultantId) => {
-    const feedbacksForConsultant = getFeedbackForConsultant(consultantId);
-    if (feedbacksForConsultant.length === 0) return null;
-    const totalRating = feedbacksForConsultant.reduce((sum, feedback) => sum + feedback.consultantRating, 0);
-    return (totalRating / feedbacksForConsultant.length).toFixed(1);
-  };
   const getCustomerName = (bookingRequestId) => {
     const feedback = feedbacks.find(feedback => feedback.bookingRequestId === bookingRequestId);
-    return feedback && feedback.bookingRequestId && feedback.bookingRequestId.customerId
-      ? feedback.bookingRequestId.customerId.name
-      : "Customer";
+    return feedback?.bookingRequestId?.customerId?.name || "Customer";
   };
 
   const handleBookingNow = async (consultantId) => {
@@ -101,7 +93,7 @@ export default function BookingTherapist() {
       <div className="w-full max-w-[1200px] mx-auto py-8 px-4">
         {/* Back Button */}
         <button
-          onClick={() => navigate("/services")}
+          onClick={() => navigate("/dịch vụ")}
           className="mb-6 text-lg text-[#2B6A7C] hover:text-[#1E4F60] transition duration-200"
         >
           ← Back to Services
@@ -142,21 +134,18 @@ export default function BookingTherapist() {
                     {getFeedbackForConsultant(consultant._id).length === 0 ? (
                       <div>
                         <h3 className="text-xl font-semibold">Đánh giá của khách hàng</h3>
-                        <h3><strong>Điểm trung bình: </strong>Không có điểm đánh giá nào về chuyên viên này.</h3>
-                        <h3><strong>Đánh giá: </strong>Không có đánh giá nào về chuyên viên này.</h3>
+                        <p>Chưa có đánh giá nào.</p>
                       </div>
                     ) : (
                       <div className="mt-4">
                         <h3 className="text-xl font-semibold">Đánh giá của khách hàng</h3>
-                        <p><strong>Điểm trung bình:</strong> {getAverageRating(consultant._id)}⭐</p>
-                        {getFeedbackForConsultant(consultant._id).slice(0, 3).map(feedback => (
-                          <div key={feedback._id} className="mt-2">
-                            <p><strong>{getCustomerName(feedback.bookingRequestId)}:</strong> {feedback.consultantComment}</p>
+                        {getFeedbackForConsultant(consultant._id).map((feedback, idx) => (
+                          <div key={idx} className="mt-2">
+                            <p><strong>Khách hàng:</strong> {getCustomerName(feedback.bookingRequestId)}</p>
+                            <p><strong>Điểm:</strong> {feedback.consultantRating} ⭐</p>
+                            <p><strong>Nhận xét:</strong> {feedback.consultantComment || "Không có nhận xét."}</p>
                           </div>
                         ))}
-                        {getFeedbackForConsultant(consultant._id).length > 3 && (
-                          <p className="mt-2 text-blue-500">View more comments...</p>
-                        )}
                       </div>
                     )}
                   </div>

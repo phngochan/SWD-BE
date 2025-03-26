@@ -18,6 +18,9 @@ export default function About() {
     const [items, setItems] = useState([]);
     const [expandedProduct, setExpandedProduct] = useState(null); // State for expanded product
     const [zoomedImage, setZoomedImage] = useState(null); // State for zoomed image
+    const [consultants, setConsultants] = useState([]);
+    const [feedbacks, setFeedbacks] = useState([]);
+    const [expandedConsultant, setExpandedConsultant] = useState(null); // State for expanded consultant
 
     const token = localStorage.getItem("authToken") || sessionStorage.getItem("authToken");
 
@@ -148,6 +151,14 @@ export default function About() {
         setZoomedImage(null);
     };
 
+    const toggleConsultantNote = (consultantId) => {
+        setExpandedConsultant(expandedConsultant === consultantId ? null : consultantId);
+    };
+
+    const handleConsultantImageClick = (imgURL) => {
+        setZoomedImage(imgURL);
+    };
+
     useEffect(() => {
         const fetchProducts = async () => {
             try {
@@ -163,6 +174,42 @@ export default function About() {
 
         fetchProducts();
     }, []);
+
+    useEffect(() => {
+        const fetchConsultants = async () => {
+            try {
+                const res = await axios.get("/api/consultants");
+                setConsultants(res.data);
+            } catch (err) {
+                console.error("Failed to fetch consultants:", err);
+            }
+        };
+
+        fetchConsultants();
+    }, []);
+
+    useEffect(() => {
+        const fetchFeedbacks = async () => {
+            try {
+                const res = await axios.get("/api/feedbacks");
+                setFeedbacks(res.data);
+            } catch (err) {
+                console.error("Failed to fetch feedbacks:", err);
+            }
+        };
+
+        fetchFeedbacks();
+    }, []);
+
+    const getFeedbackForConsultant = (consultantId) => {
+        return feedbacks.filter(feedback => feedback.consultantId === consultantId);
+    };
+
+    const getAverageRating = (consultantId) => {
+        const feedbacksForConsultant = getFeedbackForConsultant(consultantId);
+        const totalRating = feedbacksForConsultant.reduce((sum, feedback) => sum + feedback.consultantRating, 0);
+        return (totalRating / feedbacksForConsultant.length).toFixed(1);
+    };
 
     if (loading) {
         return <div className="text-center py-8">Loading...</div>;
@@ -196,31 +243,30 @@ export default function About() {
             {/* Body Section */}
             <div className="max-w-7xl mx-auto px-6 py-16 text-[#2B6A7C]">
                 <div className="max-w-4xl mx-auto px-4 py-16 text-gray-800"> {/* Adjusted margins */}
-                <h2 className="text-3xl font-bold text-center mb-6">
-                    <span className="text-[#075E76]">LÀN DA KHỎE ĐẸP</span> TỪ THIÊN NHIÊN - AN TOÀN VÀ HIỆU QUẢ!
-                </h2>
-                <p className="text-lg text-center leading-relaxed">
-                    Từ năm 1973, Revivalabs đã theo đuổi một sứ mệnh duy nhất: tạo ra những sản phẩm chăm sóc da an toàn, hiệu quả và mang lại kết quả rõ rệt với mức giá hợp lý.
-                    Chúng tôi tự hào khi biết rằng sản phẩm của mình được tin dùng qua nhiều thế hệ – từ bà, mẹ đến con gái.
-                </p>
+                    <h2 className="text-3xl font-bold text-center mb-6">
+                        <span className="text-[#075E76]">LÀN DA KHỎE ĐẸP</span> TỪ THIÊN NHIÊN - AN TOÀN VÀ HIỆU QUẢ!
+                    </h2>
+                    <p className="text-lg text-center leading-relaxed">
+                        Từ năm 1973, Revivalabs đã theo đuổi một sứ mệnh duy nhất: tạo ra những sản phẩm chăm sóc da an toàn, hiệu quả và mang lại kết quả rõ rệt với mức giá hợp lý.
+                        Chúng tôi tự hào khi biết rằng sản phẩm của mình được tin dùng qua nhiều thế hệ – từ bà, mẹ đến con gái.
+                    </p>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-10">
-                    <img src="client/public/images/about_2.png" alt="Lịch sử thương hiệu" className="rounded-lg shadow-lg" />
-                    <div>
-                        <p className="text-lg leading-relaxed">
-                            Hành trình của Revivalabs là một câu chuyện về sự đổi mới, niềm tin và sự bền vững. Từ những ngày đầu tiên, chúng tôi đã theo đuổi 100% nguyên liệu thiên nhiên, trước khi xu hướng này trở thành phổ biến trên toàn cầu.
-                        </p>
-                        <p className="mt-4 text-lg leading-relaxed">
-                            Ngày nay, chúng tôi tiếp tục phát triển những sản phẩm chăm sóc da tự nhiên giúp bạn có làn da rạng rỡ và khỏe mạnh hơn mỗi ngày. Hãy cùng chúng tôi viết tiếp câu chuyện này!
-                        </p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-10">
+                        <img src="client/public/images/about_2.png" alt="Lịch sử thương hiệu" className="rounded-lg shadow-lg" />
+                        <div>
+                            <p className="text-lg leading-relaxed">
+                                Hành trình của Revivalabs là một câu chuyện về sự đổi mới, niềm tin và sự bền vững. Từ những ngày đầu tiên, chúng tôi đã theo đuổi 100% nguyên liệu thiên nhiên, trước khi xu hướng này trở thành phổ biến trên toàn cầu.
+                            </p>
+                            <p className="mt-4 text-lg leading-relaxed">
+                                Ngày nay, chúng tôi tiếp tục phát triển những sản phẩm chăm sóc da tự nhiên giúp bạn có làn da rạng rỡ và khỏe mạnh hơn mỗi ngày. Hãy cùng chúng tôi viết tiếp câu chuyện này!
+                            </p>
+                        </div>
                     </div>
-                </div>
                 </div>
 
                 <div className="max-w-7xl mx-auto px-6 py-16 text-[#2B6A7C]">
                     <div className="flex-shrink-0 text-[40px] mb-10 font-semibold leading-[48px] tracking-[-0.8px] text-center px-[80px] text-[#2B6A7C] pacifico-regular">
-                        <span className="text-[50px]">T</span>
-                        op những sản phẩm nổi bật:
+                        Top những sản phẩm nổi bật:
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
                         {products.map((product) => (
@@ -277,6 +323,56 @@ export default function About() {
                                     >
                                         Thêm vào giỏ hàng
                                     </button>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Consultants Section */}
+                <div className="max-w-7xl mx-auto px-6 py-16 text-[#2B6A7C]">
+                    <div className="flex-shrink-0 text-[40px] mb-10 font-semibold leading-[48px] tracking-[-0.8px] text-center px-[80px] text-[#2B6A7C] pacifico-regular">
+                        Những chuyên viên của chúng tôi:
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                        {consultants.map((consultant) => (
+                            <div
+                                key={consultant._id}
+                                className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 flex flex-col justify-between"
+                            >
+                                {/* Consultant Image */}
+                                <div className="w-full h-48 overflow-hidden cursor-pointer" onClick={() => handleConsultantImageClick(consultant.image || "/images/default-consultant.png")}>
+                                    <img
+                                        src={consultant.image || "/images/default-consultant.png"}
+                                        alt={consultant.firstName}
+                                        className="w-full h-full object-cover"
+                                    />
+                                </div>
+
+                                {/* Consultant Details */}
+                                <div className="px-6 pt-6 flex-grow">
+                                    <h3 className="text-xl font-bold mb-2">
+                                        {consultant.firstName} {consultant.lastName}
+                                    </h3>
+                                    <p className="text-gray-600 mb-2">
+                                        {expandedConsultant === consultant._id ? consultant.note : `${consultant.note.substring(0, 100)}...`}
+                                        {consultant.note.length > 100 && (
+                                            <button onClick={() => toggleConsultantNote(consultant._id)} className="text-blue-500 ml-2">
+                                                {expandedConsultant === consultant._id ? "Thu gọn" : "Xem thêm"}
+                                            </button>
+                                        )}
+                                    </p>
+                                    <div className="text-gray-600 mt-2">
+                                        <h3 className="text-lg mt-5 mb-1 font-bold">Đánh giá của khách hàng</h3>
+                                        {getFeedbackForConsultant(consultant._id).length === 0 ? (
+                                            <h3><strong>Điểm trung bình: </strong>Không có điểm đánh giá nào về chuyên viên này.</h3>
+                                        ) : (
+                                            <div className="mt-4">
+                                                <h3 className="text-base font-semibold">Điểm trung bình:</h3>
+                                                <p><strong>{getAverageRating(consultant._id)}⭐</strong></p>
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
                         ))}

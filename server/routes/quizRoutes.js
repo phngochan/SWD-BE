@@ -3,7 +3,7 @@ const { createQuiz, getQuizWithQuestions } = require('../controllers/quizControl
 const router = express.Router();
 
 router.post('/', createQuiz); // Create a new quiz
-router.get('/:id', getQuizWithQuestions); // Get quiz with questions by quiz ID
+router.get('/', getQuizWithQuestions); // Allow fetching all questions without requiring authentication
 
 module.exports = router;
 

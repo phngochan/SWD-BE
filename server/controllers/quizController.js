@@ -22,17 +22,13 @@ const createQuiz = async (req, res) => {
 
 const getQuizWithQuestions = async (req, res) => {
   try {
-    const quizId = req.params.id;
-    const quiz = await Question.find({
-      answerOptions: {
-        quizId: quizId,
-      }
-    });
+    const quiz = await Question.find(); // Fetch all questions without filtering by quiz ID
     res.status(200).json(quiz);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-}
+};
+
 module.exports = {
   createQuiz,
   getQuizWithQuestions

@@ -49,34 +49,24 @@ const Quiz = () => {
   };
 
   const handleSubmitQuiz = async () => {
-    const token = localStorage.getItem("authToken");
-
-    if (!token) {
-      setShowLoginModal(true);
-      return;
-    }
-
     console.log("Submitting answers:", answers); // Debug: Kiểm tra xem answers có dữ liệu không
 
     try {
       const response = await axios.post(
         "/api/quiz-results/save",
-        { answers },
-        { headers: { Authorization: `Bearer ${token}` } }
+        { answers }
       );
 
       console.log("Response from server:", response.data); // Debug: Kiểm tra phản hồi từ server
       setQuizResult(response.data.quizResult);
     } catch (error) {
       console.error("Error submitting quiz:", error);
-      setError("Something went wrong. Please try again.");
+      if (error.response?.status === 401) {
+        setShowLoginModal(true); // Show login modal if unauthorized
+      } else {
+        setError("Something went wrong. Please try again.");
+      }
     }
-  };
-
-
-  const handleLoginRedirect = () => {
-    setShowLoginModal(false);
-    navigate("/login");
   };
 
   if (error) {
@@ -192,31 +182,30 @@ const Quiz = () => {
         </div>
       )}
 
-      {/* Custom Login Modal */}
-      {/* {showLoginModal && (
+      {showLoginModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
           <div className="bg-white p-6 rounded-xl shadow-lg max-w-sm w-full text-center">
-            <h3 className="text-xl font-bold text-gray-800 mb-4">
-              Đăng nhập để xem kết quả
+            <h3 className="text-xl font-bold text-gray-800 mb-4 pacifico-regular">
+              Bạn cần đăng nhập để xem kết quả. Bạn có muốn đăng nhập ngay không?
             </h3>
-            <p className="text-gray-600">You need to be logged in to save your quiz results. Do you want to log in now?</p>
-            <div className="flex justify-center gap-4 mt-4">
-              <button
-                className="py-2 px-6 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 transition"
-                onClick={() => setShowLoginModal(false)}
-              >
-                Đóng
-              </button>
+            <div className="flex justify-center space-x-4"> {/* Add spacing between buttons */}
               <button
                 className="py-2 px-6 bg-[#A7DFEC] text-white rounded-lg hover:bg-[#2B6A7C] transition"
-                onClick={handleLoginRedirect}
+                onClick={() => navigate("/dang-nhap")} // Navigate to login page
               >
                 Đăng nhập
+              </button>
+              <button
+                className="py-2 px-6 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition"
+                onClick={() => setShowLoginModal(false)} // Close modal
+              >
+                Không muốn
               </button>
             </div>
           </div>
         </div>
-      )} */}
+      )}
+
       {/* Booking Now Button */}
       <div className="fixed bottom-4 right-4">
         {/* Ping effect */}

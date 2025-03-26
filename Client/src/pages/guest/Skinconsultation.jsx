@@ -63,19 +63,19 @@ export default function Skinconsultation() {
             : "Customer";
     };
 
-    const handleBookingNow = async (consultantId) => {
-        localStorage.setItem("consultantId", consultantId);
-        sessionStorage.setItem("consultantId", consultantId);
-        localStorage.setItem(
-            "serviceUrl",
-            `/services/${id}/chon-chuyen-vien/${consultantId}/lich-hen`
-        );
-        sessionStorage.setItem(
-            "serviceUrl",
-            `/services/${id}/chon-chuyen-vien/${consultantId}/lich-hen`
-        );
-        navigate(`/services/${id}/chon-chuyen-vien/${consultantId}/lich-hen`);
-    };
+    // const handleBookingNow = async (consultantId) => {
+    //     localStorage.setItem("consultantId", consultantId);
+    //     sessionStorage.setItem("consultantId", consultantId);
+    //     localStorage.setItem(
+    //         "serviceUrl",
+    //         `/dịch/${id}/chon-chuyen-vien/${consultantId}/lich-hen`
+    //     );
+    //     sessionStorage.setItem(
+    //         "serviceUrl",
+    //         `/dịch vụ/${id}/chon-chuyen-vien/${consultantId}/lich-hen`
+    //     );
+    //     navigate(`/dịch vụ/${id}/chon-chuyen-vien/${consultantId}/lich-hen`);
+    // };
 
     const handleViewMore = (index) => {
         setVisibleNoteIndex(visibleNoteIndex === index ? null : index);
