@@ -4,7 +4,8 @@ const OrderProduct = require("../models/OrderProduct");
 // Lấy tất cả sản phẩm của một đơn hàng
 exports.getOrderItems = async (req, res) => {
   try {
-    const orderItems = await OrderItem.find({ orderID: req.params.orderID }).populate("productID", "productName price imgURL description availability");
+    const orderItems = await OrderItem.find({ orderID: req.params.orderID })
+      .populate("productID", "productName price imgURL description availability");
     res.status(200).json(orderItems);
   } catch (error) {
     res.status(500).json({ message: "Internal server error" });

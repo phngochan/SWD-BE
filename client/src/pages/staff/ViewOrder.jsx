@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "../../utils/axiosInstance";
 import StaffSidebar from "../../components/StaffSidebar";
-import { Pagination } from "@mui/material"; // Import Pagination component
+import { Pagination, Dialog, DialogTitle, DialogContent, Button } from "@mui/material"; 
 
-
-const ITEMS_PER_PAGE = 10; // Number of orders per page
+const ITEMS_PER_PAGE = 10;
 
 const ViewOrder = () => {
     const [currentPage, setCurrentPage] = useState(1);
@@ -12,6 +11,7 @@ const ViewOrder = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [selectedOrder, setSelectedOrder] = useState(null);
+    const [openModal, setOpenModal] = useState(false);
 
     useEffect(() => {
         const fetchOrders = async () => {
@@ -43,11 +43,11 @@ const ViewOrder = () => {
     const sortedOrders = orders.sort((a, b) => {
         if (a.status === "Pending" && b.status !== "Pending") return -1;
         if (a.status !== "Pending" && b.status === "Pending") return 1;
-        return new Date(b.createdAt) - new Date(a.createdAt); // Sort by creation date, newest first
+        return new Date(b.createdAt) - new Date(a.createdAt);
     });
 
-    const totalPages = Math.ceil(sortedOrders.length / ITEMS_PER_PAGE); // Calculate total pages
-    const currentOrders = sortedOrders.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE); // Get orders for current page
+    const totalPages = Math.ceil(sortedOrders.length / ITEMS_PER_PAGE);
+    const currentOrders = sortedOrders.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
 
     return (
         <div className="flex">
@@ -62,7 +62,6 @@ const ViewOrder = () => {
                         <tr className="bg-gray-200">
                             <th className="border p-2 text-center">Khách hàng</th>
                             <th className="border p-2 text-center">Sản phẩm</th>
-                            <th className="border p-2 text-center">Số lượng</th>
                             <th className="border p-2 text-center">Tổng tiền</th>
                             <th className="border p-2 text-center">Thanh toán</th>
                             <th className="border p-2 text-center">Trạng thái</th>
@@ -70,17 +69,22 @@ const ViewOrder = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {orders.map((order) => (
+                        {currentOrders.map((order) => (
                             <tr key={order._id} className="border">
                                 <td className="border p-2 text-center">
                                     {order.customerID?.firstName} {order.customerID?.lastName}
                                 </td>
-                                <td className="border p-2 text-center">{order.productID?.name}</td>
-                                <td className="border p-2 text-center">{order.quantity}</td>
+                                <td className="border p-2 text-center cursor-pointer text-blue-600 underline"
+                                    onClick={() => {
+                                        setSelectedOrder(order);
+                                        setOpenModal(true);
+                                    }}>
+                                    {order.items?.map((item) => item.productID?.productName).join(", ")}
+                                </td>
                                 <td className="border p-2 text-center">${order.totalPrice}</td>
                                 <td className="border p-2 text-center">
                                     <span className={`p-1 rounded ${order.paymentStatus === "Paid" ? "bg-green-200" : "bg-red-200"}`}>
-                                        {order.paymentStatus}
+                                        {order.paymentMethod === "Bank" ? "Bank" : "Cash"}
                                     </span>
                                 </td>
                                 <td className="border p-2 text-center">
@@ -97,9 +101,10 @@ const ViewOrder = () => {
                                         onChange={(e) => handleStatusUpdate(order._id, e.target.value)}
                                         className="border p-1"
                                     >
-                                        <option value="Pending" className="bg-yellow-200">Chờ xác nhận</option>
-                                        <option value="Completed" className="bg-green-200">Đã hoàn thành</option>
-                                        <option value="Cancelled" className="bg-red-200">Hủy</option>
+                                        <option value="Pending">chờ thanh toán</option>
+                                        <option value="Cornfirm">xác nhận</option>
+                                        <option value="Completed">Đã hoàn thành</option>
+                                        <option value="Cancelled">Hủy</option>
                                     </select>
                                 </td>
                             </tr>
@@ -116,6 +121,30 @@ const ViewOrder = () => {
                     />
                 </div>
 
+                {/* Modal hiển thị chi tiết đơn hàng */}
+                <Dialog open={openModal} onClose={() => setOpenModal(false)} fullWidth>
+                    <DialogTitle>Chi tiết đơn hàng</DialogTitle>
+                    <DialogContent>
+                        {selectedOrder && (
+                            <div>
+                                <p><strong>Khách hàng:</strong> {selectedOrder.customerID?.firstName} {selectedOrder.customerID?.lastName}</p>
+                                <p><strong>Danh sách sản phẩm:</strong></p>
+                                <ul className="list-disc pl-5">
+                                    {selectedOrder.items?.map((item, index) => (
+                                        <li key={index}>
+                                            {item.productID?.productName} - {item.quantity} cái
+                                        </li>
+                                    ))}
+                                </ul>
+                                <p><strong>Tổng tiền:</strong> ${selectedOrder.totalPrice}</p>
+                                <p><strong>Trạng thái:</strong> {selectedOrder.status}</p>
+                                <Button variant="contained" color="primary" onClick={() => setOpenModal(false)}>
+                                    Đóng
+                                </Button>
+                            </div>
+                        )}
+                    </DialogContent>
+                </Dialog>
             </div>
         </div>
     );

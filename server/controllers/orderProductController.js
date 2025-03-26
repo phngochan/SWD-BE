@@ -49,12 +49,13 @@ exports.getAllOrders = async (req, res) => {
 
     const results = await Promise.all(orders.map(async (order) => {
       const items = await OrderItem.find({ orderID: order._id })
-        .populate("productID", "name price");
-      return { ...order.toObject(), items };
+        .populate("productID", "productName price"); // Ensure productID is populated with correct fields
+      return { ...order.toObject(), items }; // Combine order and its items
     }));
 
-    res.status(200).json(results);
+    res.status(200).json(results); // Return the combined results
   } catch (error) {
+    console.error("Error fetching orders:", error.message);
     res.status(500).json({ error: error.message });
   }
 };
@@ -108,7 +109,6 @@ exports.updateOrderStatus = async (req, res) => {
 
 
 
-
 // 🔹 Lấy danh sách đơn hàng của khách hàng
 exports.getCustomerOrders = async (req, res) => {
   try {
@@ -116,7 +116,7 @@ exports.getCustomerOrders = async (req, res) => {
 
     const results = await Promise.all(orders.map(async (order) => {
       const items = await OrderItem.find({ orderID: order._id })
-        .populate("productID", "name price");
+        .populate("productID", "productName price");
       return { ...order.toObject(), items };
     }));
 
