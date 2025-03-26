@@ -31,30 +31,28 @@ export const PayFailed = () => {
         <div className="bg-gradient-to-r from-pink-100 to-pink-200 min-h-screen flex items-center justify-center p-4">
             <div className="max-w-lg w-full bg-white p-8 shadow-2xl rounded-3xl transform transition duration-500 hover:scale-105">
                 <div className="text-center mb-6">
-                    <h2 className="text-3xl font-extrabold text-red-600">Payment Failed</h2>
-                    <p className="text-gray-600">Please try agai.</p>
-                </div>
-
-                <div className="hãy css giống với form của phần paysuccess">
-                    <p className="text-lg font-semibold text-pink-700">Buyer Details</p>
-                    <p className="text-sm text-gray-700 font-bold">Name: {order?.buyerName || "N/A"}</p>
-                    <p className="text-sm text-gray-700 font-bold">Email: {order?.buyerEmail || "N/A"}</p>
-                    <p className="text-sm text-gray-700 font-bold">Phone: {order?.buyerPhone || "N/A"}</p>
+                    <h2 className="text-3xl font-extrabold text-red-600">Thanh toán thất bại</h2>
+                    <p className="text-gray-600">Vui lòng thử lại.</p>
                 </div>
 
                 <div className="border-t border-pink-300 mt-4 pt-4">
-                    <p className="text-lg font-semibold text-pink-700">Receipt</p>
-                    <p className="text-sm text-gray-600">Order ID: <span className="font-mono">{order?.appointmentCode}</span></p>
+                    <p className="text-lg font-semibold text-pink-700">Thông tin người mua</p>
+                    <p className="text-sm text-gray-700 font-bold">Tên: {order?.buyerName || "Không có"}</p>
+                    <p className="text-sm text-gray-700 font-bold">Email: {order?.buyerEmail || "Không có"}</p>
+                    <p className="text-sm text-gray-700 font-bold">Số điện thoại: {order?.buyerPhone || "Không có"}</p>
+                </div>
+
+                <div className="border-t border-pink-300 mt-4 pt-4">
+                    <p className="text-lg font-semibold text-pink-700">Hóa đơn</p>
+                    <p className="text-sm text-gray-600">Mã đơn hàng: <span className="font-mono">{order?.appointmentCode}</span></p>
                     <p className="text-sm text-gray-600">
-                        Transaction Date: {order?.transactionDateTime ? new Date(order.transactionDateTime).toLocaleString() : "N/A"}
+                        Ngày giao dịch: {order?.transactionDateTime ? new Date(order.transactionDateTime).toLocaleString() : "Không có"}
                     </p>
                 </div>
 
-
-
-                <div className="flex justify-between mt-6 ">
+                <div className="flex justify-between mt-6">
                     <Link to={"/view-booking"} className="text-pink-700 flex transition-colors hover:text-pink-900">
-                        Back Home
+                        Quay lại trang chủ
                     </Link>
                 </div>
             </div>

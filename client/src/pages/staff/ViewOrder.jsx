@@ -29,10 +29,26 @@ const ViewOrder = () => {
 
     const handleStatusUpdate = async (orderId, newStatus) => {
         try {
-            await axios.put(`/api/orders/${orderId}/status`, { status: newStatus });
+            const order = orders.find((order) => order._id === orderId);
+            const paymentMethod =
+                newStatus === "Confirmed"
+                    ? "cash"
+                    : newStatus === "Completed" && order.status === "Confirmed"
+                    ? "cash"
+                    : newStatus === "Completed" && order.status === "Pending"
+                    ? "banking"
+                    : order.paymentMethod; // Retain existing payment method for other cases
+
+            await axios.put(`/api/orders/${orderId}/status`, {
+                status: newStatus,
+                paymentMethod, // Include payment method
+            });
+
             setOrders((prev) =>
                 prev.map((order) =>
-                    order._id === orderId ? { ...order, status: newStatus } : order
+                    order._id === orderId
+                        ? { ...order, status: newStatus, paymentMethod }
+                        : order
                 )
             );
         } catch (err) {
@@ -84,7 +100,7 @@ const ViewOrder = () => {
                                 <td className="border p-2 text-center">${order.totalPrice}</td>
                                 <td className="border p-2 text-center">
                                     <span className={`p-1 rounded ${order.paymentStatus === "Paid" ? "bg-green-200" : "bg-red-200"}`}>
-                                        {order.paymentMethod === "Bank" ? "Bank" : "Cash"}
+                                        {order.status === "Confirmed" ? "Tiền mặt" : order.status === "Completed" ? "Chuyển khoản" : ""}
                                     </span>
                                 </td>
                                 <td className="border p-2 text-center">
@@ -102,7 +118,7 @@ const ViewOrder = () => {
                                         className="border p-1"
                                     >
                                         <option value="Pending">chờ thanh toán</option>
-                                        <option value="Cornfirm">xác nhận</option>
+                                        <option value="Confirmed">xác nhận</option>
                                         <option value="Completed">Đã hoàn thành</option>
                                         <option value="Cancelled">Hủy</option>
                                     </select>

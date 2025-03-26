@@ -98,6 +98,7 @@ export default function ProductDetail() {
             try {
                 const response = await axios.put(`/api/orders/${orderID}/status`, {
                     status: "Confirmed",
+                    paymentMethod: "cash", // Add payment method
                 });
 
                 if (response.status === 200) {
@@ -121,7 +122,10 @@ export default function ProductDetail() {
                     window.location.href = checkoutUrl;
 
                     // Update order status to "Completed"
-                    await axios.put(`/api/orders/${orderID}/status`, { status: "Completed" });
+                    await axios.put(`/api/orders/${orderID}/status`, {
+                        status: "Completed",
+                        paymentMethod: "banking", // Add payment method
+                    });
 
                     handleSuccessPayment();
                 } else {
