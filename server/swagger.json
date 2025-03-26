@@ -37,6 +37,14 @@
     {
       "name": "Consultants",
       "description": "Consultant management"
+    },
+    {
+      "name": "Customers",
+      "description": "Customer management"
+    },
+    {
+      "name": "Feedbacks",
+      "description": "Feedback management"
     }
   ],
   "components": {
@@ -467,6 +475,61 @@
         },
         "required": [
           "user"
+        ]
+      },
+      "Feedback": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "The auto-generated id of the feedback"
+          },
+          "bookingRequestId": {
+            "type": "string",
+            "description": "The ID of the associated booking request"
+          },
+          "serviceId": {
+            "type": "string",
+            "description": "The ID of the associated service"
+          },
+          "consultantId": {
+            "type": "string",
+            "description": "The ID of the associated consultant"
+          },
+          "serviceRating": {
+            "type": "number",
+            "description": "The rating for the service",
+            "minimum": 1,
+            "maximum": 5
+          },
+          "serviceComment": {
+            "type": "string",
+            "description": "The comment for the service",
+            "maxLength": 500
+          },
+          "consultantRating": {
+            "type": "number",
+            "description": "The rating for the consultant",
+            "minimum": 1,
+            "maximum": 5
+          },
+          "consultantComment": {
+            "type": "string",
+            "description": "The comment for the consultant",
+            "maxLength": 500
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The date when the feedback was created"
+          }
+        },
+        "required": [
+          "bookingRequestId",
+          "serviceId",
+          "consultantId",
+          "serviceRating",
+          "consultantRating"
         ]
       }
     }
@@ -1658,7 +1721,7 @@
       "get": {
         "summary": "Get booked times for a consultant on a specific date",
         "tags": [
-          "BookingRequests"
+          "Customers"
         ],
         "security": [
           {
@@ -2293,6 +2356,502 @@
           },
           "500": {
             "description": "Server error. Please try again."
+          }
+        }
+      }
+    },
+    "/customers": {
+      "get": {
+        "summary": "Get all customers",
+        "tags": [
+          "Customers"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of all customers",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "An error occurred while fetching customers"
+          }
+        }
+      }
+    },
+    "/customers/{id}": {
+      "get": {
+        "summary": "Get a customer by ID",
+        "tags": [
+          "Customers"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the customer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Customer details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Customer not found"
+          },
+          "500": {
+            "description": "An error occurred while fetching the customer"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update a customer profile",
+        "tags": [
+          "Customers"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the customer"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "firstName": {
+                    "type": "string",
+                    "description": "The first name of the customer"
+                  },
+                  "lastName": {
+                    "type": "string",
+                    "description": "The last name of the customer"
+                  },
+                  "phoneNumber": {
+                    "type": "string",
+                    "description": "The phone number of the customer"
+                  }
+                },
+                "required": [
+                  "firstName",
+                  "lastName"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Customer updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Customer not found"
+          },
+          "500": {
+            "description": "An error occurred while updating the customer"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a customer",
+        "tags": [
+          "Customers"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the customer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Customer deleted successfully"
+          },
+          "404": {
+            "description": "Customer not found"
+          },
+          "500": {
+            "description": "An error occurred while deleting the customer"
+          }
+        }
+      }
+    },
+    "/customers/change-password": {
+      "post": {
+        "summary": "Change customer password",
+        "tags": [
+          "Customers"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "currentPassword": {
+                    "type": "string",
+                    "description": "The current password of the customer"
+                  },
+                  "newPassword": {
+                    "type": "string",
+                    "description": "The new password for the customer"
+                  },
+                  "userId": {
+                    "type": "string",
+                    "description": "The ID of the customer"
+                  }
+                },
+                "required": [
+                  "currentPassword",
+                  "newPassword",
+                  "userId"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password changed successfully"
+          },
+          "400": {
+            "description": "Invalid input or password requirements not met"
+          },
+          "404": {
+            "description": "Customer not found"
+          },
+          "500": {
+            "description": "An error occurred while changing the password"
+          }
+        }
+      }
+    },
+    "/feedback": {
+      "post": {
+        "summary": "Create feedback for a booking request",
+        "tags": [
+          "Feedback"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Feedback"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Feedback created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Feedback"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input or booking request not completed"
+          },
+          "404": {
+            "description": "Booking request not found"
+          },
+          "500": {
+            "description": "An error occurred while creating feedback"
+          }
+        }
+      }
+    },
+    "/feedback/{bookingRequestId}": {
+      "get": {
+        "summary": "Get feedback by booking request ID",
+        "tags": [
+          "Feedback"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "bookingRequestId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the booking request"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Feedback for the booking request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Feedback"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Feedback not found"
+          },
+          "500": {
+            "description": "An error occurred while fetching feedback"
+          }
+        }
+      }
+    },
+    "/feedback/service-rating/{serviceId}": {
+      "get": {
+        "summary": "Get average service rating by service ID",
+        "tags": [
+          "Feedback"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "serviceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the service"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Average service rating",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "averageRating": {
+                      "type": "number",
+                      "description": "The average rating for the service"
+                    },
+                    "totalReviews": {
+                      "type": "number",
+                      "description": "The total number of reviews for the service"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Service not found"
+          },
+          "500": {
+            "description": "An error occurred while fetching the average service rating"
+          }
+        }
+      }
+    },
+    "/feedback/consultant-rating/{id}": {
+      "get": {
+        "summary": "Get average consultant rating by consultant ID",
+        "tags": [
+          "Feedback"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the consultant"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Average consultant rating",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "averageRating": {
+                      "type": "number",
+                      "description": "The average rating for the consultant"
+                    },
+                    "totalReviews": {
+                      "type": "number",
+                      "description": "The total number of reviews for the consultant"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Consultant not found"
+          },
+          "500": {
+            "description": "An error occurred while fetching the average consultant rating"
+          }
+        }
+      }
+    },
+    "/feedback/service/{serviceId}": {
+      "get": {
+        "summary": "Get feedback for a specific service",
+        "tags": [
+          "Feedback"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "serviceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the service"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Feedback for the service",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Feedback"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Feedback not found"
+          },
+          "500": {
+            "description": "An error occurred while fetching feedback for the service"
+          }
+        }
+      }
+    },
+    "/feedback/consultant-rating": {
+      "get": {
+        "summary": "Get average ratings for all consultants",
+        "tags": [
+          "Feedback"
+        ],
+        "responses": {
+          "200": {
+            "description": "Average ratings for all consultants",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "consultantId": {
+                        "type": "string",
+                        "description": "The ID of the consultant"
+                      },
+                      "averageRating": {
+                        "type": "number",
+                        "description": "The average rating for the consultant"
+                      },
+                      "totalReviews": {
+                        "type": "number",
+                        "description": "The total number of reviews for the consultant"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An error occurred while fetching consultant ratings"
           }
         }
       }
