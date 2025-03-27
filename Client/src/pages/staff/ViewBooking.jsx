@@ -15,6 +15,8 @@ const ViewBooking = () => {
   const [availableConsultants, setAvailableConsultants] = useState([]);
   const [currentBooking, setCurrentBooking] = useState(null); // booking hiện tại khi chưa có consultant
   const [currentPage, setCurrentPage] = useState(1); // Add state for current page
+  const [searchQuery, setSearchQuery] = useState(""); // State for search query
+  const [sortStatus, setSortStatus] = useState(""); // State for sorting by status
 
   useEffect(() => {
     const fetchBookings = async () => {
@@ -168,10 +170,21 @@ const ViewBooking = () => {
     }
   };
 
-  const sortedBookings = bookings.sort((a, b) => {
-    if (a.status === "Pending" && b.status !== "Pending") return -1;
-    if (a.status !== "Pending" && b.status === "Pending") return 1;
-    return new Date(b.createdAt) - new Date(a.createdAt); // Sort by creation date, newest first
+  // Filter bookings based on search query
+  const filteredBookings = bookings.filter((booking) => {
+    const customerName = booking.customerInfo
+      ? `${booking.customerInfo.firstName} ${booking.customerInfo.lastName}`
+      : "Unknown";
+    return customerName.toLowerCase().includes(searchQuery.toLowerCase());
+  });
+
+  // Sort bookings based on status
+  const sortedBookings = filteredBookings.sort((a, b) => {
+    if (sortStatus) {
+      if (a.status === sortStatus && b.status !== sortStatus) return -1;
+      if (a.status !== sortStatus && b.status === sortStatus) return 1;
+    }
+    return new Date(b.createdAt) - new Date(a.createdAt); // Default sort by creation date
   });
 
   const totalPages = Math.ceil(sortedBookings.length / ITEMS_PER_PAGE); // Calculate total pages
@@ -183,6 +196,29 @@ const ViewBooking = () => {
       <div className="p-4 w-full">
         <ToastContainer />
         <h1 className="text-2xl font-bold mb-4">Xem lịch đặt</h1>
+
+        {/* Search and Sort Controls */}
+        <div className="flex justify-between items-center mb-4">
+          <input
+            type="text"
+            placeholder="Search by customer name..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="border p-2 rounded w-1/3"
+          />
+          <select
+            value={sortStatus}
+            onChange={(e) => setSortStatus(e.target.value)}
+            className="border p-2 rounded"
+          >
+            <option value="">Sort by Status</option>
+            <option value="Pending">Pending</option>
+            <option value="Confirmed">Confirmed</option>
+            <option value="Completed">Completed</option>
+            <option value="Cancelled">Cancelled</option>
+          </select>
+        </div>
+
         {loading && <p>Loading...</p>}
         {error && <p className="text-red-500">{error}</p>}
         <table className="min-w-full bg-white border border-gray-200">
@@ -361,36 +397,35 @@ const ViewBooking = () => {
                 </button>
               </div>
 
-              <div className="mt-4">
-                {availableConsultants.map((consultant) => (
-                  <div
-                    key={consultant._id}
-                    className="flex justify-between items-center border-b py-2"
-                  >
-                    <div>
-                      <p className="text-gray-800 font-medium">
-                        {consultant.firstName} {consultant.lastName}
-                      </p>
-                      <p className="text-gray-600 text-sm">
-                        {consultant.email}
-                      </p>
-                    </div>
-                    <button
-                      onClick={() =>
-                        assignConsultant(currentBooking, consultant._id)
-                      }
-                      className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-700"
-                    >
-                      Assign
-                    </button>
+              <div className="mt-4"></div>
+              {availableConsultants.map((consultant) => (
+                <div
+                  key={consultant._id}
+                  className="flex justify-between items-center border-b py-2"
+                >
+                  <div>
+                    <p className="text-gray-800 font-medium">
+                      {consultant.firstName} {consultant.lastName}
+                    </p>
+                    <p className="text-gray-600 text-sm">
+                      {consultant.email}
+                    </p>
                   </div>
-                ))}
-              </div>
+                  <button
+                    onClick={() =>
+                      assignConsultant(currentBooking, consultant._id)
+                    }
+                    className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-700"
+                  ></button>
+                  Assign
+                </div>
+              ))}
             </div>
           </div>
-        )}
-      </div>
-    </div>
+        )
+        }
+      </div >
+    </div >
   );
 };
 

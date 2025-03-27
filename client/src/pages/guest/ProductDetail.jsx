@@ -202,8 +202,8 @@ export default function ProductDetail() {
                                         <td className="px-4 py-2 border-b text-lg font-bold text-[#2B6A7C] text-center">
                                             {(product.productID?.price || 0).toLocaleString()} VND
                                         </td>
-                                        <td className={`px-4 py-2 border-b text-sm text-center ${product.productID?.availability ? "text-green-500" : "text-red-500"}`}>
-                                            {product.productID?.availability ? "Còn hàng" : "Hết hàng"}
+                                        <td className="px-4 py-2 border-b text-center text-lg font-bold text-[#2B6A7C]">
+                                            {((product.productID?.price || 0) * product.quantity).toLocaleString()} VND {/* Total price */}
                                         </td>
                                         <td className="px-4 py-2 border-b text-center">
                                             <input
