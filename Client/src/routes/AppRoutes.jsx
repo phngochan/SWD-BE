@@ -27,7 +27,6 @@ import ChangePassword from "../components/ChangePassword.jsx";
 import BlogDetail from "../pages/guest/BlogDetail.jsx";
 import ServiceDetails from "../pages/guest/ServiceDetails.jsx";
 import BookingTherapist from "../pages/customer/BookingTherapist.jsx";
-import { Calendar } from "lucide-react";
 import CustomerProfile from "../pages/customer/ProfileUpdate.jsx";
 import { PaySuccess } from "../pages/staff/PaySuccess";
 import { PayFailed } from "../pages/staff/PayFailed";
