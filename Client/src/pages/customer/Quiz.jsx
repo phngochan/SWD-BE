@@ -196,7 +196,7 @@ const Quiz = () => {
                 Đăng nhập
               </button>
               <button
-                className="py-2 px-6 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition"
+                className="py-2 px-6 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 tran  sition"
                 onClick={() => setShowLoginModal(false)} // Close modal
               >
                 Không muốn
