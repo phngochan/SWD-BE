@@ -1,5 +1,4 @@
-import { Link } from "react-router-dom";
-import { FaFacebook, FaInstagram, FaTwitter, FaHandSparkles } from "react-icons/fa";
+import { FaHandSparkles } from "react-icons/fa";
 import Footer from "../../components/Footer";
 import Navbar from "../../components/Navbar";
 

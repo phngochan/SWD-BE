@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "../../utils/axiosInstance";
 import CustomerSidebar from "../../components/CustomerSideBar";
@@ -13,10 +13,8 @@ import {
     TableBody,
     Paper,
     TableContainer,
-    Tooltip,
     Typography,
     Modal,
-    Box,
     Button,
     TextField,
     Select,
@@ -28,7 +26,6 @@ import {
 } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
 import { motion } from "framer-motion";
-import { FaTrash, FaComment } from "react-icons/fa";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 

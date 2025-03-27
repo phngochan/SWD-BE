@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -6,7 +6,7 @@ import axios from "../../utils/axiosInstance";
 import Sidebar from "../../components/ManagerSidebar";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { FaCheck, FaLock, FaTimes } from "react-icons/fa";
+import { FaLock } from "react-icons/fa";
 import { FaEdit, FaTrash } from "react-icons/fa";
 
 const schema = yup.object().shape({
