@@ -86,6 +86,10 @@ exports.getAverageServiceRating = async (req, res) => {
       }
     ]);
 
+    if (result.length === 0) {
+      return res.status(200).json([{ averageRating: 0, totalReviews: 0 }]);
+    }
+
     res.status(200).json(result);
   } catch (error) {
     res.status(500).json({ error: error.message });
